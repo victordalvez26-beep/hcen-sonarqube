@@ -1,0 +1,15 @@
+
+  ____  ____  ___   
+ |  _ \|  _ \|_ _|  
+ | |_) | | | || |   
+ |  __/| |_| || |   
+ |_|   |____/|___|  
+                    
+ Plataforma de Interoperabilidad
+ DNIC - Servicio Básico de Información
+ TSE 2025
+ 
+ Puerto: 8083
+ SOAP Endpoint: /ws
+
+

@@ -1,0 +1,15 @@
+*.class
+.settings/
+.classpath
+.project
+.idea/
+*.iml
+*.log
+.git/
+.gitignore
+README.md
+docker-compose.yml
+.dockerignore
+src/
+pom.xml
+

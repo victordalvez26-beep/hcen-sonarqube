@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  pdi-dnic-service:
+    build: .
+    container_name: pdi-dnic-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: unless-stopped
+    networks:
+      - pdi-network
+
+networks:
+  pdi-network:
+    driver: bridge
+
+

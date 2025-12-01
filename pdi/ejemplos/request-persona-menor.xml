@@ -1,0 +1,12 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:dnic="http://agesic.gub.uy/pdi/services/dnic/1.0">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dnic:ObtPersonaPorDocRequest>
+         <dnic:tipoDocumento>CI</dnic:tipoDocumento>
+         <dnic:numeroDocumento>39178531</dnic:numeroDocumento>
+      </dnic:ObtPersonaPorDocRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+

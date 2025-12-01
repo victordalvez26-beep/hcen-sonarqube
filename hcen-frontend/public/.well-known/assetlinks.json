@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "uy.edu.tse.hcen",
+      "sha256_cert_fingerprints": [
+        "07:86:28:8B:FD:CF:CE:37:8C:5F:B5:8A:FA:5C:08:76:4F:79:23:74:53:E7:DC:F4:19:CC:75:95:4E:6B:2C:F0"
+      ]
+    }
+  }
+]

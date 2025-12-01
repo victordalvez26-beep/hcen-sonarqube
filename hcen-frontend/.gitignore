@@ -1,0 +1,15 @@
+# Dependencias
+/node_modules/
+
+# Build
+/build/
+
+#Configuracion local
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.project

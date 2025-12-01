@@ -1,0 +1,42 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Mancha 1 -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="0.2"
+                android:centerY="0.3"
+                android:gradientRadius="1500dp"
+                android:startColor="@color/picton_blue"
+                android:endColor="@android:color/transparent"/>
+        </shape>
+    </item>
+
+    <!-- Mancha 2 -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="0.8"
+                android:centerY="0.7"
+                android:gradientRadius="1200dp"
+                android:startColor="@color/moonstone"
+                android:endColor="@android:color/transparent"/>
+        </shape>
+    </item>
+
+    <!-- Mancha 3 -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="0.5"
+                android:centerY="0.1"
+                android:gradientRadius="1300dp"
+                android:startColor="@color/mint_green"
+                android:endColor="@android:color/transparent"/>
+        </shape>
+    </item>
+
+</layer-list>

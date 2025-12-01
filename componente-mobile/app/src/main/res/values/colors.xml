@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mint_green">#bee9e8</color>
+    <color name="moonstone">#62b6cb</color>
+    <color name="indigo_dye">#1b4965</color>
+    <color name="columbia_blue">#cae9ff</color>
+    <color name="picton_blue">#5fa8d3</color>
+    <color name="blue_ncs">#0893c3</color>
+    <color name="black">@android:color/black</color>
+    <color name="red">#7D1600</color>
+    <color name="white">@android:color/white</color>
+    <color name="gray">@android:color/darker_gray</color>
+    <color name="success">@android:color/holo_green_dark</color>
+    <color name="error">@android:color/holo_red_dark</color>
+    <color name="warning">@android:color/holo_orange_light</color>
+</resources>

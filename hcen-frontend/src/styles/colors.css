@@ -1,0 +1,167 @@
+/* Paleta de colores HCEN */
+:root {
+  /* Colores base */
+  --mint-green: #bee9e8ff;
+  --moonstone: #62b6cbff;
+  --indigo-dye: #1b4965ff;
+  --columbia-blue: #cae9ffff;
+  --picton-blue: #5fa8d3ff;
+  --blue-ncs: #0893c3ff;
+  --black: #000000ff;
+  --white: #ffffffff;
+  
+  /* Colores semánticos según guía */
+  --btn-primary: var(--indigo-dye);
+  --btn-secondary: var(--moonstone);
+  --btn-text: var(--white);
+  --icon-color: var(--moonstone);
+  --highlight-color: var(--moonstone);
+  --title-color: var(--indigo-dye);
+  --link-color: var(--picton-blue);
+  --text-color: var(--black);
+  --text-muted: #6c757d;
+  --background-color: var(--columbia-blue);
+}
+
+/* Estilos base */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--title-color);
+}
+
+/* Párrafos */
+p {
+  color: var(--text-color);
+}
+
+/* Enlaces */
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--blue-ncs);
+  text-decoration: underline;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: var(--btn-primary);
+  border-color: var(--btn-primary);
+  color: var(--btn-text);
+}
+
+.btn-primary:hover {
+  background-color: var(--blue-ncs);
+  border-color: var(--blue-ncs);
+  color: var(--btn-text);
+}
+
+.btn-secondary {
+  background-color: var(--btn-secondary);
+  border-color: var(--btn-secondary);
+  color: var(--btn-text);
+}
+
+.btn-secondary:hover {
+  background-color: var(--picton-blue);
+  border-color: var(--picton-blue);
+  color: var(--btn-text);
+}
+
+.btn-outline-primary {
+  color: var(--btn-primary);
+  border-color: var(--btn-primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--btn-primary);
+  border-color: var(--btn-primary);
+  color: var(--btn-text);
+}
+
+.btn-outline-secondary {
+  color: var(--btn-secondary);
+  border-color: var(--btn-secondary);
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--btn-secondary);
+  border-color: var(--btn-secondary);
+  color: var(--btn-text);
+}
+
+/* Iconos */
+.fas, .far, .fab {
+  color: var(--icon-color);
+}
+
+/* Resaltados */
+.highlight {
+  background-color: var(--highlight-color);
+  color: var(--white);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Cards */
+.card {
+  background-color: var(--white);
+  border: 1px solid var(--moonstone);
+}
+
+.card-header {
+  background-color: var(--mint-green);
+  border-bottom: 1px solid var(--moonstone);
+  color: var(--title-color);
+}
+
+/* Formularios */
+.form-control:focus {
+  border-color: var(--moonstone);
+  box-shadow: 0 0 0 0.2rem rgba(98, 182, 203, 0.25);
+}
+
+.form-label {
+  color: var(--title-color);
+  font-weight: 500;
+}
+
+/* Alertas */
+.alert-info {
+  background-color: var(--columbia-blue);
+  border-color: var(--moonstone);
+  color: var(--indigo-dye);
+}
+
+/* Badges */
+.badge-primary {
+  background-color: var(--btn-primary);
+  color: var(--btn-text);
+}
+
+.badge-secondary {
+  background-color: var(--btn-secondary);
+  color: var(--btn-text);
+}
+
+/* Tablas */
+.table {
+  background-color: var(--white);
+}
+
+.table thead th {
+  background-color: var(--mint-green);
+  color: var(--title-color);
+  border-color: var(--moonstone);
+}
+
+.table tbody tr:hover {
+  background-color: var(--columbia-blue);
+}

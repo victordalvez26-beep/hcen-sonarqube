@@ -1,0 +1,701 @@
+openapi: 3.0.3
+info:
+  title: PDI API (Plataforma de Interoperabilidad)
+  description: |
+    API de la Plataforma de Interoperabilidad (PDI) que incluye:
+    - Servicios REST para gestión de usuarios INUS (datos patronímicos)
+    - Servicios REST para asociaciones usuario-prestador
+    - Servicios REST de prueba y administración
+    - Servicio SOAP para consulta de información de personas (DNIC)
+  version: 1.0.0
+  contact:
+    name: PDI Development Team
+
+servers:
+  - url: http://localhost:8083
+    description: Servidor local de desarrollo
+
+paths:
+  # ============================================
+  # SERVICIOS DE PRUEBA (TEST)
+  # ============================================
+  
+  /api/test/personas:
+    get:
+      summary: Listar todas las personas
+      description: Lista todas las personas en el repositorio en memoria (para testing)
+      operationId: listarPersonas
+      tags:
+        - Test
+      responses:
+        '200':
+          description: Lista de personas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  personas:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PersonaData'
+    
+    post:
+      summary: Agregar nueva persona
+      description: Agrega una nueva persona al repositorio en memoria para pruebas
+      operationId: agregarPersona
+      tags:
+        - Test
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonaData'
+            example:
+              tipoDocumento: "CI"
+              numeroDocumento: "12345678"
+              primerNombre: "Test"
+              segundoNombre: "Usuario"
+              primerApellido: "Prueba"
+              segundoApellido: "Test"
+              fechaNacimiento: "1990-01-01"
+              sexo: "M"
+              nacionalidad: "UY"
+              departamento: "Montevideo"
+              localidad: "Montevideo"
+      responses:
+        '201':
+          description: Persona agregada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  mensaje:
+                    type: string
+                  persona:
+                    $ref: '#/components/schemas/PersonaData'
+                  totalPersonas:
+                    type: integer
+        '400':
+          description: Error de validación
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ============================================
+  # SERVICIOS INUS - GESTIÓN DE USUARIOS
+  # ============================================
+
+  /api/inus/usuarios:
+    get:
+      summary: Listar todos los usuarios
+      description: Lista todos los usuarios registrados (para testing/administración)
+      operationId: listarUsuarios
+      tags:
+        - INUS - Usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  total:
+                    type: integer
+                  usuarios:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InusUsuario'
+    
+    post:
+      summary: Crear nuevo usuario
+      description: Crea un nuevo usuario con datos patronímicos
+      operationId: crearUsuario
+      tags:
+        - INUS - Usuarios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InusUsuario'
+            example:
+              uid: "uid-nuevo-usuario"
+              email: "usuario@example.com"
+              primerNombre: "Juan"
+              segundoNombre: "Carlos"
+              primerApellido: "Pérez"
+              segundoApellido: "González"
+              tipDocum: "CI"
+              codDocum: "12345678"
+              nacionalidad: "UY"
+              fechaNacimiento: "1990-01-01"
+              departamento: "MONTEVIDEO"
+              localidad: "Montevideo"
+              direccion: "Av. 18 de Julio 1234"
+              telefono: "099123456"
+              codigoPostal: "11200"
+              profileCompleted: true
+              rol: "USUARIO_SALUD"
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  mensaje:
+                    type: string
+                  usuario:
+                    $ref: '#/components/schemas/InusUsuario'
+                  totalUsuarios:
+                    type: integer
+        '409':
+          description: Usuario ya existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/inus/usuarios/{uid}:
+    get:
+      summary: Obtener usuario por UID
+      description: Obtiene los datos patronímicos de un usuario por su UID
+      operationId: obtenerUsuarioPorUid
+      tags:
+        - INUS - Usuarios
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: UID del usuario
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  usuario:
+                    $ref: '#/components/schemas/InusUsuario'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    put:
+      summary: Actualizar usuario
+      description: Actualiza los datos patronímicos de un usuario existente (solo campos no nulos)
+      operationId: actualizarUsuario
+      tags:
+        - INUS - Usuarios
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: UID del usuario
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InusUsuario'
+            example:
+              email: "nuevo-email@example.com"
+              telefono: "099999999"
+              direccion: "Nueva dirección 567"
+      responses:
+        '200':
+          description: Usuario actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  mensaje:
+                    type: string
+                  usuario:
+                    $ref: '#/components/schemas/InusUsuario'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/inus/usuarios/documento:
+    get:
+      summary: Obtener usuario por documento
+      description: Obtiene los datos patronímicos de un usuario por tipo y número de documento
+      operationId: obtenerUsuarioPorDocumento
+      tags:
+        - INUS - Usuarios
+      parameters:
+        - name: tipDocum
+          in: query
+          required: true
+          description: Tipo de documento (CI, PASAPORTE, etc.)
+          schema:
+            type: string
+        - name: codDocum
+          in: query
+          required: true
+          description: Número de documento
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  usuario:
+                    $ref: '#/components/schemas/InusUsuario'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ============================================
+  # SERVICIOS INUS - BÚSQUEDA POR PRESTADOR
+  # ============================================
+
+  /api/inus/usuarios/prestador/{prestadorId}:
+    get:
+      summary: Obtener usuarios por prestador (ID)
+      description: Obtiene todos los usuarios asociados a un prestador de salud por su ID
+      operationId: obtenerUsuariosPorPrestadorId
+      tags:
+        - INUS - Prestadores
+      parameters:
+        - name: prestadorId
+          in: path
+          required: true
+          description: ID del prestador de salud
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Lista de usuarios asociados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  prestadorId:
+                    type: integer
+                  total:
+                    type: integer
+                  usuarios:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InusUsuario'
+
+  /api/inus/usuarios/prestador/rut/{prestadorRut}:
+    get:
+      summary: Obtener usuarios por prestador (RUT)
+      description: Obtiene todos los usuarios asociados a un prestador de salud por su RUT
+      operationId: obtenerUsuariosPorPrestadorRut
+      tags:
+        - INUS - Prestadores
+      parameters:
+        - name: prestadorRut
+          in: path
+          required: true
+          description: RUT del prestador de salud
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de usuarios asociados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  prestadorRut:
+                    type: string
+                  total:
+                    type: integer
+                  usuarios:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InusUsuario'
+
+  /api/inus/usuarios/{uid}/prestadores:
+    get:
+      summary: Obtener prestadores de un usuario
+      description: Obtiene todos los prestadores de salud asociados a un usuario
+      operationId: obtenerPrestadoresPorUsuario
+      tags:
+        - INUS - Prestadores
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: UID del usuario
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de prestadores asociados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  usuarioUid:
+                    type: string
+                  totalPrestadores:
+                    type: integer
+                  prestadoresIds:
+                    type: array
+                    items:
+                      type: integer
+                  asociaciones:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UsuarioPrestadorAssociation'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    post:
+      summary: Asociar usuario con prestador
+      description: Crea una asociación entre un usuario y un prestador de salud
+      operationId: asociarUsuarioConPrestador
+      tags:
+        - INUS - Prestadores
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: UID del usuario
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - prestadorId
+              properties:
+                prestadorId:
+                  type: integer
+                  format: int64
+                prestadorRut:
+                  type: string
+            example:
+              prestadorId: 1
+              prestadorRut: "12345678"
+      responses:
+        '201':
+          description: Asociación creada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  mensaje:
+                    type: string
+                  asociacion:
+                    $ref: '#/components/schemas/UsuarioPrestadorAssociation'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/inus/usuarios/{uid}/prestadores/{prestadorId}:
+    delete:
+      summary: Eliminar asociación usuario-prestador
+      description: Elimina la asociación entre un usuario y un prestador de salud
+      operationId: eliminarAsociacionUsuarioPrestador
+      tags:
+        - INUS - Prestadores
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: UID del usuario
+          schema:
+            type: string
+        - name: prestadorId
+          in: path
+          required: true
+          description: ID del prestador
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Asociación eliminada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '404':
+          description: Asociación no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/inus/asociaciones:
+    get:
+      summary: Listar todas las asociaciones
+      description: Lista todas las asociaciones usuario-prestador (para administración/testing)
+      operationId: listarAsociaciones
+      tags:
+        - INUS - Prestadores
+      responses:
+        '200':
+          description: Lista de asociaciones
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  total:
+                    type: integer
+                  asociaciones:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UsuarioPrestadorAssociation'
+
+components:
+  schemas:
+    PersonaData:
+      type: object
+      required:
+        - tipoDocumento
+        - numeroDocumento
+        - primerNombre
+        - primerApellido
+      properties:
+        tipoDocumento:
+          type: string
+          description: Tipo de documento (CI, PASAPORTE, etc.)
+          example: "CI"
+        numeroDocumento:
+          type: string
+          description: Número de documento
+          example: "50830691"
+        primerNombre:
+          type: string
+          description: Primer nombre
+          example: "Victor"
+        segundoNombre:
+          type: string
+          description: Segundo nombre
+          example: "David"
+        primerApellido:
+          type: string
+          description: Primer apellido
+          example: "Alvez"
+        segundoApellido:
+          type: string
+          description: Segundo apellido
+          example: "González"
+        fechaNacimiento:
+          type: string
+          format: date
+          description: Fecha de nacimiento (YYYY-MM-DD)
+          example: "2000-12-26"
+        sexo:
+          type: string
+          enum: [M, F]
+          description: Sexo (M=Masculino, F=Femenino)
+          example: "M"
+        nacionalidad:
+          type: string
+          enum: [UY, AR, BR, CL, OT]
+          description: Código de nacionalidad
+          example: "UY"
+        departamento:
+          type: string
+          description: Departamento
+          example: "Montevideo"
+        localidad:
+          type: string
+          description: Localidad
+          example: "Montevideo"
+
+    InusUsuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID interno
+        uid:
+          type: string
+          description: UID único del usuario
+          example: "uid-victor-50830691"
+        email:
+          type: string
+          format: email
+          description: Email del usuario
+          example: "victor.alvez@example.com"
+        primerNombre:
+          type: string
+          description: Primer nombre
+          example: "Victor"
+        segundoNombre:
+          type: string
+          description: Segundo nombre
+          example: "David"
+        primerApellido:
+          type: string
+          description: Primer apellido
+          example: "Alvez"
+        segundoApellido:
+          type: string
+          description: Segundo apellido
+          example: "González"
+        tipDocum:
+          type: string
+          description: Tipo de documento
+          example: "CI"
+        codDocum:
+          type: string
+          description: Código de documento
+          example: "50830691"
+        nacionalidad:
+          type: string
+          enum: [UY, AR, BR, CL, OT]
+          description: Código de nacionalidad
+          example: "UY"
+        fechaNacimiento:
+          type: string
+          format: date
+          description: Fecha de nacimiento
+          example: "2000-12-26"
+        departamento:
+          type: string
+          enum: [MONTEVIDEO, ARTIGAS, CANELONES, CERRO_LARGO, COLONIA, DURAZNO, FLORES, FLORIDA, LAVALLEJA, MALDONADO, PAYSANDU, RIO_NEGRO, RIVERA, ROCHA, SALTO, SAN_JOSE, SORIANO, TACUAREMBO, TREINTA_Y_TRES]
+          description: Departamento
+          example: "MONTEVIDEO"
+        localidad:
+          type: string
+          description: Localidad
+          example: "Montevideo"
+        direccion:
+          type: string
+          description: Dirección
+          example: "Av. 18 de Julio 1234"
+        telefono:
+          type: string
+          description: Teléfono
+          example: "099123456"
+        codigoPostal:
+          type: string
+          description: Código postal
+          example: "11200"
+        profileCompleted:
+          type: boolean
+          description: Indica si el perfil está completo
+          example: true
+        rol:
+          type: string
+          enum: [USUARIO_SALUD, ADMIN_HCEN]
+          description: Rol del usuario
+          example: "USUARIO_SALUD"
+
+    UsuarioPrestadorAssociation:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID interno de la asociación
+        usuarioUid:
+          type: string
+          description: UID del usuario
+          example: "uid-victor-50830691"
+        prestadorId:
+          type: integer
+          format: int64
+          description: ID del prestador de salud
+          example: 1
+        prestadorRut:
+          type: string
+          description: RUT del prestador
+          example: "12345678"
+        fechaAlta:
+          type: string
+          format: date-time
+          description: Fecha de creación de la asociación
+          example: "2025-01-15T10:30:00"
+
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        mensaje:
+          type: string
+          description: Mensaje de error
+          example: "Usuario no encontrado con UID: uid-inexistente"
+
+tags:
+  - name: Test
+    description: Servicios de prueba y administración
+  - name: INUS - Usuarios
+    description: Gestión de datos patronímicos de usuarios
+  - name: INUS - Prestadores
+    description: Gestión de asociaciones usuario-prestador de salud
+

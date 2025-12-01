@@ -1,0 +1,436 @@
+a:hover {
+    color: #0056b3;
+    text-decoration: none !important;
+}
+
+/* ============================================
+   Header Component Styles
+   ============================================ */
+
+/* Header Principal */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Container */
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Container para pantallas grandes */
+@media (min-width: 1400px) {
+  .header-container {
+    max-width: 1400px;
+    padding: 0 40px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .header-container {
+    max-width: 1600px;
+    padding: 0 60px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .header-container {
+    max-width: 1800px;
+    padding: 0 80px;
+  }
+}
+
+/* Flex Container Principal */
+.header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+}
+
+/* Ajustes de altura para pantallas grandes */
+@media (min-width: 1400px) {
+  .header-flex {
+    height: 75px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .header-flex {
+    height: 80px;
+  }
+}
+
+/* Logo Container */
+.header-logo-container {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+/* Logo Link */
+.header-logo-link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+/* Logo Image */
+.header-logo-img {
+  height: 45px;
+  margin-right: 12px;
+}
+
+/* Logo Text */
+.header-logo-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+}
+
+/* Ajustes de logo para pantallas grandes */
+@media (min-width: 1400px) {
+  .header-logo-img {
+    height: 50px;
+    margin-right: 16px;
+  }
+  
+  .header-logo-text {
+    font-size: 26px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .header-logo-img {
+    height: 55px;
+    margin-right: 20px;
+  }
+  
+  .header-logo-text {
+    font-size: 28px;
+  }
+}
+
+/* Vista Badge (cuando admin está en modo usuario) */
+.header-vista-badge {
+  margin-left: 8px;
+  padding: 4px 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Mobile Menu Button */
+.header-mobile-menu-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Navigation */
+.header-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
+  position: relative;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  width: auto;
+}
+
+/* Navigation Links Container */
+.header-nav-links {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  width: auto;
+}
+
+/* Ajustes para pantallas grandes */
+@media (min-width: 1400px) {
+  .header-nav {
+    gap: 50px;
+  }
+  
+  .header-nav-links {
+    gap: 40px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .header-nav {
+    gap: 60px;
+  }
+  
+  .header-nav-links {
+    gap: 48px;
+  }
+  
+  .header-nav-link {
+    font-size: 17px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .header-nav {
+    gap: 70px;
+  }
+  
+  .header-nav-links {
+    gap: 56px;
+  }
+  
+  .header-nav-link {
+    font-size: 18px;
+  }
+}
+
+/* Navigation Link Base */
+.header-nav-link {
+  color: #e5e7eb;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.2s ease;
+  position: relative;
+  padding: 0;
+  width: auto;
+}
+
+/* Navigation Link Active */
+.header-nav-link.active {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Navigation Link Active Indicator */
+.header-nav-link-indicator {
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 1px;
+}
+
+.header-toggle-btn,
+.header-logout-btn {
+  padding: 5px 15px;
+  
+}
+
+/* Toggle View Role Button */
+.header-toggle-btn {
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: auto;
+  white-space: nowrap;
+  margin-right: 0;
+  margin-bottom: 0;
+}
+
+/* Logout Button */
+.header-logout-btn {
+  background-color: #dc2626;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  border: 2px solid #dc2626;
+  cursor: pointer;
+  width: auto;
+  text-align: center;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.header-toggle-btn.view-admin {
+  background-color: #f59e0b;
+}
+
+.header-toggle-btn.view-user {
+  background-color: #10b981;
+}
+
+.header-toggle-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Action Buttons Container */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-direction: row;
+  width: auto;
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+/* Ajustes de botones para pantallas grandes */
+@media (min-width: 1400px) {
+  .header-actions {
+    gap: 16px;
+  }
+  
+  .header-logout-btn,
+  .header-login-btn,
+  .header-toggle-btn {
+    padding: 3px 17px;
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .header-actions {
+    gap: 20px;
+  }
+  
+  .header-toggle-btn,
+  .header-logout-btn,
+  .header-login-btn {
+    padding: 6px 20px;
+    font-size: 15px;
+  }
+}
+
+
+.header-logout-btn:hover {
+  background-color: #b91c1c;
+  border-color: #b91c1c;
+  transform: translateY(-1px);
+}
+
+/* Login Button */
+.header-login-btn {
+  padding: 10px 20px;
+  background-color: #ffffff;
+  color: #3b82f6;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  width: auto;
+  text-align: center;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.header-login-btn:hover {
+  background-color: #f8fafc;
+  color: #1e40af;
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   Responsive Styles (Mobile)
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Logo Image Mobile */
+  .header-logo-img {
+    height: 35px;
+    margin-right: 8px;
+  }
+
+  /* Logo Text Mobile */
+  .header-logo-text {
+    font-size: 18px;
+  }
+
+  /* Navigation Mobile */
+  .header-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+
+  .header-nav.hidden {
+    display: none !important;
+  }
+
+  /* Navigation Links Container Mobile */
+  .header-nav-links {
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+
+  /* Navigation Link Mobile */
+  .header-nav-link {
+    font-size: 18px;
+    padding: 8px 0;
+    width: 100%;
+  }
+
+  /* Action Buttons Container Mobile */
+  .header-actions {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  /* Logout Button Mobile */
+  .header-toggle-btn,
+  .header-logout-btn {
+    padding: 12px 20px;
+    font-size: 16px;
+    width: 100%;
+  }
+
+}
+
+/* Ajuste del padding superior del contenido principal para pantallas grandes */
+@media (min-width: 1400px) {
+  .main-content-wrapper {
+    padding-top: 75px !important;
+  }
+}
+
+@media (min-width: 1600px) {
+  .main-content-wrapper {
+    padding-top: 80px !important;
+  }
+}
+
+
+

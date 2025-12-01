@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">HCEN</string>
+    <string name="delete_notification">Borrar notificación</string>
+</resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/clinicalDocumentsFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient">
+
+    <!-- RecyclerView para documentos -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerDocuments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical" />
+
+    <!-- Vista vacía -->
+    <LinearLayout
+        android:id="@+id/emptyView"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:src="@drawable/ic_clinical_docs"
+            android:layout_marginBottom="15dp" />
+
+        <TextView
+            android:text="¡No hay documentos cargados!"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/indigo_dye"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</FrameLayout>

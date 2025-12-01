@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-app>
+    <module>
+        <web>
+            <web-uri>prestador-salud-mockup.war</web-uri>
+            <context-root>/</context-root>
+        </web>
+    </module>
+</jboss-app>
+

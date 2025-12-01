@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "52431662171",
+    "project_id": "hcen-tse",
+    "storage_bucket": "hcen-tse.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52431662171:android:3ad14f9fd66fd75161e37e",
+        "android_client_info": {
+          "package_name": "uy.edu.tse.hcen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE1uR_PffS_NcuurWtIjnGH0ct9fRMevs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

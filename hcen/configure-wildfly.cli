@@ -1,0 +1,49 @@
+embed-server --server-config=standalone-full.xml --std-out=echo
+
+module add --name=org.postgresql --resources=/opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main/postgresql-42.6.0.jar --dependencies=javax.api,javax.transaction.api
+
+/subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql,driver-class-name=org.postgresql.Driver,driver-xa-datasource-class-name=org.postgresql.xa.PGXADataSource)
+
+/subsystem=datasources/data-source=hcenDS:add(jndi-name=java:/hcen,connection-url=jdbc:postgresql://postgres:5432/hcen,driver-name=postgresql,user-name=hcen_user,password=hcen_password,enabled=true)
+
+try
+    /subsystem=datasources/data-source=PoliticasDS:read-resource
+catch
+    /subsystem=datasources/data-source=PoliticasDS:add(jndi-name=java:jboss/datasources/PoliticasDS,connection-url=jdbc:postgresql://postgres:5432/hcen,driver-name=postgresql,user-name=hcen_user,password=hcen_password,enabled=true,jta=true)
+end-try
+
+try
+    /subsystem=messaging-activemq/server=default/jms-queue=NodoRegistrationQueue:read-resource
+catch
+    /subsystem=messaging-activemq/server=default/jms-queue=NodoRegistrationQueue:add(durable=true,entries=["java:/jms/queue/NodoRegistrationQueue","java:jboss/exported/jms/queue/NodoRegistrationQueue"])
+end-try
+
+try
+    /subsystem=messaging-activemq/server=default/connection-factory=RemoteConnectionFactory:read-resource
+catch
+    /subsystem=messaging-activemq/server=default/connection-factory=RemoteConnectionFactory:add(entries=["java:/jms/RemoteConnectionFactory","java:jboss/exported/jms/RemoteConnectionFactory"])
+end-try
+
+try
+    /subsystem=messaging-activemq/server=default/jms-queue=nodoConfigQueue:read-resource
+catch
+    /subsystem=messaging-activemq/server=default/jms-queue=nodoConfigQueue:add(durable=true,entries=["java:/jms/queue/nodoConfigQueue","java:jboss/exported/jms/queue/nodoConfigQueue"])
+end-try
+
+try
+    /subsystem=ee/service=default-bindings:write-attribute(name=jms-connection-factory,value=java:jboss/DefaultJMSConnectionFactory)
+catch
+end-try
+
+try
+    /subsystem=ejb3:write-attribute(name=default-resource-adapter-name,value=${ejb.resource-adapter-name:activemq-ra.rar})
+catch
+end-try
+
+try
+    /subsystem=ejb3:write-attribute(name=default-mdb-instance-pool,value=mdb-strict-max-pool)
+catch
+end-try
+
+quit
+

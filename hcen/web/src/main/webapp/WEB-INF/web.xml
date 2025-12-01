@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee 
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+    
+    <display-name>HCEN Web Application</display-name>
+    
+    <!-- Servlet de callback de Gub.uy - debe tener prioridad sobre la página de bienvenida -->
+    <servlet>
+        <servlet-name>GubUyCallbackServlet</servlet-name>
+        <servlet-class>uy.edu.tse.hcen.servlet.GubUyCallbackServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>GubUyCallbackServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>GubUyCallbackServlet</servlet-name>
+        <url-pattern>/callback</url-pattern>
+    </servlet-mapping>
+    
+    <!-- Servlet de logout -->
+    <servlet>
+        <servlet-name>LogoutCallbackServlet</servlet-name>
+        <servlet-class>uy.edu.tse.hcen.servlet.LogoutCallbackServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>LogoutCallbackServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    
+    <!-- Excluir /api/* del servlet de callback -->
+    <welcome-file-list>
+        <!-- No definir welcome files para evitar conflicto con el servlet -->
+    </welcome-file-list>
+    
+</web-app>

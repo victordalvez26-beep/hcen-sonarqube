@@ -1,0 +1,118 @@
+openapi: 3.0.3
+info:
+  title: HCEN - RNDC Service API
+  version: 1.0.0
+  description: API del microservicio RNDC (gestión de metadatos y descargas de documentos)
+servers:
+  - url: http://localhost:8080/hcen-rndc-service/api
+paths:
+  /rndc/documentos/paciente/{ci}:
+    get:
+      summary: Buscar documentos por CI
+      parameters:
+        - in: path
+          name: ci
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Profesional-Id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de metadatos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MetadataDocumentoDTO'
+  /rndc/documentos/buscar:
+    get:
+      summary: Buscar documentos por nombre
+      parameters:
+        - in: query
+          name: nombre
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Profesional-Id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de metadatos
+  /rndc/documentos/{id}:
+    get:
+      summary: Obtener metadata por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Metadata del documento
+    delete:
+      summary: (No expuesto) placeholder
+  /rndc/documentos:
+    post:
+      summary: Crear metadata de documento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetadataDocumentoDTO'
+      responses:
+        '201':
+          description: Creado
+  /rndc/documentos/{id}/descargar:
+    get:
+      summary: Descargar documento por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Stream del archivo
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+  /rndc/documentos/health:
+    get:
+      summary: Health check RNDC
+      responses:
+        '200':
+          description: OK
+
+components:
+  schemas:
+    MetadataDocumentoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nombrePaciente:
+          type: string
+        ciPaciente:
+          type: string
+        fechaDocumento:
+          type: string
+          format: date-time
+        tipoDocumento:
+          type: string
+        tamaño:
+          type: integer
+          format: int64

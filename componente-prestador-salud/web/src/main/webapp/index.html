@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prestador de Salud - Mockup HCEN</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #666;
+        }
+        .config-banner {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .config-banner.warning {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .service-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        .service-card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        .service-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #5568d3;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Prestador de Salud - Mockup</h1>
+            <p>Simulador de software de prestador para consumir servicios HCEN</p>
+        </div>
+
+        <div id="configBanner" class="config-banner warning">
+            <div>
+                <strong>⚠️ Configuración requerida</strong>
+                <p style="margin: 5px 0 0 0; font-size: 14px;">Configure su API Key y URL de origen antes de usar los servicios</p>
+            </div>
+            <a href="config.html" class="btn">Configurar</a>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="icon">👤</div>
+                <h2>Alta de Usuario</h2>
+                <p>Dar de alta un usuario en el INUS (Índice Nacional de Usuarios de Salud)</p>
+                <a href="alta-usuario.html" class="btn">Ir al servicio</a>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">📄</div>
+                <h2>Registrar Metadatos</h2>
+                <p>Registrar metadatos de un documento clínico en el RNDC</p>
+                <a href="registrar-metadatos.html" class="btn">Ir al servicio</a>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">📋</div>
+                <h2>Listar Documentos</h2>
+                <p>Recuperar lista de documentos clínicos asociados a un usuario</p>
+                <a href="listar-documentos.html" class="btn">Ir al servicio</a>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">🔍</div>
+                <h2>Consultar Documento</h2>
+                <p>Obtener metadatos de un documento clínico específico</p>
+                <a href="consultar-documento.html" class="btn">Ir al servicio</a>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">⬇️</div>
+                <h2>Descargar Documento</h2>
+                <p>Descargar un documento clínico específico alojado en otro prestador</p>
+                <a href="descargar-documento.html" class="btn">Ir al servicio</a>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">⚙️</div>
+                <h2>Configuración</h2>
+                <p>Configurar API Key y URL de origen para autenticación</p>
+                <a href="config.html" class="btn btn-secondary">Configurar</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar si hay configuración guardada
+        fetch('/config')
+            .then(() => {
+                // Si hay configuración, ocultar el banner de advertencia
+                const banner = document.getElementById('configBanner');
+                if (banner) {
+                    banner.style.display = 'none';
+                }
+            })
+            .catch(() => {
+                // No hay configuración, mostrar advertencia
+            });
+    </script>
+</body>
+</html>
+

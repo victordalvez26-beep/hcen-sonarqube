@@ -1,0 +1,110 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@drawable/background_gradient">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Notificación de resultados -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchResults"
+            android:text="Notificación de resultados"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="Cuando los resultados de laboratorio o de imágenes (radiografías, ecografías, etc.) estén disponibles."
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Nuevo pedido de acceso -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchNewAccessRequest"
+            android:text="Nuevo pedido de acceso"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="Cuando un profesional o institución solicita permiso para acceder a tu información médica."
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Actualizaciones en el historial médico -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchMedicalHistory"
+            android:text="Actualizaciones en el historial médico"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="Cuando se añaden nuevos documentos, diagnósticos o notas en tu historial médico."
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Nuevo acceso a historia clínica -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchNewAccessHistory"
+            android:text="Nuevo acceso a historia clínica"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="Cuando un profesional o institución obtiene acceso a tu historia clínica."
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Mantenimiento del sistema -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchMaintenance"
+            android:text="Mantenimiento del sistema"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="Cuando la app o el sistema va a estar fuera de servicio temporalmente por mantenimiento."
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Nuevas funciones -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchNewFeatures"
+            android:text="Nuevas funciones"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="Avisos sobre mejoras, nuevas características o correcciones de errores en la app."
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Desactivar todas -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchAll"
+            android:text="Desactivar todas"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="Desactiva todas las notificaciones de la aplicación."
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</ScrollView>

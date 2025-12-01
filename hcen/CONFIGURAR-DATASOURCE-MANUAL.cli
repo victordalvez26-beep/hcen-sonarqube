@@ -1,0 +1,40 @@
+# Script CLI para configurar el datasource manualmente
+# Ejecutar con: docker exec -i hcen-backend /opt/jboss/wildfly/bin/jboss-cli.sh --connect --file=/dev/stdin < CONFIGURAR-DATASOURCE-MANUAL.cli
+
+# Verificar si el driver ya existe
+try
+    /subsystem=datasources/jdbc-driver=postgresql:read-resource
+catch
+    echo Driver PostgreSQL no encontrado, agregando...
+    /subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql,driver-class-name=org.postgresql.Driver)
+end-try
+
+# Eliminar datasource si existe
+try
+    /subsystem=datasources/data-source=hcenDS:remove()
+catch
+    echo DataSource no existe, creando nuevo...
+end-try
+
+# Crear el datasource
+/subsystem=datasources/data-source=hcenDS:add(
+    jndi-name=java:/hcen,
+    connection-url=jdbc:postgresql://postgres:5432/hcen,
+    driver-name=postgresql,
+    user-name=hcen_user,
+    password=hcen_password,
+    enabled=true,
+    max-pool-size=20,
+    min-pool-size=5
+)
+
+# Verificar que se creó correctamente
+/subsystem=datasources/data-source=hcenDS:read-resource
+
+# Probar la conexión
+/subsystem=datasources/data-source=hcenDS:test-connection-in-pool
+
+# Guardar configuración
+/:write-configuration
+
+

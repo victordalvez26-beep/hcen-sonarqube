@@ -1,0 +1,68 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Mancha 1: picton_blue -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="0.2"
+                android:centerY="0.25"
+                android:gradientRadius="1500dp"
+                android:startColor="@color/picton_blue"
+                android:endColor="@android:color/transparent"/>
+        </shape>
+    </item>
+
+    <!-- Mancha 2: moonstone -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="0.8"
+                android:centerY="0.7"
+                android:gradientRadius="1400dp"
+                android:startColor="@color/moonstone"
+                android:endColor="@android:color/transparent"/>
+        </shape>
+    </item>
+
+    <!-- Mancha 3: mint_green -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="0.5"
+                android:centerY="0.15"
+                android:gradientRadius="1300dp"
+                android:startColor="@color/mint_green"
+                android:endColor="@android:color/transparent"/>
+        </shape>
+    </item>
+
+    <!-- Mancha 4: columbia_blue -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="0.3"
+                android:centerY="0.8"
+                android:gradientRadius="1200dp"
+                android:startColor="@color/columbia_blue"
+                android:endColor="@android:color/transparent"/>
+        </shape>
+    </item>
+
+    <!-- Mancha 5: blue_ncs -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="0.7"
+                android:centerY="0.35"
+                android:gradientRadius="1600dp"
+                android:startColor="@color/blue_ncs"
+                android:endColor="@android:color/transparent"/>
+        </shape>
+    </item>
+
+</layer-list>

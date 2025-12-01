@@ -1,0 +1,5 @@
+{
+    "sonarCloudOrganization": "stretchcloud",
+    "projectKey": "stretchcloud_deeper-sast-demo",
+    "region": "EU"
+}

@@ -1,0 +1,190 @@
+openapi: 3.0.3
+info:
+  title: HCEN - Web API
+  version: 1.0.0
+  description: "API para gestión de Nodos Periféricos y utilidades (auth, rabbit)."
+servers:
+  - url: http://localhost:8080/hcen-web/api
+paths:
+  /nodos:
+    get:
+      summary: Lista nodos
+      responses:
+        '200':
+          description: Lista de nodos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NodoPerifericoDTO'
+    post:
+      summary: Crear nodo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodoPerifericoDTO'
+      responses:
+        '201':
+          description: Nodo creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodoPerifericoDTO'
+  /nodos/{rut}:
+    get:
+      summary: Obtener nodo por RUT
+      parameters:
+        - in: path
+          name: rut
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Nodo encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodoPerifericoDTO'
+        '404':
+          description: No encontrado
+    put:
+      summary: Actualizar nodo (por RUT)
+      parameters:
+        - in: path
+          name: rut
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodoPerifericoDTO'
+      responses:
+        '200':
+          description: Nodo actualizado
+        '404':
+          description: No encontrado
+    delete:
+      summary: Eliminar nodo por RUT
+      parameters:
+        - in: path
+          name: rut
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Eliminado
+  /nodos/{rut}/config:
+    put:
+      summary: Actualizar configuración técnica del nodo
+      parameters:
+        - in: path
+          name: rut
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nodoPerifericoUrlBase:
+                  type: string
+      responses:
+        '200':
+          description: Config actualizada
+        '400':
+          description: Bad request
+  /nodos/{rut}/notify:
+    post:
+      summary: Forzar notificación (alta) para un nodo existente
+      parameters:
+        - in: path
+          name: rut
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Notificación enviada
+        '404':
+          description: Nodo no encontrado
+  /nodos/notify:
+    post:
+      summary: Crear nodo y notificar (alta.clinica)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodoPerifericoDTO'
+      responses:
+        '201':
+          description: Nodo creado y notificado
+
+  /auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Usuario autenticado
+  /auth/session:
+    get:
+      summary: Obtener sesión actual
+      responses:
+        '200':
+          description: Información de sesión
+
+components:
+  schemas:
+    NodoPerifericoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nombre:
+          type: string
+        RUT:
+          type: string
+        departamento:
+          type: string
+        localidad:
+          type: string
+        direccion:
+          type: string
+        contacto:
+          type: string
+        url:
+          type: string
+        nodoPerifericoUrlBase:
+          type: string
+        nodoPerifericoUsuario:
+          type: string
+        nodoPerifericoPassword:
+          type: string
+        estado:
+          type: string
+        fechaAlta:
+          type: string
+          format: date-time

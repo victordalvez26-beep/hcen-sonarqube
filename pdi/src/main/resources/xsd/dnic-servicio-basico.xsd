@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://agesic.gub.uy/pdi/services/dnic/1.0"
+           targetNamespace="http://agesic.gub.uy/pdi/services/dnic/1.0"
+           elementFormDefault="qualified">
+
+    <!-- Request: Obtener Persona por Documento -->
+    <xs:element name="ObtPersonaPorDocRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="tipoDocumento" type="xs:string"/>
+                <xs:element name="numeroDocumento" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Response: Obtener Persona por Documento -->
+    <xs:element name="ObtPersonaPorDocResponse">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element name="persona" type="tns:Persona"/>
+                <xs:element name="error" type="tns:Error"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Tipo: Persona -->
+    <xs:complexType name="Persona">
+        <xs:sequence>
+            <xs:element name="tipoDocumento" type="xs:string"/>
+            <xs:element name="numeroDocumento" type="xs:string"/>
+            <xs:element name="primerNombre" type="xs:string"/>
+            <xs:element name="segundoNombre" type="xs:string" minOccurs="0"/>
+            <xs:element name="primerApellido" type="xs:string"/>
+            <xs:element name="segundoApellido" type="xs:string" minOccurs="0"/>
+            <xs:element name="fechaNacimiento" type="xs:date"/>
+            <xs:element name="sexo" type="xs:string"/>
+            <xs:element name="nacionalidad" type="xs:string"/>
+            <xs:element name="departamento" type="xs:string" minOccurs="0"/>
+            <xs:element name="localidad" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Tipo: Error -->
+    <xs:complexType name="Error">
+        <xs:sequence>
+            <xs:element name="codigo" type="xs:string"/>
+            <xs:element name="mensaje" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
+
+

@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:animation="@anim/fade_in">
+
+    <ImageView
+        android:id="@+id/dialogIcon"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="12dp"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/dialogProgress"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:indeterminateTint="@color/indigo_dye"
+        android:indeterminateTintMode="src_atop" />
+
+    <TextView
+        android:id="@+id/dialogMessage"
+        android:textSize="16sp"
+        android:textColor="@color/indigo_dye"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

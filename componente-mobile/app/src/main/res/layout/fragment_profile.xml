@@ -1,0 +1,41 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/txtProfileTitle"
+            android:text="Mi Perfil"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/sectionHelp"
+            layout="@layout/item_profile_section" />
+
+        <include
+            android:id="@+id/sectionSettings"
+            layout="@layout/item_profile_section" />
+
+        <include
+            android:id="@+id/sectionHCEN"
+            layout="@layout/item_profile_section" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:text="Cerrar sesión"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            android:layout_marginTop="24dp" />
+    </LinearLayout>
+</ScrollView>

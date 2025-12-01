@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: hcen-postgres
+    environment:
+      POSTGRES_DB: hcen
+      POSTGRES_USER: hcen_user
+      POSTGRES_PASSWORD: hcen_password
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - hcen-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hcen_user -d hcen"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    container_name: hcen-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"     # AMQP
+      - "15672:15672"   # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: hcen
+      RABBITMQ_DEFAULT_PASS: hcen
+    networks:
+      - hcen-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hcen-backend
+    ports:
+      - "8080:8080"
+      - "9990:9990"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    environment:
+      - JAVA_OPTS=-Xms512m -Xmx1024m
+      # Variables para comunicación con componente periférico (Docker interno)
+      - PERIPHERAL_SERVICE_NAME=hcen-wildfly-app
+      - PERIPHERAL_SERVICE_PORT=8080
+      # URL del componente periférico (usado cuando se guardan URIs externas)
+      # Default: http://localhost:8081 (para desarrollo local)
+      # En producción, configurar con URL del servidor donde corre el componente periférico
+      - PERIPHERAL_NODE_URL=http://localhost:8081
+      # URL del frontend del componente periférico (para URLs de activación)
+      # Default: http://localhost:3001 (para desarrollo local)
+      # En producción, configurar con URL pública del frontend del componente periférico
+      - PERIPHERAL_FRONTEND_URL=http://localhost:3001
+      # Variables para autenticación Gub.uy
+      - GUBUY_REDIRECT_URI=http://localhost:8080
+      - FRONTEND_URL=http://localhost:3000
+      - POST_LOGOUT_REDIRECT_URI=http://localhost:8080/logout
+      - BACKEND_URL=http://localhost:8080/hcen
+      # URL del servicio INUS (PDI)
+      - INUS_SERVICE_URL=http://host.docker.internal:8083
+        # URL del servicio DNIC (PDI - SOAP)
+      - DNIC_SERVICE_URL=http://host.docker.internal:8083/ws
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - hcen-network
+
+volumes:
+  postgres_data:
+
+networks:
+  hcen-network:
+    driver: bridge

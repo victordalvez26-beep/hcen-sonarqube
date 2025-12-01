@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>uy.edu.tse.hcen</groupId>
+        <artifactId>componente-prestador-salud</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>prestador-salud-ear</artifactId>
+    <packaging>ear</packaging>
+
+    <name>Prestador Salud - EAR</name>
+    <description>Enterprise Application Archive que empaqueta EJB y WAR</description>
+
+    <dependencies>
+        <!-- Dependencia del módulo EJB -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>prestador-salud-ejb</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
+
+        <!-- Dependencia del módulo WAR -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>prestador-salud-web</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>prestador-salud-mockup</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>${version.ear.plugin}</version>
+                <configuration>
+                    <version>10</version>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <outputFileNameMapping>@{artifactId}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>
+                    <modules>
+                        <webModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>prestador-salud-web</artifactId>
+                            <bundleFileName>prestador-salud-mockup.war</bundleFileName>
+                            <contextRoot>/</contextRoot>
+                        </webModule>
+                    </modules>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+

@@ -1,0 +1,232 @@
+/* Estilos específicos para componentes HCEN */
+
+/* Login Component */
+.slider_area {
+  background-color: var(--background-color);
+}
+
+.slider_text h3 {
+  color: var(--title-color);
+}
+
+/* Header */
+.main-header-area {
+  background-color: var(--white);
+  border-bottom: 2px solid var(--moonstone);
+}
+
+.logo-img img {
+  filter: drop-shadow(0 2px 4px rgba(27, 73, 101, 0.1));
+}
+
+/* Navigation */
+.main-menu ul li a {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.main-menu ul li a:hover {
+  color: var(--link-color);
+}
+
+/* Cards personalizadas */
+.card {
+  box-shadow: 0 4px 6px rgba(27, 73, 101, 0.1);
+  border-radius: 8px;
+  border: 1px solid var(--moonstone);
+}
+
+.card-header {
+  background: linear-gradient(135deg, var(--mint-green), var(--columbia-blue));
+  border-radius: 8px 8px 0 0;
+  border-bottom: 2px solid var(--moonstone);
+}
+
+/* Formularios */
+.form-control {
+  border: 2px solid var(--moonstone);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: var(--picton-blue);
+  box-shadow: 0 0 0 0.2rem rgba(95, 168, 211, 0.25);
+}
+
+/* Botones personalizados */
+.btn {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(27, 73, 101, 0.2);
+}
+
+/* Tablas */
+.table {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(27, 73, 101, 0.1);
+}
+
+.table thead th {
+  background: linear-gradient(135deg, var(--mint-green), var(--columbia-blue));
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+}
+
+/* Alertas personalizadas */
+.alert {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(27, 73, 101, 0.1);
+}
+
+.alert-info {
+  background: linear-gradient(135deg, var(--columbia-blue), var(--mint-green));
+  color: var(--indigo-dye);
+}
+
+/* Badges */
+.badge {
+  border-radius: 20px;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+}
+
+/* Select personalizado - Corregir texto cortado verticalmente */
+.form-select,
+select {
+  border: 2px solid var(--moonstone);
+  border-radius: 6px;
+  padding: 10px 12px !important;
+  line-height: 1.5 !important;
+  height: auto !important;
+  min-height: 42px;
+  display: block;
+  overflow: visible !important;
+}
+
+.form-select:focus,
+select:focus {
+  border-color: var(--picton-blue);
+  box-shadow: 0 0 0 0.2rem rgba(95, 168, 211, 0.25);
+}
+
+/* Corregir nice-select para que muestre el texto completo */
+.nice-select {
+  border: 2px solid var(--moonstone);
+  border-radius: 6px;
+  line-height: 1.5 !important;
+  height: auto !important;
+  min-height: 42px;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  overflow: visible !important;
+}
+
+.nice-select .current {
+  line-height: 1.5 !important;
+  display: flex !important;
+  align-items: center !important;
+  min-height: 22px;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: visible !important;
+}
+
+.nice-select span {
+  line-height: 1.5 !important;
+  display: block;
+  overflow: visible !important;
+  padding: 0;
+}
+
+.nice-select:focus {
+  border-color: var(--picton-blue);
+  box-shadow: 0 0 0 0.2rem rgba(95, 168, 211, 0.25);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card {
+    margin: 0.5rem;
+  }
+  
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Estados de hover para elementos interactivos */
+.table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: var(--columbia-blue);
+  cursor: pointer;
+}
+
+/* Estilos para iconos */
+.fas, .far, .fab {
+  transition: color 0.2s ease;
+}
+
+.btn:hover .fas,
+.btn:hover .far,
+.btn:hover .fab {
+  color: var(--white);
+}
+
+/* Estilos para enlaces en botones */
+.btn-link {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  color: var(--blue-ncs);
+  text-decoration: underline;
+}
+
+/* Estilos para botones de cerrar (btn-close) */
+.btn-close {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+}
+
+.btn-close i {
+  font-size: 20px;
+  line-height: 1;
+  display: block;
+}

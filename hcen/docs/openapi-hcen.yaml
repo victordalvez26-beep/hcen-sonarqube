@@ -1,0 +1,232 @@
+openapi: 3.0.3
+info:
+  title: HCEN API (central)
+  version: 1.0.0
+  description: API central HCEN - endpoints para gestionar nodos periféricos
+servers:
+  - url: http://localhost:8080/hcen-web/api
+paths:
+  /nodos:
+    get:
+      summary: Listar nodos
+      responses:
+        '200':
+          description: Lista de nodos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NodoPerifericoDTO'
+    post:
+      summary: Crear un nuevo nodo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodoPerifericoCreate'
+            examples:
+              createSimple:
+                summary: Payload mínimo para crear
+                value:
+                  nombre: "Centro Salud A"
+                  RUT: "12345678-9"
+                  nodoPerifericoUrlBase: "http://localhost:8083/api"
+      responses:
+        '201':
+          description: Nodo creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodoPerifericoDTO'
+        '400':
+          description: Bad request (validación)
+        '409':
+          description: Conflict (RUT duplicado)
+
+  /nodos/notify:
+    post:
+      summary: Crear un nuevo nodo y notificar (createAndNotify)
+      description: Crea el nodo y publica el evento `alta.clinica`. Si la publicación falla, la transacción falla y se devuelve 500.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodoPerifericoCreate'
+            examples:
+              notifyExample:
+                summary: Crear y notificar
+                value:
+                  nombre: "Centro Salud B"
+                  RUT: "98765432-1"
+                  nodoPerifericoUrlBase: "http://localhost:8083/api"
+      responses:
+        '201':
+          description: Nodo creado y notificado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodoPerifericoDTO'
+        '500':
+          description: Error al publicar el evento (transacción revertida)
+
+  /nodos/{rut}:
+    parameters:
+      - name: rut
+        in: path
+        required: true
+        description: Clave lógica del nodo (RUT). Usar este valor en las rutas en vez del id interno.
+        schema:
+          type: string
+          example: "12345678-9"
+    get:
+      summary: Obtener nodo por id
+      responses:
+        '200':
+          description: Nodo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodoPerifericoDTO'
+        '404':
+          description: Nodo no encontrado
+    put:
+      summary: Actualizar un nodo completo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodoPerifericoDTO'
+      responses:
+        '200':
+          description: Nodo actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodoPerifericoDTO'
+        '400':
+          description: Validación fallida
+        '404':
+          description: Nodo no encontrado
+    delete:
+      summary: Eliminar un nodo
+      responses:
+        '204':
+          description: Nodo eliminado
+        '404':
+          description: Nodo no encontrado
+
+  /nodos/{rut}/config:
+    put:
+      summary: Actualizar sólo la configuración técnica del nodo (nodoPerifericoUrlBase)
+      description: Acepta un payload mínimo con la propiedad `nodoPerifericoUrlBase`. Si la actualización se aplica pero la notificación falla, devuelve 202 Accepted con mensaje.
+      parameters:
+        - name: rut
+          in: path
+          required: true
+          description: RUT del nodo (clave lógica). Ej: "12345678-9".
+          schema:
+            type: string
+            example: "12345678-9"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodoPerifericoConfig'
+            examples:
+              configExample:
+                summary: Cambiar URL base del nodo
+                value:
+                  nodoPerifericoUrlBase: "http://localhost:8083/api"
+      responses:
+        '200':
+          description: Config actualizada y notificación enviada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodoPerifericoDTO'
+        '400':
+          description: Bad request
+        '404':
+          description: Nodo no encontrado
+        '202':
+          description: Config actualizada pero notificación falló; revisar logs
+
+  /nodos/{rut}/notify:
+    post:
+      summary: Forzar notificación (reintento) para un nodo existente
+      parameters:
+        - name: rut
+          in: path
+          required: true
+          description: RUT del nodo (clave lógica). Ej: "12345678-9".
+          schema:
+            type: string
+            example: "12345678-9"
+      responses:
+        '200':
+          description: Notificación enviada (ok)
+        '404':
+          description: Nodo no encontrado
+        '500':
+          description: Error al publicar notificación
+
+components:
+  schemas:
+    NodoPerifericoDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador interno generado por la base de datos (no usar en el front-end). El RUT es la clave lógica.
+          example: "1"
+        nombre:
+          type: string
+          example: "Centro Salud A"
+        RUT:
+          type: string
+          description: Clave lógica del nodo. Usar este valor en las rutas (path) para identificar recursos, por ejemplo "12345678-9".
+          example: "12345678-9"
+        nodoPerifericoUrlBase:
+          type: string
+          example: "http://localhost:8083/api"
+        estado:
+          type: string
+          description: Estado del nodo (PENDIENTE, ACTIVO, ERROR)
+          example: "PENDIENTE"
+        fechaAlta:
+          type: string
+          format: date-time
+          example: "2025-10-21T03:00:00Z"
+
+    NodoPerifericoCreate:
+      type: object
+      required: [nombre, RUT, nodoPerifericoUrlBase]
+      properties:
+        nombre:
+          type: string
+          example: "Centro Salud A"
+        RUT:
+          type: string
+          example: "12345678-9"
+        nodoPerifericoUrlBase:
+          type: string
+          example: "http://localhost:8083/api"
+
+    NodoPerifericoConfig:
+      type: object
+      required: [nodoPerifericoUrlBase]
+      properties:
+        nodoPerifericoUrlBase:
+          type: string
+          example: "http://localhost:8083/api"
+
+  responses:
+    NotFound:
+      description: Recurso no encontrado
+    BadRequest:
+      description: Validación fallida

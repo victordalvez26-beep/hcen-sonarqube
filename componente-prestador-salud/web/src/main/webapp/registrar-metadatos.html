@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Metadatos - Prestador de Salud</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .btn {
+            padding: 14px 28px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #5568d3;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            margin-left: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📄 Registrar Metadatos de Documento</h1>
+        <p>Registrar metadatos de un documento clínico en el RNDC</p>
+
+        <form id="registrarMetadatosForm">
+            <div class="form-group">
+                <label for="documentoIdPaciente">CI del Paciente *</label>
+                <input type="text" id="documentoIdPaciente" name="documentoIdPaciente" required placeholder="12345678">
+            </div>
+
+            <div class="form-group">
+                <label for="datosPatronimicos">Nombre Completo del Paciente *</label>
+                <input type="text" id="datosPatronimicos" name="datosPatronimicos" required placeholder="Juan Pérez">
+            </div>
+
+            <div class="form-group">
+                <label for="tipoDocumento">Tipo de Documento *</label>
+                <select id="tipoDocumento" name="tipoDocumento" required>
+                    <option value="EVALUACION">Evaluación</option>
+                    <option value="HISTORIA_CLINICA">Historia Clínica</option>
+                    <option value="INFORME_MEDICO">Informe Médico</option>
+                    <option value="RESULTADO_LABORATORIO">Resultado de Laboratorio</option>
+                    <option value="ESTUDIO_IMAGENOLOGIA">Estudio de Imagenología</option>
+                    <option value="RECETA_MEDICA">Receta Médica</option>
+                    <option value="EPICRISIS">Epicrisis</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="fechaCreacion">Fecha de Creación</label>
+                <input type="date" id="fechaCreacion" name="fechaCreacion">
+            </div>
+
+            <div class="form-group">
+                <label for="formato">Formato del Documento</label>
+                <select id="formato" name="formato">
+                    <option value="application/pdf">PDF</option>
+                    <option value="application/dicom">DICOM</option>
+                    <option value="application/xml">XML</option>
+                    <option value="application/json">JSON</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="urlAcceso">URL de Acceso al Documento *</label>
+                <input type="url" id="urlAcceso" name="urlAcceso" required 
+                       placeholder="https://prestador.com/documentos/123.pdf">
+            </div>
+
+            <button type="submit" class="btn">Registrar Metadatos</button>
+            <a href="index.html" class="btn btn-secondary" style="text-decoration: none; display: inline-block;">Volver</a>
+        </form>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('registrarMetadatosForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const fechaCreacion = formData.get('fechaCreacion');
+            
+            // Enviar la fecha en formato yyyy-MM-ddTHH:mm:ss (sin zona horaria 'Z')
+            // porque LocalDateTime en el backend espera este formato
+            let fechaFormateada = null;
+            if (fechaCreacion) {
+                // Convertir de yyyy-MM-dd a yyyy-MM-ddTHH:mm:ss (sin 'Z')
+                fechaFormateada = fechaCreacion + 'T00:00:00';
+            }
+            
+            const data = {
+                documentoIdPaciente: formData.get('documentoIdPaciente'),
+                datosPatronimicos: formData.get('datosPatronimicos'),
+                tipoDocumento: formData.get('tipoDocumento'),
+                fechaCreacion: fechaFormateada,
+                formato: formData.get('formato'),
+                urlAcceso: formData.get('urlAcceso')
+            };
+
+            try {
+                const response = await fetch('/api/metadatos-documento', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                const resultDiv = document.getElementById('result');
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <strong>✅ Metadatos registrados exitosamente</strong>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        <strong>❌ Error al registrar metadatos</strong>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                }
+                resultDiv.style.display = 'block';
+            } catch (error) {
+                const resultDiv = document.getElementById('result');
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<strong>❌ Error de conexión:</strong> ${error.message}`;
+                resultDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
+

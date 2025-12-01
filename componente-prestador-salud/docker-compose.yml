@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  prestador-salud:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prestador-salud-mockup
+    ports:
+      - "8085:8080"
+      - "9995:9990"
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m
+      # URL de HCEN: configurar según el entorno
+      # Para desarrollo local con Docker: http://hcen-backend:8080/hcen/api/prestador-salud/services
+      # Para desarrollo local sin Docker: http://host.docker.internal:8080/hcen/api/prestador-salud/services
+      # Para producción en Elastic Cloud: https://tu-app.web.elasticloud.uy/hcen/api/prestador-salud/services
+      # Puedes sobrescribir esta variable al ejecutar: docker-compose up -e HCEN_API_URL=https://...
+      #- HCEN_API_URL=http://hcen-backend:8080/hcen/api/prestador-salud/services
+      - HCEN_API_URL=https://env-6105410.web.elasticloud.uy/hcen/api/prestador-salud/services
+
+

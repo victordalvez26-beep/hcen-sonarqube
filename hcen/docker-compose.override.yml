@@ -1,0 +1,6 @@
+services:
+  backend:
+    environment:
+      - GUBUY_REDIRECT_URI=http://localhost:8080
+      - FRONTEND_URL=http://localhost:3000
+      - POST_LOGOUT_REDIRECT_URI=http://localhost:8080/logout

@@ -1,0 +1,17 @@
+{
+  "watch": ["src"],
+  "ext": "js,jsx,css,scss,json",
+  "ignore": [
+    "node_modules/",
+    "build/",
+    "public/",
+    "*.test.js",
+    "*.spec.js"
+  ],
+  "exec": "npm start",
+  "env": {
+    "NODE_ENV": "development",
+    "BROWSER": "none"
+  },
+  "delay": 1000
+}
