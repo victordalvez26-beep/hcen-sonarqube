@@ -57,13 +57,13 @@ public class HcenApiClient {
      */
     public ApiResponse post(String endpoint, Object body, String apiKey, String origin) {
         String fullUrl = baseURL + endpoint;
-        LOGGER.info("📤 [HCEN-API-CLIENT] POST a: " + fullUrl);
-        LOGGER.info("📤 [HCEN-API-CLIENT] Headers - X-API-Key: " + (apiKey != null ? apiKey.substring(0, Math.min(10, apiKey.length())) + "..." : "null"));
-        LOGGER.info("📤 [HCEN-API-CLIENT] Headers - Origin: " + origin);
+        LOGGER.info("[HCEN-API-CLIENT] POST a: " + fullUrl);
+        LOGGER.info("[HCEN-API-CLIENT] Headers - X-API-Key: " + (apiKey != null ? apiKey.substring(0, Math.min(10, apiKey.length())) + "..." : "null"));
+        LOGGER.info("[HCEN-API-CLIENT] Headers - Origin: " + origin);
         
         try {
             String jsonBody = objectMapper.writeValueAsString(body);
-            LOGGER.debugf("📤 [HCEN-API-CLIENT] Body: %s", jsonBody);
+            LOGGER.debugf("[HCEN-API-CLIENT] Body: %s", jsonBody);
 
             HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
                 .uri(URI.create(fullUrl))
@@ -80,11 +80,11 @@ public class HcenApiClient {
 
             HttpRequest request = reqBuilder.build();
             
-            LOGGER.info("📤 [HCEN-API-CLIENT] Enviando petición POST...");
+            LOGGER.info("[HCEN-API-CLIENT] Enviando petición POST...");
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             
-            LOGGER.info("📥 [HCEN-API-CLIENT] Respuesta recibida - Status: " + response.statusCode());
-            LOGGER.debugf("📥 [HCEN-API-CLIENT] Respuesta body: %s", response.body());
+            LOGGER.info("[HCEN-API-CLIENT] Respuesta recibida - Status: " + response.statusCode());
+            LOGGER.debugf("[HCEN-API-CLIENT] Respuesta body: %s", response.body());
             
             return new ApiResponse(
                 response.statusCode(),
@@ -93,11 +93,11 @@ public class HcenApiClient {
             );
             
         } catch (InterruptedException ie) {
-            LOGGER.error("❌ [HCEN-API-CLIENT] Petición POST interrumpida a " + fullUrl, ie);
+            LOGGER.error("[HCEN-API-CLIENT] Petición POST interrumpida a " + fullUrl, ie);
             Thread.currentThread().interrupt();
             return new ApiResponse(500, "{\"error\": \"internal\"}", Map.of());
         } catch (IOException e) {
-            LOGGER.error("❌ [HCEN-API-CLIENT] Error en petición POST a " + fullUrl, e);
+            LOGGER.error("[HCEN-API-CLIENT] Error en petición POST a " + fullUrl, e);
             return new ApiResponse(500, "{\"error\": \"internal\"}", Map.of());
         }
     }
@@ -107,9 +107,9 @@ public class HcenApiClient {
      */
     public ApiResponse get(String endpoint, String apiKey, String origin) {
         String fullUrl = baseURL + endpoint;
-        LOGGER.info("📤 [HCEN-API-CLIENT] GET a: " + fullUrl);
-        LOGGER.info("📤 [HCEN-API-CLIENT] Headers - X-API-Key: " + (apiKey != null ? apiKey.substring(0, Math.min(10, apiKey.length())) + "..." : "null"));
-        LOGGER.info("📤 [HCEN-API-CLIENT] Headers - Origin: " + origin);
+        LOGGER.info("[HCEN-API-CLIENT] GET a: " + fullUrl);
+        LOGGER.info("[HCEN-API-CLIENT] Headers - X-API-Key: " + (apiKey != null ? apiKey.substring(0, Math.min(10, apiKey.length())) + "..." : "null"));
+        LOGGER.info("[HCEN-API-CLIENT] Headers - Origin: " + origin);
         
         try {
             HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
@@ -126,11 +126,11 @@ public class HcenApiClient {
 
             HttpRequest request = reqBuilder.build();
             
-            LOGGER.info("📤 [HCEN-API-CLIENT] Enviando petición GET...");
+            LOGGER.info("[HCEN-API-CLIENT] Enviando petición GET...");
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             
-            LOGGER.info("📥 [HCEN-API-CLIENT] Respuesta recibida - Status: " + response.statusCode());
-            LOGGER.debug("📥 [HCEN-API-CLIENT] Respuesta body: " + response.body());
+            LOGGER.info("[HCEN-API-CLIENT] Respuesta recibida - Status: " + response.statusCode());
+            LOGGER.debug("[HCEN-API-CLIENT] Respuesta body: " + response.body());
             
             return new ApiResponse(
                 response.statusCode(),
@@ -139,11 +139,11 @@ public class HcenApiClient {
             );
             
         } catch (InterruptedException ie) {
-            LOGGER.error("❌ [HCEN-API-CLIENT] Petición GET interrumpida a " + fullUrl, ie);
+            LOGGER.error("[HCEN-API-CLIENT] Petición GET interrumpida a " + fullUrl, ie);
             Thread.currentThread().interrupt();
             return new ApiResponse(500, "{\"error\": \"internal\"}", Map.of());
         } catch (IOException e) {
-            LOGGER.error("❌ [HCEN-API-CLIENT] Error en petición GET a " + fullUrl, e);
+            LOGGER.error("[HCEN-API-CLIENT] Error en petición GET a " + fullUrl, e);
             return new ApiResponse(500, "{\"error\": \"internal\"}", Map.of());
         }
     }

@@ -1,6 +1,6 @@
-# 🧪 Guía de Pruebas - Sistema de Roles
+# Guía de Pruebas - Sistema de Roles
 
-## ✅ Estado Actual de los Servicios
+## Estado Actual de los Servicios
 
 - **Frontend:** http://localhost:3000 (Dev Server con Hot Reload)
 - **Backend:** http://localhost:8080
@@ -8,28 +8,28 @@
 
 ---
 
-## 📝 Roles Disponibles
+## Roles Disponibles
 
 ### 1. **US** - Usuario de la Salud (Default)
 - **Descripción:** Usuario normal del sistema
 - **Permisos:**
-  - ✅ Ver su propia historia clínica
-  - ✅ Ver detalles de documentos
-  - ✅ Descargar PDFs
-  - ❌ NO puede acceder a Gestión de Clínicas
+  - Ver su propia historia clínica
+  - Ver detalles de documentos
+  - Descargar PDFs
+  - NO puede acceder a Gestión de Clínicas
 
 ### 2. **AD** - Administrador HCEN
 - **Descripción:** Administrador del sistema
 - **Permisos:**
-  - ✅ Ver su propia historia clínica
-  - ✅ Ver detalles de documentos
-  - ✅ Descargar PDFs
-  - ✅ **Acceso a Gestión de Clínicas**
-  - ✅ **Botón adicional en el header** (morado)
+  - Ver su propia historia clínica
+  - Ver detalles de documentos
+  - Descargar PDFs
+  - **Acceso a Gestión de Clínicas**
+  - **Botón adicional en el header** (morado)
 
 ---
 
-## 🧪 Prueba 1: Usuario Normal (US)
+## Prueba 1: Usuario Normal (US)
 
 ### Paso 1: Hacer Login
 1. Abre el navegador en: http://localhost:3000
@@ -64,7 +64,7 @@ Copia tu UID (formato: `uy-ci-XXXXXXXX`)
 
 ---
 
-## 🧪 Prueba 2: Administrador (AD)
+## Prueba 2: Administrador (AD)
 
 ### Paso 1: Convertir tu usuario a Administrador
 Reemplaza `TU_UID` con el UID que obtuviste arriba:
@@ -147,11 +147,11 @@ docker-compose -f docker-compose.dev.yml down && docker-compose -f docker-compos
 
 | Acción | Usuario Normal (US) | Administrador (AD) |
 |--------|---------------------|-------------------|
-| Acceder a `/historia-clinica` | ✅ Permitido | ✅ Permitido |
-| Acceder a `/documento/:id` | ✅ Permitido | ✅ Permitido |
-| Acceder a `/gestion-clinicas` | ❌ Bloqueado | ✅ Permitido |
-| Ver botón "Gestión de Clínicas" | ❌ No visible | ✅ Visible |
-| Completar perfil (primer login) | ✅ Obligatorio | ✅ Obligatorio |
+| Acceder a `/historia-clinica` | Permitido | Permitido |
+| Acceder a `/documento/:id` | Permitido | Permitido |
+| Acceder a `/gestion-clinicas` | Bloqueado | Permitido |
+| Ver botón "Gestión de Clínicas" | No visible | Visible |
+| Completar perfil (primer login) | Obligatorio | Obligatorio |
 
 ---
 

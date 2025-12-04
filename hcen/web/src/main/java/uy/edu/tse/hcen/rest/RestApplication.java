@@ -19,7 +19,7 @@ public class RestApplication extends Application {
         Set<Class<?>> classes = new HashSet<>();
         
         // Registrar filtros CORS de JAX-RS (deben estar primero para que se ejecuten antes de los recursos)
-        LOGGER.info("📋 [REST-APPLICATION] Registrando filtros CORS explícitamente:");
+        LOGGER.info("[REST-APPLICATION] Registrando filtros CORS explícitamente:");
         LOGGER.info("   1. CorsRequestFilter - Maneja OPTIONS (preflight)");
         classes.add(CorsRequestFilter.class);
         LOGGER.info("   2. CorsResponseFilter - Agrega headers CORS a todas las respuestas");
@@ -27,7 +27,7 @@ public class RestApplication extends Application {
         classes.add(PrestadorSaludApiFilter.class);
         
         // Registrar explícitamente los recursos principales
-        LOGGER.info("📋 [REST-APPLICATION] Registrando recursos REST:");
+        LOGGER.info("[REST-APPLICATION] Registrando recursos REST:");
         classes.add(MetadatosDocumentoResource.class);
         classes.add(NodoPerifericoResource.class);
         classes.add(ConfigResource.class);
@@ -42,7 +42,7 @@ public class RestApplication extends Application {
         classes.add(PatientSummaryResource.class);
         classes.add(PrestadorSaludApiResource.class);
         
-        LOGGER.info(String.format("✅ [REST-APPLICATION] Total de clases registradas: %d", classes.size()));
+        LOGGER.info(String.format("[REST-APPLICATION] Total de clases registradas: %d", classes.size()));
         
         return classes;
     }

@@ -2,41 +2,41 @@
 
 ## 📊 Estado de Cobertura
 
-### ✅ Tests Creados (Alta Calidad y Defensivos)
+### Tests Creados (Alta Calidad y Defensivos)
 
 #### Módulo hcen-common
-- ✅ `ValidationUtilTest.java` - Tests exhaustivos para validaciones
-- ✅ `ValidationExceptionTest.java` - Tests para excepciones
-- ✅ `HcenBusinessExceptionTest.java` - Tests para excepción base
+- `ValidationUtilTest.java` - Tests exhaustivos para validaciones
+- `ValidationExceptionTest.java` - Tests para excepciones
+- `HcenBusinessExceptionTest.java` - Tests para excepción base
 
 #### Módulo ejb
-- ✅ `PasswordUtilTest.java` - Tests completos para generación de salt y hashing
-- ✅ `JWTUtilTest.java` - Tests exhaustivos para JWT
-- ✅ `NacionalidadTest.java` - Tests para enum Nacionalidad
-- ✅ `EstadoNodoPerifericoTest.java` - Tests para enum EstadoNodoPeriferico
-- ✅ `DepartamentoTest.java` - Ya existía
-- ✅ `PrestadorSaludServiceTest.java` - Tests completos para servicio de prestadores
-- ✅ `NodoServiceTest.java` - Tests para servicio de nodos
+- `PasswordUtilTest.java` - Tests completos para generación de salt y hashing
+- `JWTUtilTest.java` - Tests exhaustivos para JWT
+- `NacionalidadTest.java` - Tests para enum Nacionalidad
+- `EstadoNodoPerifericoTest.java` - Tests para enum EstadoNodoPeriferico
+- `DepartamentoTest.java` - Ya existía
+- `PrestadorSaludServiceTest.java` - Tests completos para servicio de prestadores
+- `NodoServiceTest.java` - Tests para servicio de nodos
 
 #### Módulo web
-- ✅ `EmailTestResourceTest.java` - Tests para endpoint de prueba de emails
-- ✅ `ConfigResourceTest.java` - Tests para endpoints de configuración
-- ✅ `CookieUtilTest.java` - Tests para utilidad de cookies
-- ✅ `NodoPerifericoResourceTest.java` - Ya existía parcialmente
-- ✅ `NodoPerifericoConverterTest.java` - Ya existía
-- ✅ `PrestadorSaludResourceTest.java` - Tests completos para recurso REST
+- `EmailTestResourceTest.java` - Tests para endpoint de prueba de emails
+- `ConfigResourceTest.java` - Tests para endpoints de configuración
+- `CookieUtilTest.java` - Tests para utilidad de cookies
+- `NodoPerifericoResourceTest.java` - Ya existía parcialmente
+- `NodoPerifericoConverterTest.java` - Ya existía
+- `PrestadorSaludResourceTest.java` - Tests completos para recurso REST
 
 #### Módulo hcen-politicas-service
-- ✅ `PoliticaAccesoServiceTest.java` - Tests para servicio de políticas
+- `PoliticaAccesoServiceTest.java` - Tests para servicio de políticas
 
 #### Módulo hcen-rndc-service
-- ✅ `DocumentoRndcServiceTest.java` - Tests para servicio de documentos RNDC
+- `DocumentoRndcServiceTest.java` - Tests para servicio de documentos RNDC
 
 ### 🔧 Configuración Completada
 
-- ✅ Mockito agregado a todos los módulos (ejb, hcen-common, hcen-politicas-service, hcen-rndc-service)
-- ✅ JUnit 5 configurado en todos los módulos
-- ✅ Estructura de tests organizada por módulo
+- Mockito agregado a todos los módulos (ejb, hcen-common, hcen-politicas-service, hcen-rndc-service)
+- JUnit 5 configurado en todos los módulos
+- Estructura de tests organizada por módulo
 
 ### 📈 Cobertura Estimada
 
@@ -90,7 +90,7 @@ Todos los tests creados son:
 - ⏳ Tests para filtros CORS
 - ⏳ Tests para modelos complejos
 
-### 📋 Cómo Ejecutar los Tests
+### Cómo Ejecutar los Tests
 
 ```bash
 # Ejecutar todos los tests
@@ -115,7 +115,7 @@ mvn clean test jacoco:report
 4. La estructura sigue las mejores prácticas de JUnit 5 y Mockito
 5. Los tests son mantenibles y fáciles de extender
 
-### 🚀 Próximos Pasos Recomendados
+### Próximos Pasos Recomendados
 
 Para alcanzar el 90% de cobertura:
 
@@ -124,13 +124,13 @@ Para alcanzar el 90% de cobertura:
 3. **Prioridad 3**: Completar tests para módulos de servicios (politicas y rndc)
 4. **Prioridad 4**: Tests para componentes auxiliares (DAOs, converters, etc.)
 
-### ✅ Logros
+### Logros
 
-- ✅ Dependencias de testing configuradas correctamente
-- ✅ Suite base de tests defensivos creada
-- ✅ Tests cubriendo componentes críticos
-- ✅ Estructura preparada para expansión
-- ✅ Cobertura mejorada significativamente
+- Dependencias de testing configuradas correctamente
+- Suite base de tests defensivos creada
+- Tests cubriendo componentes críticos
+- Estructura preparada para expansión
+- Cobertura mejorada significativamente
 
 **Total de archivos de test creados**: ~15 archivos nuevos
 **Total de tests creados**: ~150+ casos de prueba individuales

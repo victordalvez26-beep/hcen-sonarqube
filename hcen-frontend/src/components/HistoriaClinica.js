@@ -25,10 +25,10 @@ const HistoriaClinica = () => {
   useEffect(() => {
     console.log('🔄 useEffect ejecutado. User:', user);
     if (user && user.uid) {
-      console.log('📋 Usuario autenticado, cargando documentos');
+      console.log('Usuario autenticado, cargando documentos');
       loadDocumentosPorUsuario();
     } else {
-      console.log('❌ Usuario no autenticado');
+      console.log('Usuario no autenticado');
       console.log('User:', user);
     }
   }, [user]);
@@ -47,11 +47,11 @@ const HistoriaClinica = () => {
       
       if (data.authenticated) {
         console.log('👤 Datos del usuario recibidos:', data);
-        console.log('📋 Campo documento:', data.documento);
-        console.log('📋 Todos los campos del usuario:', Object.keys(data));
+        console.log('Campo documento:', data.documento);
+        console.log('Todos los campos del usuario:', Object.keys(data));
         setUser(data);
       } else {
-        console.log('❌ Sesión no válida, redirigiendo a login');
+        console.log('Sesión no válida, redirigiendo a login');
         setUser(null);
         window.location.href = '/';
       }
@@ -67,7 +67,7 @@ const HistoriaClinica = () => {
   const loadDocumentosPorUsuario = async () => {
     setLoadingDocumentos(true);
     setError(null);
-    console.log('🔍 Cargando documentos para usuario autenticado');
+    console.log(' Cargando documentos para usuario autenticado');
     try {
       const url = `${config.BACKEND_URL}/api/metadatos-documento/usuario`;
       console.log('🌐 URL:', url);
@@ -88,7 +88,7 @@ const HistoriaClinica = () => {
       }
 
       const documentos = await response.json();
-      console.log('📄 Documentos recibidos del backend:', documentos);
+      console.log('Documentos recibidos del backend:', documentos);
       console.log('🆔 IDs de documentos del backend:', documentos.map(doc => doc.id));
       
       // Mapear los documentos del backend al formato esperado por el frontend
@@ -108,8 +108,8 @@ const HistoriaClinica = () => {
       console.log('💾 Documentos mapeados guardados en estado:', documentosMapeados);
       setDocumentosClinicos(documentosMapeados);
     } catch (error) {
-      console.error('❌ Error cargando documentos:', error);
-      console.error('❌ Error details:', error.message);
+      console.error('Error cargando documentos:', error);
+      console.error('Error details:', error.message);
       setError('No se pudieron cargar los documentos clínicos. Por favor, intente más tarde.');
       setDocumentosClinicos([]);
     } finally {
@@ -161,9 +161,9 @@ const HistoriaClinica = () => {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(urlBlob);
       
-      console.log('✅ Historia clínica descargada exitosamente');
+      console.log('Historia clínica descargada exitosamente');
     } catch (error) {
-      console.error('❌ Error descargando historia clínica:', error);
+      console.error('Error descargando historia clínica:', error);
       setPopup({ show: true, message: 'No se pudo descargar la historia clínica completa. Por favor, intente más tarde.', type: 'error' });
     } finally {
       setDescargandoHistoria(false);

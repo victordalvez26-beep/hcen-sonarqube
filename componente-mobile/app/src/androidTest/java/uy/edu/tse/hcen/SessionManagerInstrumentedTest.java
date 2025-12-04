@@ -51,7 +51,7 @@ public class SessionManagerInstrumentedTest {
     }
 
     @Test
-    public void getJwtFromBackend_successAndFailure() throws Exception {
+    public void getJwtFromBackendSuccessAndFailure() throws Exception {
         // success
         TestNetworkDispatcher.enqueueResponse(AppConfig.AUTH_SESSION_URL, 200, "{\"jwt\":\"ok-jwt\"}");
 

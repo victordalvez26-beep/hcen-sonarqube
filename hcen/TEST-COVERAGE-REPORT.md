@@ -4,36 +4,36 @@ Este documento describe los tests unitarios defensivos creados para el proyecto 
 
 ## Estado de la Cobertura
 
-### ✅ Tests Creados (Alta Calidad y Defensivos)
+### Tests Creados (Alta Calidad y Defensivos)
 
 #### Módulo hcen-common
-- ✅ `ValidationUtilTest.java` - Tests exhaustivos para validaciones (CI, nombres, sanitización)
-- ✅ `ValidationExceptionTest.java` - Tests para excepciones de validación
-- ✅ `HcenBusinessExceptionTest.java` - Tests para excepción base de negocio
+- `ValidationUtilTest.java` - Tests exhaustivos para validaciones (CI, nombres, sanitización)
+- `ValidationExceptionTest.java` - Tests para excepciones de validación
+- `HcenBusinessExceptionTest.java` - Tests para excepción base de negocio
 
 #### Módulo ejb
-- ✅ `PasswordUtilTest.java` - Tests completos para generación de salt y hashing de contraseñas
-- ✅ `JWTUtilTest.java` - Tests exhaustivos para generación, validación y extracción de JWT
-- ✅ `NacionalidadTest.java` - Tests para enum Nacionalidad
-- ✅ `EstadoNodoPerifericoTest.java` - Tests para enum EstadoNodoPeriferico
-- ✅ `DepartamentoTest.java` - Ya existía, se mantiene
+- `PasswordUtilTest.java` - Tests completos para generación de salt y hashing de contraseñas
+- `JWTUtilTest.java` - Tests exhaustivos para generación, validación y extracción de JWT
+- `NacionalidadTest.java` - Tests para enum Nacionalidad
+- `EstadoNodoPerifericoTest.java` - Tests para enum EstadoNodoPeriferico
+- `DepartamentoTest.java` - Ya existía, se mantiene
 
 #### Módulo web
-- ✅ `EmailTestResourceTest.java` - Tests para endpoint de prueba de emails
-- ✅ `ConfigResourceTest.java` - Tests para endpoints de configuración (nacionalidades, roles)
-- ✅ `CookieUtilTest.java` - Tests para utilidad de cookies cross-site
-- ✅ `NodoPerifericoResourceTest.java` - Ya existía parcialmente
-- ✅ `NodoPerifericoConverterTest.java` - Ya existía
+- `EmailTestResourceTest.java` - Tests para endpoint de prueba de emails
+- `ConfigResourceTest.java` - Tests para endpoints de configuración (nacionalidades, roles)
+- `CookieUtilTest.java` - Tests para utilidad de cookies cross-site
+- `NodoPerifericoResourceTest.java` - Ya existía parcialmente
+- `NodoPerifericoConverterTest.java` - Ya existía
 
-### 📋 Dependencias Agregadas
+### Dependencias Agregadas
 
 Se agregó Mockito a todos los módulos que lo necesitan:
-- ✅ `ejb/pom.xml` - Mockito 5.4.0 agregado
-- ✅ `hcen-common/pom.xml` - Mockito y JUnit 5 agregados
-- ✅ `hcen-politicas-service/pom.xml` - Mockito agregado
-- ✅ `hcen-rndc-service/pom.xml` - Mockito agregado
+- `ejb/pom.xml` - Mockito 5.4.0 agregado
+- `hcen-common/pom.xml` - Mockito y JUnit 5 agregados
+- `hcen-politicas-service/pom.xml` - Mockito agregado
+- `hcen-rndc-service/pom.xml` - Mockito agregado
 
-### 🔄 Pendientes (Para alcanzar 90% de cobertura)
+### Pendientes (Para alcanzar 90% de cobertura)
 
 #### Servicios EJB que necesitan tests:
 - ⏳ `EmailService` - Tests con mocks de JavaMail
@@ -77,20 +77,20 @@ Se agregó Mockito a todos los módulos que lo necesitan:
 
 ## Características de los Tests Creados
 
-### ✅ Enfoque Defensivo
+### Enfoque Defensivo
 - Validación de casos límite (null, empty, valores extremos)
 - Validación de casos de error
 - Validación de casos de éxito
 - Tests de casos edge (valores especiales, caracteres especiales)
 
-### ✅ Calidad
+### Calidad
 - Uso de JUnit 5 y Mockito
 - Nombres descriptivos de tests
 - Comentarios en español
 - Cobertura de múltiples escenarios por método
 - Uso de @ParameterizedTest para múltiples valores
 
-### ✅ Estructura
+### Estructura
 - Tests organizados por módulo
 - Tests en paquetes correspondientes
 - Uso de mocks apropiados

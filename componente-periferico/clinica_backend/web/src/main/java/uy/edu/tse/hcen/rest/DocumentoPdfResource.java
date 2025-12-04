@@ -242,32 +242,32 @@ public class DocumentoPdfResource {
     @Produces("application/pdf")
     // @RolesAllowed("PROFESIONAL") // Temporalmente deshabilitado para pruebas
     public Response descargarPdf(@PathParam("id") String id, @QueryParam("tenantId") Long tenantIdParam) {
-        LOG.info(String.format("📥 [BACKEND→PERIFERICO] Petición recibida para descargar PDF - ID: %s, TenantId (query): %s", id, tenantIdParam));
+        LOG.info(String.format("[BACKEND→PERIFERICO] Petición recibida para descargar PDF - ID: %s, TenantId (query): %s", id, tenantIdParam));
         
         try {
             String tenantIdStr = TenantContext.getCurrentTenant();
-            LOG.info(String.format("📋 [PERIFERICO] Tenant en contexto: %s", tenantIdStr));
+            LOG.info(String.format("[PERIFERICO] Tenant en contexto: %s", tenantIdStr));
             
             // Prioridad: 1) Query parameter, 2) Contexto, 3) Fallback
             Long tenantId = null;
             if (tenantIdParam != null) {
                 tenantId = tenantIdParam;
-                LOG.info(String.format("✅ [PERIFERICO] Usando tenantId del query parameter: %d", tenantId));
+                LOG.info(String.format("[PERIFERICO] Usando tenantId del query parameter: %d", tenantId));
             } else if (tenantIdStr != null && !tenantIdStr.isBlank()) {
                 tenantId = Long.parseLong(tenantIdStr);
-                LOG.info(String.format("✅ [PERIFERICO] Usando tenantId del contexto: %d", tenantId));
+                LOG.info(String.format("[PERIFERICO] Usando tenantId del contexto: %d", tenantId));
             } else {
                 // Fallback: usar tenant 1 si no hay información disponible
-                LOG.warn("⚠️ [PERIFERICO] Tenant no identificado en contexto ni query parameter, usando tenant 1 como fallback");
+                LOG.warn("[PERIFERICO] Tenant no identificado en contexto ni query parameter, usando tenant 1 como fallback");
                 tenantId = 1L;
             }
 
             // Obtener metadata del documento para verificar permisos
-            LOG.info(String.format("🔍 [PERIFERICO] Obteniendo metadata del documento - ID: %s, Tenant: %d", id, tenantId));
+            LOG.info(String.format("[PERIFERICO] Obteniendo metadata del documento - ID: %s, Tenant: %d", id, tenantId));
             Map<String, Object> metadata = documentoPdfService.obtenerMetadataPorId(id, tenantId);
             
             if (metadata == null) {
-                LOG.warn(String.format("❌ [PERIFERICO] Documento no encontrado - ID: %s, Tenant: %d", id, tenantId));
+                LOG.warn(String.format("[PERIFERICO] Documento no encontrado - ID: %s, Tenant: %d", id, tenantId));
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity("Documento no encontrado")
                         .build();
@@ -289,7 +289,7 @@ public class DocumentoPdfResource {
                      profesionalId.contains("service") || profesionalId.contains("backend"));
             
             if (esLlamadaDesdeBackendHCEN) {
-                LOG.info(String.format("✅ [PERIFERICO] Llamada desde backend HCEN detectada (profesionalId: %s), saltando verificación de permisos (ya verificada en backend)", 
+                LOG.info(String.format("[PERIFERICO] Llamada desde backend HCEN detectada (profesionalId: %s), saltando verificación de permisos (ya verificada en backend)", 
                         profesionalId));
             } else {
                 // Verificar permisos de acceso usando el servicio de políticas solo si NO es llamada desde backend HCEN
@@ -304,43 +304,43 @@ public class DocumentoPdfResource {
                             tenantIdStr);
                     
                     if (!tienePermiso) {
-                        LOG.warn(String.format("❌ [PERIFERICO] Acceso denegado - Profesional: %s, Paciente: %s", 
+                        LOG.warn(String.format("[PERIFERICO] Acceso denegado - Profesional: %s, Paciente: %s", 
                                 profesionalId, pacienteCI));
                         return Response.status(Response.Status.FORBIDDEN)
                                 .entity("No tiene permiso para acceder a este documento. Se requiere una política de acceso aprobada.")
                                 .build();
                     }
                     
-                    LOG.info(String.format("✅ [PERIFERICO] Permiso concedido - Profesional: %s, Paciente: %s", 
+                    LOG.info(String.format("[PERIFERICO] Permiso concedido - Profesional: %s, Paciente: %s", 
                             profesionalId, pacienteCI));
                 } else {
                     // Si no hay información del profesional, permitir descarga (para compatibilidad con llamadas desde HCEN backend)
-                    LOG.info("⚠️ [PERIFERICO] No se pudo obtener información del profesional, permitiendo descarga (compatibilidad con HCEN backend)");
+                    LOG.info("[PERIFERICO] No se pudo obtener información del profesional, permitiendo descarga (compatibilidad con HCEN backend)");
                 }
             }
 
             // Obtener el PDF
-            LOG.info(String.format("🔍 [PERIFERICO] Obteniendo PDF de MongoDB - ID: %s, Tenant: %d", id, tenantId));
+            LOG.info(String.format("[PERIFERICO] Obteniendo PDF de MongoDB - ID: %s, Tenant: %d", id, tenantId));
             byte[] pdfBytes = documentoPdfService.obtenerPdfPorId(id, tenantId);
             
             if (pdfBytes == null) {
-                LOG.warn(String.format("❌ [PERIFERICO] PDF no encontrado - ID: %s, Tenant: %d", id, tenantId));
+                LOG.warn(String.format("[PERIFERICO] PDF no encontrado - ID: %s, Tenant: %d", id, tenantId));
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity("Documento no encontrado")
                         .build();
             }
 
-            LOG.info(String.format("✅ [PERIFERICO] PDF obtenido de MongoDB - ID: %s, Tamaño: %d bytes", id, pdfBytes.length));
+            LOG.info(String.format("[PERIFERICO] PDF obtenido de MongoDB - ID: %s, Tamaño: %d bytes", id, pdfBytes.length));
             
             // Verificar que los primeros bytes sean de un PDF válido
             if (pdfBytes.length >= 4) {
                 String header = new String(pdfBytes, 0, 4);
                 if (!header.startsWith("%PDF")) {
-                    LOG.warn(String.format("⚠️ [PERIFERICO] Los primeros bytes no son de un PDF válido: %s", header));
-                    LOG.warn(String.format("⚠️ [PERIFERICO] Primeros 200 bytes: %s", 
+                    LOG.warn(String.format("[PERIFERICO] Los primeros bytes no son de un PDF válido: %s", header));
+                    LOG.warn(String.format("[PERIFERICO] Primeros 200 bytes: %s", 
                             new String(pdfBytes, 0, Math.min(200, pdfBytes.length))));
                 } else {
-                    LOG.info(String.format("✅ [PERIFERICO] PDF válido detectado - Header: %s", header));
+                    LOG.info(String.format("[PERIFERICO] PDF válido detectado - Header: %s", header));
                 }
             }
             
@@ -364,7 +364,7 @@ public class DocumentoPdfResource {
                                 nombreProfesional, especialidad));
                     }
                 } catch (Exception e) {
-                    LOG.warn(String.format("⚠️ [PERIFERICO] No se pudo obtener información completa del profesional %s: %s", 
+                    LOG.warn(String.format("[PERIFERICO] No se pudo obtener información completa del profesional %s: %s", 
                             profesionalId, e.getMessage()));
                 }
                 
@@ -380,15 +380,15 @@ public class DocumentoPdfResource {
                             tipoDocumento,
                             true // éxito
                     );
-                    LOG.info(String.format("✅ [PERIFERICO] Acceso registrado para profesional %s, paciente %s, documento %s", 
+                    LOG.info(String.format("[PERIFERICO] Acceso registrado para profesional %s, paciente %s, documento %s", 
                             profesionalId, pacienteCI, id));
                 } catch (Exception e) {
                     // No bloquear la descarga si falla el registro
-                    LOG.warn(String.format("⚠️ [PERIFERICO] Error al registrar acceso (no crítico): %s", e.getMessage()));
+                    LOG.warn(String.format("[PERIFERICO] Error al registrar acceso (no crítico): %s", e.getMessage()));
                 }
             }
             
-            LOG.info(String.format("📤 [PERIFERICO→BACKEND] Enviando PDF al backend HCEN - Tamaño: %d bytes", pdfBytes.length));
+            LOG.info(String.format("[PERIFERICO→BACKEND] Enviando PDF al backend HCEN - Tamaño: %d bytes", pdfBytes.length));
 
             return Response.ok(pdfBytes)
                     .header("Content-Type", "application/pdf")
@@ -397,7 +397,7 @@ public class DocumentoPdfResource {
                     .build();
 
         } catch (Exception ex) {
-            LOG.error(String.format("❌ [PERIFERICO] Error al descargar PDF - ID: %s", id), ex);
+            LOG.error(String.format("[PERIFERICO] Error al descargar PDF - ID: %s", id), ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error al obtener el documento: " + ex.getMessage())
                     .build();

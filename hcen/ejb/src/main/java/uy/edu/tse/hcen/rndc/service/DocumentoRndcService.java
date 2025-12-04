@@ -278,20 +278,20 @@ public class DocumentoRndcService {
         if (tenantId == null && metadata.getClinicaOrigen() != null) {
             // Intentar extraer el número de "Clínica X"
             String clinicaOrigen = metadata.getClinicaOrigen();
-            LOGGER.warning(String.format("⚠️ [BACKEND] TenantId es null, intentando extraer de clinicaOrigen: %s", clinicaOrigen));
+            LOGGER.warning(String.format("[BACKEND] TenantId es null, intentando extraer de clinicaOrigen: %s", clinicaOrigen));
             try {
                 // Buscar el número después de "Clínica "
                 if (clinicaOrigen.startsWith("Clínica ")) {
                     String numeroStr = clinicaOrigen.substring("Clínica ".length()).trim();
                     tenantId = Long.parseLong(numeroStr);
-                    LOGGER.info(String.format("✅ [BACKEND] TenantId extraído de clinicaOrigen: %d", tenantId));
+                    LOGGER.info(String.format("[BACKEND] TenantId extraído de clinicaOrigen: %d", tenantId));
                 }
             } catch (Exception e) {
-                LOGGER.warning(String.format("⚠️ [BACKEND] No se pudo extraer tenantId de clinicaOrigen: %s", e.getMessage()));
+                LOGGER.warning(String.format("[BACKEND] No se pudo extraer tenantId de clinicaOrigen: %s", e.getMessage()));
             }
         }
         
-        LOGGER.info(String.format("📋 [BACKEND] Usando tenantId: %s para descargar documento", tenantId));
+        LOGGER.info(String.format("[BACKEND] Usando tenantId: %s para descargar documento", tenantId));
         
         // Obtener documento desde nodo periférico, pasando el tenantId
         InputStream stream = obtenerDocumentoDesdeNodo(metadata.getUriDocumento(), tenantId);
@@ -304,7 +304,7 @@ public class DocumentoRndcService {
     }
     
     private InputStream obtenerDocumentoDesdeNodo(String uri, Long tenantId) throws Exception {
-        LOGGER.info(String.format("🔄 [BACKEND→PERIFERICO] Obteniendo documento desde nodo periférico: %s, TenantId: %s", uri, tenantId));
+        LOGGER.info(String.format("[BACKEND→PERIFERICO] Obteniendo documento desde nodo periférico: %s, TenantId: %s", uri, tenantId));
         
         // Obtener URL base del componente periférico desde variable de entorno
         String peripheralBaseUrl = System.getenv().getOrDefault("PERIPHERAL_NODE_URL", "http://localhost:8081");
@@ -312,9 +312,9 @@ public class DocumentoRndcService {
         // Si la URI contiene localhost pero PERIPHERAL_NODE_URL apunta a una URL externa,
         // reemplazar localhost por la URL externa configurada
         if (uri != null && uri.contains("localhost:8081") && !peripheralBaseUrl.contains("localhost")) {
-            LOGGER.info(String.format("🔄 [BACKEND→PERIFERICO] Reemplazando localhost:8081 en URI por URL configurada: %s", peripheralBaseUrl));
+            LOGGER.info(String.format("[BACKEND→PERIFERICO] Reemplazando localhost:8081 en URI por URL configurada: %s", peripheralBaseUrl));
             uri = uri.replace("http://localhost:8081", peripheralBaseUrl);
-            LOGGER.info(String.format("🔄 [BACKEND→PERIFERICO] URI actualizada: %s", uri));
+            LOGGER.info(String.format("[BACKEND→PERIFERICO] URI actualizada: %s", uri));
         }
         
         // Extraer el host de la URL base para validación (después del reemplazo)
@@ -326,11 +326,11 @@ public class DocumentoRndcService {
             !uri.contains(peripheralHost) && 
             !uri.contains("hcen-wildfly-app") &&
             !(uri.contains("localhost:8081") && peripheralBaseUrl.contains("localhost"))) {
-            LOGGER.warning(String.format("⚠️ [BACKEND→PERIFERICO] URI no coincide con configuración: %s", uri));
-            LOGGER.warning(String.format("⚠️ [BACKEND→PERIFERICO] PERIPHERAL_NODE_URL configurada: %s", peripheralBaseUrl));
+            LOGGER.warning(String.format("[BACKEND→PERIFERICO] URI no coincide con configuración: %s", uri));
+            LOGGER.warning(String.format("[BACKEND→PERIFERICO] PERIPHERAL_NODE_URL configurada: %s", peripheralBaseUrl));
             // No lanzar excepción, solo registrar warning y continuar
             // La URI puede ser válida aunque no coincida exactamente (ej: URLs de ejemplo en desarrollo)
-            LOGGER.info("ℹ️ [BACKEND→PERIFERICO] Continuando con la URI tal como está");
+            LOGGER.info("[BACKEND→PERIFERICO] Continuando con la URI tal como está");
         }
         
         // Convertir URI externa (localhost:8081) a URI interna (nombre del servicio Docker)
@@ -341,10 +341,10 @@ public class DocumentoRndcService {
         if (tenantId != null) {
             String separator = uriInterna.contains("?") ? "&" : "?";
             uriInterna = uriInterna + separator + "tenantId=" + tenantId;
-            LOGGER.info(String.format("🔄 [BACKEND→PERIFERICO] TenantId agregado como query parameter: %s", tenantId));
+            LOGGER.info(String.format("[BACKEND→PERIFERICO] TenantId agregado como query parameter: %s", tenantId));
         }
         
-        LOGGER.info(String.format("🔄 [BACKEND→PERIFERICO] URI convertida: %s → %s", uri, uriInterna));
+        LOGGER.info(String.format("[BACKEND→PERIFERICO] URI convertida: %s → %s", uri, uriInterna));
         
         // Generar token de servicio para autenticación entre servicios
         String serviceToken = generarTokenServicio();
@@ -359,7 +359,7 @@ public class DocumentoRndcService {
                 requestBuilder.header("Authorization", "Bearer " + serviceToken);
                 LOGGER.info("🔑 [BACKEND→PERIFERICO] Token de servicio agregado a la petición");
             } else {
-                LOGGER.warning("⚠️ [BACKEND→PERIFERICO] No se pudo generar token de servicio");
+                LOGGER.warning("[BACKEND→PERIFERICO] No se pudo generar token de servicio");
             }
             
             HttpRequest request = requestBuilder.build();
@@ -368,27 +368,27 @@ public class DocumentoRndcService {
             HttpResponse<InputStream> response = httpClient.send(request, 
                 HttpResponse.BodyHandlers.ofInputStream());
             
-            LOGGER.info(String.format("📥 [PERIFERICO→BACKEND] Respuesta recibida - Status: %d", response.statusCode()));
+            LOGGER.info(String.format("[PERIFERICO→BACKEND] Respuesta recibida - Status: %d", response.statusCode()));
             
             // Verificar headers de respuesta
             if (response.headers().firstValue("Content-Type").isPresent()) {
-                LOGGER.info(String.format("📥 [PERIFERICO→BACKEND] Content-Type: %s", 
+                LOGGER.info(String.format("[PERIFERICO→BACKEND] Content-Type: %s", 
                         response.headers().firstValue("Content-Type").get()));
             }
             if (response.headers().firstValue("Content-Length").isPresent()) {
-                LOGGER.info(String.format("📥 [PERIFERICO→BACKEND] Content-Length: %s bytes", 
+                LOGGER.info(String.format("[PERIFERICO→BACKEND] Content-Length: %s bytes", 
                         response.headers().firstValue("Content-Length").get()));
             }
             
             if (response.statusCode() == 401 || response.statusCode() == 403) {
-                LOGGER.warning("⚠️ [BACKEND→PERIFERICO] Token de servicio rechazado, intentando sin autenticación");
+                LOGGER.warning("[BACKEND→PERIFERICO] Token de servicio rechazado, intentando sin autenticación");
                 // Reintentar sin token (por si el endpoint permite acceso sin autenticación en red interna)
                 request = HttpRequest.newBuilder()
                     .uri(URI.create(uriInterna))
                     .GET()
                     .build();
                 response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
-                LOGGER.info(String.format("📥 [PERIFERICO→BACKEND] Respuesta sin token - Status: %d", response.statusCode()));
+                LOGGER.info(String.format("[PERIFERICO→BACKEND] Respuesta sin token - Status: %d", response.statusCode()));
             }
             
             if (response.statusCode() != 200) {
@@ -397,7 +397,7 @@ public class DocumentoRndcService {
                     // Intentar leer el cuerpo de la respuesta de error
                     byte[] errorBytes = response.body().readAllBytes();
                     errorBody = new String(errorBytes);
-                    LOGGER.severe(String.format("❌ [PERIFERICO→BACKEND] Error response body: %s", errorBody));
+                    LOGGER.severe(String.format("[PERIFERICO→BACKEND] Error response body: %s", errorBody));
                 } catch (Exception ex) {
                     LOGGER.warning("No se pudo leer el cuerpo de la respuesta de error");
                 }
@@ -405,11 +405,11 @@ public class DocumentoRndcService {
                         (errorBody.isEmpty() ? "" : " - Body: " + errorBody));
             }
             
-            LOGGER.info("✅ [PERIFERICO→BACKEND] Stream recibido exitosamente del componente periférico");
+            LOGGER.info("[PERIFERICO→BACKEND] Stream recibido exitosamente del componente periférico");
             return response.body();
             
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, String.format("❌ [BACKEND→PERIFERICO] Error al comunicarse con nodo periférico: %s", uriInterna), e);
+            LOGGER.log(Level.SEVERE, String.format("[BACKEND→PERIFERICO] Error al comunicarse con nodo periférico: %s", uriInterna), e);
             throw new Exception("No se pudo obtener el documento desde el nodo periférico: " + e.getMessage(), e);
         }
     }

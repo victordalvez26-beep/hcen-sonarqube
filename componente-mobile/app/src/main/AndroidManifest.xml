@@ -15,38 +15,42 @@
         tools:targetApi="31">
 
         <!-- Launcher -->
-        <activity android:name=".splash.SplashActivity"
+        <activity
+            android:name=".splash.SplashActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity android:name=".MainActivity" />
 
-        <activity android:name=".LoginCallbackActivity"
+        <activity
+            android:name=".LoginCallbackActivity"
             android:exported="true">
             <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:scheme="https"
                     android:host="hcen-frontend-git-feature-login-victordalvez26-6494s-projects.vercel.app"
-                    android:pathPrefix="/"/>
+                    android:pathPrefix="/"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 
-        <activity android:name="uy.edu.tse.hcen.SingleFragmentActivity"
+        <activity
+            android:name="uy.edu.tse.hcen.SingleFragmentActivity"
             android:exported="false" />
-
 
         <service
             android:name=".notifications.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
@@ -62,7 +66,7 @@
 
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 </manifest>

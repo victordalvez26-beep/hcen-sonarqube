@@ -1,4 +1,4 @@
-# 📋 Documentación de Endpoints REST API - PDI
+# Documentación de Endpoints REST API - PDI
 
 ## Base URL
 

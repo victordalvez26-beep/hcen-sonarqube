@@ -47,11 +47,11 @@ public class UsuarioSaludService {
         
         // DEBUG: Verificar tenant context
         String currentTenant = TenantContext.getCurrentTenant();
-        LOGGER.info("🔍 DEBUG - TenantContext actual: " + currentTenant);
+        LOGGER.info("DEBUG - TenantContext actual: " + currentTenant);
         
         // Asegurar que el tenant context esté seteado (por si acaso)
         if (currentTenant == null || !currentTenant.equals(String.valueOf(tenantId))) {
-            LOGGER.warn("⚠️ TenantContext no está seteado correctamente, seteándolo a: " + tenantId);
+            LOGGER.warn("TenantContext no está seteado correctamente, seteándolo a: " + tenantId);
             TenantContext.setCurrentTenant(String.valueOf(tenantId));
         }
         

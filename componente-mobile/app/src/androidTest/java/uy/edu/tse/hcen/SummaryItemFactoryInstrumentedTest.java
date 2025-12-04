@@ -13,58 +13,77 @@ import uy.edu.tse.hcen.summary.SummaryItemFactory;
 
 @RunWith(AndroidJUnit4.class)
 public class SummaryItemFactoryInstrumentedTest {
+    private static final String CATEGORY_ALLERGIES = "allergies";
+    private static final String CATEGORY_MEDICATIONS = "medications";
+    private static final String CATEGORY_UNKNOWN = "unknown";
+    private static final String CATEGORY_LABS = "labs";
+    private static final String TITLE_ALERGIA = "Alergia";
+    private static final String TITLE_MEDICACION = "Medicación";
+    private static final String DESCRIPTION_ALERGIA = "Alergia ()";
+    private static final String DESCRIPTION_INFO_NOT_AVAILABLE = "Información no disponible";
+    private static final String DESCRIPTION_IBUPROFENO_EMPTY = "Ibuprofeno - ";
+    private static final String DESCRIPTION_IBUPROFENO_DOSE = "Ibuprofeno - 200mg cada 8h";
+    private static final String NAME_POLEN = "Polen";
+    private static final String STATUS_ACTIVE = "active";
+    private static final String NAME_TEST = "Test";
+    private static final String CUSTOM_EXCEPTION_MESSAGE = "JSON extraction failed";
     @Test
     public void allergiesCategoryDefaultsAndMissingFields() throws Exception {
         // Sin campos
         JSONObject payload = new JSONObject();
-        SummaryItem item = SummaryItemFactory.fromCategory("allergies", payload);
-        assertEquals("Alergia", item.title);
-        assertEquals("Alergia ()", item.description);
+        SummaryItem item = SummaryItemFactory.fromCategory(CATEGORY_ALLERGIES, payload);
+        assertEquals(TITLE_ALERGIA, item.title);
+        assertEquals(DESCRIPTION_ALERGIA, item.description);
         assertEquals(R.drawable.ic_allergy, item.iconResId);
     }
 
     @Test
     public void medicationsCategoryMissingDose() throws Exception {
         JSONObject payload = new JSONObject().put("name", "Ibuprofeno");
-        SummaryItem item = SummaryItemFactory.fromCategory("medications", payload);
-        assertEquals("Medicación", item.title);
-        assertEquals("Ibuprofeno - ", item.description);
+        SummaryItem item = SummaryItemFactory.fromCategory(CATEGORY_MEDICATIONS, payload);
+        assertEquals(TITLE_MEDICACION, item.title);
+        assertEquals(DESCRIPTION_IBUPROFENO_EMPTY, item.description);
         assertEquals(R.drawable.ic_medication, item.iconResId);
     }
 
     @Test
     public void extractDescriptionHandlesJSONException() {
         // Simula un JSONObject que lanza excepción
-        SummaryItem item = SummaryItemFactory.fromCategory("allergies", new org.json.JSONObject() {
+        class CustomJSONException extends RuntimeException {
+            public CustomJSONException(String message) {
+                super(message);
+            }
+        }
+        SummaryItem item = SummaryItemFactory.fromCategory(CATEGORY_ALLERGIES, new org.json.JSONObject() {
             @Override
             public String optString(String name, String fallback) {
-                throw new RuntimeException("fail");
+                throw new CustomJSONException(CUSTOM_EXCEPTION_MESSAGE);
             }
         });
-        assertEquals("Alergia", item.title);
-        assertEquals("Información no disponible", item.description);
+        assertEquals(TITLE_ALERGIA, item.title);
+        assertEquals(DESCRIPTION_INFO_NOT_AVAILABLE, item.description);
         assertEquals(R.drawable.ic_allergy, item.iconResId);
     }
 
     @Test
     public void unknownCategoryWithFields() throws Exception {
-        JSONObject payload = new JSONObject().put("name", "Test");
-        SummaryItem item = SummaryItemFactory.fromCategory("unknown", payload);
-        assertEquals("unknown", item.title);
-        assertEquals("Información no disponible", item.description);
+        JSONObject payload = new JSONObject().put("name", NAME_TEST);
+        SummaryItem item = SummaryItemFactory.fromCategory(CATEGORY_UNKNOWN, payload);
+        assertEquals(CATEGORY_UNKNOWN, item.title);
+        assertEquals(DESCRIPTION_INFO_NOT_AVAILABLE, item.description);
         assertEquals(R.drawable.ic_fhir_generic, item.iconResId);
     }
 
     @Test
     public void allergiesCategoryUsesExpectedTitleIconAndDescription() throws Exception {
         JSONObject payload = new JSONObject()
-                .put("name", "Polen")
-                .put("status", "active");
+                .put("name", NAME_POLEN)
+                .put("status", STATUS_ACTIVE);
 
-        SummaryItem item = SummaryItemFactory.fromCategory("allergies", payload);
+        SummaryItem item = SummaryItemFactory.fromCategory(CATEGORY_ALLERGIES, payload);
 
-        assertEquals("Alergia", item.title);
-        assertEquals("Polen (active)", item.description);
+        assertEquals(TITLE_ALERGIA, item.title);
+        assertEquals(NAME_POLEN + " (" + STATUS_ACTIVE + ")", item.description);
         assertEquals(R.drawable.ic_allergy, item.iconResId);
     }
 
@@ -74,19 +93,19 @@ public class SummaryItemFactoryInstrumentedTest {
                 .put("name", "Ibuprofeno")
                 .put("dose", "200mg cada 8h");
 
-        SummaryItem item = SummaryItemFactory.fromCategory("medications", payload);
+        SummaryItem item = SummaryItemFactory.fromCategory(CATEGORY_MEDICATIONS, payload);
 
-        assertEquals("Medicación", item.title);
-        assertEquals("Ibuprofeno - 200mg cada 8h", item.description);
+        assertEquals(TITLE_MEDICACION, item.title);
+        assertEquals(DESCRIPTION_IBUPROFENO_DOSE, item.description);
         assertEquals(R.drawable.ic_medication, item.iconResId);
     }
 
     @Test
     public void unknownCategoryFallsBackToGenericResources() {
-        SummaryItem item = SummaryItemFactory.fromCategory("labs", new JSONObject());
+        SummaryItem item = SummaryItemFactory.fromCategory(CATEGORY_LABS, new JSONObject());
 
-        assertEquals("labs", item.title);
-        assertEquals("Información no disponible", item.description);
+        assertEquals(CATEGORY_LABS, item.title);
+        assertEquals(DESCRIPTION_INFO_NOT_AVAILABLE, item.description);
         assertEquals(R.drawable.ic_fhir_generic, item.iconResId);
     }
 }

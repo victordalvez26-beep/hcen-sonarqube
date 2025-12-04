@@ -342,7 +342,7 @@ public class ConfigResource {
                 req.password
             );
             
-            LOG.infof("✅ Clinic fully registered: tenant=%s, username=%s, RUT=%s", req.tenantId, userNickname, req.rut);
+            LOG.infof("Clinic fully registered: tenant=%s, username=%s, RUT=%s", req.tenantId, userNickname, req.rut);
             
             // PASO 4: Notificar a HCEN que el registro se completó
             try {
@@ -370,9 +370,9 @@ public class ConfigResource {
                 );
                 
                 if (hcenResponse.statusCode() >= 200 && hcenResponse.statusCode() < 300) {
-                    LOG.info("✅ HCEN notified successfully about clinic " + req.tenantId);
+                    LOG.info("HCEN notified successfully about clinic " + req.tenantId);
                 } else {
-                    LOG.warn("⚠️ HCEN notification failed. Status: " + hcenResponse.statusCode());
+                    LOG.warn("HCEN notification failed. Status: " + hcenResponse.statusCode());
                 }
             } catch (Exception e) {
                 LOG.error("Error notifying HCEN (clinic still functional): " + e.getMessage(), e);

@@ -12,20 +12,20 @@ Este reporte presenta la cobertura de código actualizada después de agregar m�
 ### Módulo EJB (hcen-ejb)
 - **Cobertura de Instrucciones:** Ver reporte actualizado después de ejecutar tests
 - **Cobertura de Ramas:** Ver reporte actualizado después de ejecutar tests
-- **Estado:** ✅ En proceso de alcanzar 90%+
+- **Estado:** En proceso de alcanzar 90%+
 
 ### Módulo Web (hcen-web)
 - **Cobertura de Instrucciones:** Ver reporte actualizado después de ejecutar tests
 - **Cobertura de Ramas:** Ver reporte actualizado después de ejecutar tests
-- **Estado:** ✅ En proceso de alcanzar 80%+
+- **Estado:** En proceso de alcanzar 80%+
 
 ### Módulo Políticas (hcen-politicas-service)
 - **Cobertura de Instrucciones:** Ver reporte individual
-- **Estado:** ✅ Mejorado con tests adicionales
+- **Estado:** Mejorado con tests adicionales
 
 ### Módulo RNDC (hcen-rndc-service)
 - **Cobertura de Instrucciones:** Ver reporte individual
-- **Estado:** ✅ Mejorado con tests adicionales
+- **Estado:** Mejorado con tests adicionales
 
 ## Tests Agregados en Esta Sesión
 

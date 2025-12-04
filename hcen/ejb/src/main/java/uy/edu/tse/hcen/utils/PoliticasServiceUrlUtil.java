@@ -62,12 +62,12 @@ public class PoliticasServiceUrlUtil {
         // 1. Verificar si está configurada explícitamente
         String envUrl = System.getenv(ENV_POLITICAS_SERVICE_URL);
         if (envUrl != null && !envUrl.isBlank()) {
-            LOG.info("✅ Usando POLITICAS_SERVICE_URL desde variable de entorno: " + envUrl);
+            LOG.info("Usando POLITICAS_SERVICE_URL desde variable de entorno: " + envUrl);
             return envUrl;
         }
         String sysPropUrl = System.getProperty(ENV_POLITICAS_SERVICE_URL);
         if (sysPropUrl != null && !sysPropUrl.isBlank()) {
-            LOG.info("✅ Usando POLITICAS_SERVICE_URL desde propiedad del sistema: " + sysPropUrl);
+            LOG.info("Usando POLITICAS_SERVICE_URL desde propiedad del sistema: " + sysPropUrl);
             return sysPropUrl;
         }
         
@@ -75,7 +75,7 @@ public class PoliticasServiceUrlUtil {
         String backendBaseUrl = getEnvOrProperty(ENV_HCEN_BACKEND_BASE_URL);
         if (backendBaseUrl != null && !backendBaseUrl.isBlank()) {
             String politicasUrl = buildPoliticasUrlFromBase(backendBaseUrl);
-            LOG.info("✅ Construyendo URL de políticas desde HCEN_BACKEND_BASE_URL: " + politicasUrl);
+            LOG.info("Construyendo URL de políticas desde HCEN_BACKEND_BASE_URL: " + politicasUrl);
             return politicasUrl;
         }
         
@@ -86,16 +86,16 @@ public class PoliticasServiceUrlUtil {
                 String serverBaseUrl = extractServerBaseUrl(gubuyRedirectUri);
                 if (serverBaseUrl != null) {
                     String politicasUrl = buildPoliticasUrlFromBase(serverBaseUrl);
-                    LOG.info("✅ Construyendo URL de políticas desde GUBUY_REDIRECT_URI: " + politicasUrl);
+                    LOG.info("Construyendo URL de políticas desde GUBUY_REDIRECT_URI: " + politicasUrl);
                     return politicasUrl;
                 }
             } catch (Exception e) {
-                LOG.warning("⚠️ Error extrayendo URL base desde GUBUY_REDIRECT_URI: " + e.getMessage());
+                LOG.warning("Error extrayendo URL base desde GUBUY_REDIRECT_URI: " + e.getMessage());
             }
         }
         
         // 4. Usar URL por defecto (solo desarrollo)
-        LOG.warning("⚠️ No se pudo determinar la URL base del servidor. Usando URL por defecto (localhost). " +
+        LOG.warning("No se pudo determinar la URL base del servidor. Usando URL por defecto (localhost). " +
                     "Para producción, configura POLITICAS_SERVICE_URL o HCEN_BACKEND_BASE_URL.");
         return DEFAULT_POLITICAS_SERVICE_URL;
     }
@@ -134,7 +134,7 @@ public class PoliticasServiceUrlUtil {
                 return scheme + "://" + host;
             }
         } catch (URISyntaxException e) {
-            LOG.warning("⚠️ Error parseando URL: " + fullUrl + " - " + e.getMessage());
+            LOG.warning("Error parseando URL: " + fullUrl + " - " + e.getMessage());
             return null;
         }
     }
@@ -161,8 +161,8 @@ public class PoliticasServiceUrlUtil {
             // Convertir HTTPS a HTTP para llamadas internas (mismo host)
             // Esto evita problemas de certificados SSL para llamadas internas
             baseUrl = baseUrl.replaceFirst("^https://", "http://");
-            LOG.info("🔄 Convertiendo HTTPS a HTTP para llamada interna al mismo servidor: " + baseUrl);
-            LOG.warning("⚠️ Si esta URL no funciona, configura POLITICAS_SERVICE_URL explícitamente con la URL interna correcta.");
+            LOG.info("Convertiendo HTTPS a HTTP para llamada interna al mismo servidor: " + baseUrl);
+            LOG.warning("Si esta URL no funciona, configura POLITICAS_SERVICE_URL explícitamente con la URL interna correcta.");
         }
         
         // Determinar el contexto a usar según el ambiente

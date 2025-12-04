@@ -227,18 +227,18 @@ const MiPerfil = () => {
         const match = user.uid.match(/uy-ci-(\d+)/);
         if (match && match[1]) {
           userDocumento = match[1];
-          console.log(`📋 CI extraído del UID: ${userDocumento}`);
+          console.log(`CI extraído del UID: ${userDocumento}`);
         }
       }
       
       if (!userDocumento) {
-        console.warn('⚠️ No se pudo obtener el documento del usuario. User object:', user);
+        console.warn('No se pudo obtener el documento del usuario. User object:', user);
         setAccesosHistoria([]);
         setLoadingAccesos(false);
         return;
       }
 
-      console.log(`🔍 Cargando accesos para paciente CI: ${userDocumento}`);
+      console.log(` Cargando accesos para paciente CI: ${userDocumento}`);
 
       // Usar el endpoint del servicio de políticas para obtener registros de acceso por paciente
       const response = await fetch(`${config.BACKEND_URL}/hcen-politicas-service/api/registros/paciente/${userDocumento}`, {
@@ -253,7 +253,7 @@ const MiPerfil = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(`✅ Accesos recibidos:`, data);
+        console.log(`Accesos recibidos:`, data);
         // Ordenar por fecha descendente (más recientes primero)
         const accesosOrdenados = Array.isArray(data) ? data.sort((a, b) => {
           const fechaA = parseFecha(a.fecha) || new Date(0);

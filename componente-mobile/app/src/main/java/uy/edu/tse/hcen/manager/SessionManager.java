@@ -25,6 +25,7 @@ public class SessionManager {
 
     private static final String KEY_JWT = "jwt_token";
     private static final String KEY_LOGIN_STATE = "login_state";
+    private static final String AUTH_SERVICE = "AuthService";
 
     public static void saveJWT(Context context, String jwt) {
         SharedPreferences prefs = SecurePrefsHelper.getSessionPrefs(context);
@@ -73,15 +74,15 @@ public class SessionManager {
                         saveJWT(context, jwt);
                         onResult.accept(true);
                     } else {
-                        Log.w("AuthService", "Respuesta sin campo JWT");
+                        Log.w(AUTH_SERVICE, "Respuesta sin campo JWT");
                         onResult.accept(false);
                     }
                 } else {
-                    Log.e("AuthService", "Error en respuesta del backend. Código: " + responseCode);
+                    Log.e(AUTH_SERVICE, "Error en respuesta del backend. Código: " + responseCode);
                     onResult.accept(false);
                 }
             } catch (Exception e) {
-                Log.e("AuthService", "Fallo en la petición JWT", e);
+                Log.e(AUTH_SERVICE, "Fallo en la petición JWT", e);
                 onResult.accept(false);
             } finally {
                 if (connection != null) {

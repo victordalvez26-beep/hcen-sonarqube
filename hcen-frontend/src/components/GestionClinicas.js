@@ -179,7 +179,7 @@ const GestionClinicas = () => {
           const createdNodo = await response.json();
           showActivationDetails(createdNodo, formData);
           showMessage(
-            `✅ Invitación enviada a ${formData.contacto}. ` +
+            `Invitación enviada a ${formData.contacto}. ` +
             `El administrador recibirá un email para completar el registro de la clínica.`,
             'success'
           );
@@ -737,7 +737,7 @@ const GestionClinicas = () => {
 
                 <div style={{marginBottom: '20px'}}>
                   <h6 style={{color: '#374151', marginBottom: '15px', fontWeight: '600', fontSize: '16px'}}>
-                    📋 Información para el Administrador de la Clínica
+                    Información para el Administrador de la Clínica
                   </h6>
                   
                   <div style={{
@@ -782,7 +782,7 @@ const GestionClinicas = () => {
 
                     <div style={{marginBottom: '15px'}}>
                       <label style={{color: '#6b7280', fontSize: '13px', fontWeight: '600', display: 'block', marginBottom: '5px'}}>
-                        🔗 URL de Activación (válida por 48 horas)
+                        URL de Activación (válida por 48 horas)
                       </label>
                       <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
                         <input
@@ -871,7 +871,7 @@ const GestionClinicas = () => {
                   border: '1px solid #e5e7eb'
                 }}>
                   <h6 style={{color: '#374151', marginBottom: '10px', fontSize: '14px', fontWeight: '600'}}>
-                    📝 Instrucciones para el Administrador
+                    Instrucciones para el Administrador
                   </h6>
                   <ol style={{marginBottom: '0', paddingLeft: '20px', color: '#6b7280', fontSize: '13px'}}>
                     <li>Abrir el enlace de activación recibido por email</li>

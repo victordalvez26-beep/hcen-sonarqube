@@ -36,6 +36,13 @@ import uy.edu.tse.hcen.manager.SessionManager;
 @RunWith(AndroidJUnit4.class)
 public class SummaryDigitalFragmentExtraInstrumentedTest {
 
+    private static final String POLEN = "Polen";
+    private static final String ACTIVE = "active";
+    private static final String STATUS = "status";
+    private static final String ALLERGIES = "allergies";
+    private static final String JWT_TOKEN = "jwt-token";
+    private static final String FRAGMENT_LOADED_TIMEOUT = "Fragment loaded without timeout";
+
     @Test
     public void parseSummaryEmptyAndNonEmpty() {
         ActivityScenario<SingleFragmentActivity> scenario = ActivityScenario.launch(SingleFragmentActivity.class);
@@ -50,8 +57,8 @@ public class SummaryDigitalFragmentExtraInstrumentedTest {
                 m.invoke(f, root.toString());
                 // Non-empty summary
                 JSONArray arr = new JSONArray();
-                arr.put(new JSONObject().put("name", "Polen").put("status", "active"));
-                root.put("allergies", arr);
+                arr.put(new JSONObject().put("name", POLEN).put(STATUS, ACTIVE));
+                root.put(ALLERGIES, arr);
                 m.invoke(f, root.toString());
             } catch (Exception ignored) {
                 //ignored
@@ -95,7 +102,7 @@ public class SummaryDigitalFragmentExtraInstrumentedTest {
     @Test
     public void summaryFragmentDisplaysEmptyViewOnNoData() throws InterruptedException {
         Context context = ApplicationProvider.getApplicationContext();
-        SessionManager.saveJWT(context, "jwt-token");
+    SessionManager.saveJWT(context, JWT_TOKEN);
         TestNetworkDispatcher.install();
         TestNetworkDispatcher.enqueueResponse(AppConfig.SUMMARY_URL, 200, "{}"); // Empty JSON
 
@@ -111,7 +118,7 @@ public class SummaryDigitalFragmentExtraInstrumentedTest {
                 }
             });
         });
-        assertTrue("Fragment loaded without timeout", latch.await(5, TimeUnit.SECONDS));
+    assertTrue(FRAGMENT_LOADED_TIMEOUT, latch.await(5, TimeUnit.SECONDS));
         scenario.onActivity(activity -> {
             SummaryDigitalFragment f = (SummaryDigitalFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             View emptyView = f.getView().findViewById(R.id.emptyView);
@@ -123,13 +130,13 @@ public class SummaryDigitalFragmentExtraInstrumentedTest {
     @Test
     public void summaryFragmentDisplaysRecyclerWithData() throws InterruptedException {
         Context context = ApplicationProvider.getApplicationContext();
-        SessionManager.saveJWT(context, "jwt-token");
+    SessionManager.saveJWT(context, JWT_TOKEN);
         TestNetworkDispatcher.install();
         try {
             JSONObject response = new JSONObject();
             JSONArray allergies = new JSONArray();
-            allergies.put(new JSONObject().put("name", "Polen").put("status", "active"));
-            response.put("allergies", allergies);
+            allergies.put(new JSONObject().put("name", POLEN).put(STATUS, ACTIVE));
+            response.put(ALLERGIES, allergies);
             TestNetworkDispatcher.enqueueResponse(AppConfig.SUMMARY_URL, 200, response.toString());
         } catch (Exception ignored) {
             // ignored
@@ -146,7 +153,7 @@ public class SummaryDigitalFragmentExtraInstrumentedTest {
                 }
             });
         });
-        assertTrue("Fragment loaded without timeout", latch.await(5, TimeUnit.SECONDS));
+    assertTrue(FRAGMENT_LOADED_TIMEOUT, latch.await(5, TimeUnit.SECONDS));
         scenario.onActivity(activity -> {
             SummaryDigitalFragment f = (SummaryDigitalFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             View contentContainer = f.getView().findViewById(R.id.contentContainer);
@@ -158,7 +165,7 @@ public class SummaryDigitalFragmentExtraInstrumentedTest {
     @Test
     public void summaryFragmentErrorResponseShowsErrorDialog() throws InterruptedException {
         Context context = ApplicationProvider.getApplicationContext();
-        SessionManager.saveJWT(context, "jwt-token");
+    SessionManager.saveJWT(context, JWT_TOKEN);
         TestNetworkDispatcher.install();
         TestNetworkDispatcher.enqueueResponse(AppConfig.SUMMARY_URL, 500, "Server error");
 
@@ -169,19 +176,19 @@ public class SummaryDigitalFragmentExtraInstrumentedTest {
             activity.setFragment(f);
             new android.os.Handler(Looper.getMainLooper()).postDelayed(latch::countDown, 1000);
         });
-        assertTrue("Fragment loaded without timeout", latch.await(5, TimeUnit.SECONDS));
+    assertTrue(FRAGMENT_LOADED_TIMEOUT, latch.await(5, TimeUnit.SECONDS));
         // Test that fragment handles error - since it's asynchronous, just ensuring no crash
     }
 
     @Test
     public void summaryFragmentClickTypeCardShowsPopup() throws Exception {
         Context context = ApplicationProvider.getApplicationContext();
-        SessionManager.saveJWT(context, "jwt-token");
+    SessionManager.saveJWT(context, JWT_TOKEN);
         TestNetworkDispatcher.install();
         JSONObject response = new JSONObject();
         JSONArray allergies = new JSONArray();
-        allergies.put(new JSONObject().put("name", "Polen").put("status", "active"));
-        response.put("allergies", allergies);
+    allergies.put(new JSONObject().put("name", POLEN).put(STATUS, ACTIVE));
+    response.put(ALLERGIES, allergies);
         TestNetworkDispatcher.enqueueResponse(AppConfig.SUMMARY_URL, 200, response.toString());
 
         ActivityScenario<SingleFragmentActivity> scenario = ActivityScenario.launch(SingleFragmentActivity.class);
@@ -209,7 +216,7 @@ public class SummaryDigitalFragmentExtraInstrumentedTest {
             SummaryDigitalFragment f = new SummaryDigitalFragment();
             activity.setFragment(f);
             ArrayList<SummaryItem> items = new ArrayList<>();
-            items.add(new SummaryItem("Alergia", "Polen (active)", uy.edu.tse.hcen.R.drawable.ic_allergy));
+            items.add(new SummaryItem("Alergia", POLEN + " (" + ACTIVE + ")", uy.edu.tse.hcen.R.drawable.ic_allergy));
             try {
                 java.lang.reflect.Method m = SummaryDigitalFragment.class.getDeclaredMethod("generatePdfFromSummary", java.util.List.class);
                 m.setAccessible(true);

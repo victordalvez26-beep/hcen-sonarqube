@@ -211,7 +211,7 @@ function UsuariosPage() {
 
       <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
         <h3 style={{ margin: '0 0 20px 0', fontSize: '18px', fontWeight: '700' }}>
-          📋 Usuarios Registrados ({usuarios.length})
+          Usuarios Registrados ({usuarios.length})
         </h3>
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px', color: '#6b7280' }}>Cargando...</div>

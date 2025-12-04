@@ -204,7 +204,7 @@ public class AuthResource {
         String origin = request.getHeader("Origin");
         String allowedOrigin = getAllowedOriginForCors(origin);
         
-        LOGGER.info(String.format("🔵 [AUTH-RESOURCE] Agregando headers CORS explícitos - Origin: %s -> Allowed: %s", 
+        LOGGER.info(String.format("[AUTH-RESOURCE] Agregando headers CORS explícitos - Origin: %s -> Allowed: %s", 
                 origin, allowedOrigin));
         
         // Headers CORS esenciales para cross-site entre Vercel y Elastic Cloud

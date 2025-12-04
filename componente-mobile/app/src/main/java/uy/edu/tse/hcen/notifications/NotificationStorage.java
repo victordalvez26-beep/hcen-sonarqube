@@ -16,6 +16,7 @@ import java.util.List;
 
 public class NotificationStorage {
     private static final String KEY_LIST = "notifications_list";
+    private static final String TIMESTAMP = "timestamp";
 
     public static void saveNotification(Context ctx, String message) {
         SharedPreferences prefs = ctx.getSharedPreferences(PREFS_PUSH_NOTIFICATIONS, Context.MODE_PRIVATE);
@@ -25,7 +26,7 @@ public class NotificationStorage {
             JSONArray array = new JSONArray(json);
             JSONObject obj = new JSONObject();
             obj.put("message", message);
-            obj.put("timestamp", System.currentTimeMillis());
+            obj.put(TIMESTAMP, System.currentTimeMillis());
             array.put(obj);
 
             prefs.edit().putString(KEY_LIST, array.toString()).apply();
@@ -44,7 +45,7 @@ public class NotificationStorage {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.getJSONObject(i);
                 String message = obj.getString("message");
-                long timestamp = obj.getLong("timestamp");
+                long timestamp = obj.getLong(TIMESTAMP);
                 list.add(new NotificationItem(message, timestamp));
             }
         } catch (JSONException e) {
@@ -66,7 +67,7 @@ public class NotificationStorage {
             JSONArray newArray = new JSONArray();
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.getJSONObject(i);
-                long ts = obj.getLong("timestamp");
+                long ts = obj.getLong(TIMESTAMP);
                 if (ts != timestamp) {
                     newArray.put(obj);
                 }

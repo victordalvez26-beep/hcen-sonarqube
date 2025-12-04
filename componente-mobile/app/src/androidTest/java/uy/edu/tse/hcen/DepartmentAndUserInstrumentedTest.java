@@ -15,15 +15,15 @@ public class DepartmentAndUserInstrumentedTest {
 
     @Test
     public void departmentSpecialNamesAreFormatted() {
-        assertEquals("Cerro Largo", Department.Cerro_Largo.getDisplayName());
-        assertEquals("Río Negro", Department.Río_Negro.getDisplayName());
-        assertEquals("San José", Department.San_José.getDisplayName());
+        assertEquals("Cerro Largo", Department.CERRO_LARGO.getDisplayName());
+        assertEquals("Río Negro", Department.RIO_NEGRO.getDisplayName());
+        assertEquals("San José", Department.SAN_JOSE.getDisplayName());
     }
 
     @Test
     public void departmentDefaultFormattingCapitalizesName() {
-        assertEquals("Artigas", Department.Artigas.getDisplayName());
-        assertEquals("Lavalleja", Department.Lavalleja.getDisplayName());
+        assertEquals("Artigas", Department.ARTIGAS.getDisplayName());
+        assertEquals("Lavalleja", Department.LAVALLEJA.getDisplayName());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class DepartmentAndUserInstrumentedTest {
                 "12345678",
                 "UY",
                 null,
-                Department.Artigas,
+                Department.ARTIGAS,
                 "Paysandú",
                 "Calle 123"
         );
@@ -58,7 +58,7 @@ public class DepartmentAndUserInstrumentedTest {
                 "9876543",
                 "UY",
                 null,
-                Department.Montevideo,
+                Department.MONTEVIDEO,
                 "Montevideo",
                 "Av. Italia 1234"
         );

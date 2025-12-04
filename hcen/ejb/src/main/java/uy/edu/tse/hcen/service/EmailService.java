@@ -111,7 +111,7 @@ public class EmailService {
             "    <p style='color: #6b7280; font-size: 16px;'>Su clínica <strong>" + clinicName + "</strong> ha sido registrada exitosamente en el sistema.</p>" +
             
             "    <div style='background: #f0fdf4; border-left: 4px solid #10b981; padding: 20px; margin: 25px 0; border-radius: 5px;'>" +
-            "      <h3 style='color: #047857; margin-top: 0; font-size: 18px;'>📋 Sus Credenciales</h3>" +
+            "      <h3 style='color: #047857; margin-top: 0; font-size: 18px;'>Sus Credenciales</h3>" +
             "      <p style='margin: 10px 0;'><strong>Usuario:</strong> <code style='background: #f3f4f6; padding: 4px 8px; border-radius: 4px; font-size: 14px;'>" + adminNickname + "</code></p>" +
             "      <p style='margin: 10px 0;'><strong>Portal:</strong> <a href='" + portalUrl + "' style='color: #3b82f6;'>" + portalUrl + "</a></p>" +
             "    </div>" +
@@ -130,7 +130,7 @@ public class EmailService {
             
             "    <div style='background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 25px 0; border-radius: 5px;'>" +
             "      <p style='margin: 0; color: #92400e; font-size: 14px;'>" +
-            "        <strong>⚠️ Importante:</strong> Este enlace es válido por <strong>48 horas</strong>. " +
+            "        <strong>Importante:</strong> Este enlace es válido por <strong>48 horas</strong>. " +
             "        Si no activa su cuenta dentro de este período, deberá solicitar un nuevo enlace." +
             "      </p>" +
             "    </div>" +
@@ -234,7 +234,7 @@ public class EmailService {
 
             Transport.send(message);
             
-            LOGGER.info("✅ Invitation email sent successfully to: " + toEmail);
+            LOGGER.info("Invitation email sent successfully to: " + toEmail);
             return true;
             
         } catch (Exception e) {
@@ -262,7 +262,7 @@ public class EmailService {
             "    <p style='color: #6b7280; font-size: 16px;'>Ha sido invitado a registrar <strong>" + clinicName + "</strong> en el sistema HCEN.</p>" +
             
             "    <div style='background: #eff6ff; border-left: 4px solid #3b82f6; padding: 20px; margin: 25px 0; border-radius: 5px;'>" +
-            "      <h3 style='color: #1e40af; margin-top: 0; font-size: 18px;'>📋 Próximos Pasos</h3>" +
+            "      <h3 style='color: #1e40af; margin-top: 0; font-size: 18px;'>Próximos Pasos</h3>" +
             "      <p style='margin: 10px 0; color: #1e40af;'>Para completar el registro, necesitará ingresar:</p>" +
             "      <ul style='color: #1e40af; padding-left: 20px;'>" +
             "        <li>RUT de la clínica (12 dígitos)</li>" +
@@ -278,7 +278,7 @@ public class EmailService {
             
             "    <div style='background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 25px 0; border-radius: 5px;'>" +
             "      <p style='margin: 0; color: #92400e; font-size: 14px;'>" +
-            "        <strong>⚠️ Importante:</strong> Este enlace es válido por <strong>48 horas</strong>. " +
+            "        <strong>Importante:</strong> Este enlace es válido por <strong>48 horas</strong>. " +
             "        Si no completa el registro dentro de este período, deberá contactar al administrador de HCEN." +
             "      </p>" +
             "    </div>" +
@@ -332,10 +332,10 @@ public class EmailService {
             
             Transport.send(message);
             
-            LOGGER.info("✅ Email de invitación de prestador enviado exitosamente a: " + recipientEmail);
+            LOGGER.info("Email de invitación de prestador enviado exitosamente a: " + recipientEmail);
             
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "❌ Error al enviar email de invitación de prestador: " + e.getMessage(), e);
+            LOGGER.log(Level.SEVERE, "Error al enviar email de invitación de prestador: " + e.getMessage(), e);
             throw new RuntimeException("Error al enviar email: " + e.getMessage(), e);
         }
     }

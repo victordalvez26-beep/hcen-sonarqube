@@ -270,7 +270,7 @@ public class NodoPerifericoResource {
             
             repo.update(existing);
             
-            logger.info(String.format("✅ Clinic %d registration completed. RUT: %s, Admin: %s", 
+            logger.info(String.format("Clinic %d registration completed. RUT: %s, Admin: %s", 
                                      id, existing.getRUT(), existing.getAdminNickname()));
             
             return Response.ok()

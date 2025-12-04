@@ -11,9 +11,9 @@ import java.util.logging.Logger;
 /**
  * Filtro JAX-RS para agregar headers CORS a todas las respuestas.
  * 
- * ⚠️ IMPORTANTE: Este filtro NO se llama manualmente. JAX-RS lo ejecuta AUTOMÁTICAMENTE.
+ * IMPORTANTE: Este filtro NO se llama manualmente. JAX-RS lo ejecuta AUTOMÁTICAMENTE.
  * 
- * 🔄 CÓMO FUNCIONA:
+ * CÓMO FUNCIONA:
  * 1. Está registrado en RestApplication.getClasses() (línea 18)
  * 2. JAX-RS detecta que implementa ContainerResponseFilter y tiene @Provider
  * 3. JAX-RS ejecuta filter() AUTOMÁTICAMENTE después de cada request JAX-RS
@@ -26,10 +26,10 @@ import java.util.logging.Logger;
  * - Se ejecuta después del endpoint pero antes de enviar la respuesta
  * - NO se ejecuta para OPTIONS (manejado por CorsRequestFilter)
  * 
- * 🔍 PARA VERLO EN ACCIÓN:
+ * PARA VERLO EN ACCIÓN:
  * - Revisa los logs de WildFly
- * - Busca "🔵 [CORS-RESPONSE-FILTER]" para ver cuándo se ejecuta
- * - Busca "✅ [CORS-RESPONSE-FILTER]" para ver cuándo agrega headers
+ * - Busca "[CORS-RESPONSE-FILTER]" para ver cuándo se ejecuta
+ * - Busca "[CORS-RESPONSE-FILTER]" para ver cuándo agrega headers
  */
 @Provider
 public class CorsResponseFilter implements ContainerResponseFilter {
@@ -42,18 +42,18 @@ public class CorsResponseFilter implements ContainerResponseFilter {
         String path = requestContext.getUriInfo().getPath();
         String origin = requestContext.getHeaderString("Origin");
         
-        LOGGER.info(String.format("🔵 [CORS-RESPONSE-FILTER] Ejecutándose para %s %s desde origin: %s", 
+        LOGGER.info(String.format("[CORS-RESPONSE-FILTER] Ejecutándose para %s %s desde origin: %s", 
                 method, path, origin));
         
         // No agregar headers CORS para solicitudes OPTIONS (ya manejadas por CorsRequestFilter)
         if ("OPTIONS".equals(method)) {
-            LOGGER.info("🔵 [CORS-RESPONSE-FILTER] OPTIONS request detectado - saltando (manejado por CorsRequestFilter)");
+            LOGGER.info("[CORS-RESPONSE-FILTER] OPTIONS request detectado - saltando (manejado por CorsRequestFilter)");
             return;
         }
         
         // Verificar si el header ya existe antes de agregarlo (evitar duplicados)
         if (responseContext.getHeaders().containsKey("Access-Control-Allow-Origin")) {
-            LOGGER.info("🔵 [CORS-RESPONSE-FILTER] Headers CORS ya existentes - saltando para evitar duplicados");
+            LOGGER.info("[CORS-RESPONSE-FILTER] Headers CORS ya existentes - saltando para evitar duplicados");
             return; // Ya fueron agregados por otro filtro
         }
         
@@ -67,7 +67,7 @@ public class CorsResponseFilter implements ContainerResponseFilter {
         responseContext.getHeaders().putSingle("Access-Control-Allow-Credentials", "true");
         responseContext.getHeaders().putSingle("Access-Control-Max-Age", "3600");
         
-        LOGGER.info(String.format("✅ [CORS-RESPONSE-FILTER] Headers CORS agregados - Origin: %s -> Allowed: %s para %s %s", 
+        LOGGER.info(String.format("[CORS-RESPONSE-FILTER] Headers CORS agregados - Origin: %s -> Allowed: %s para %s %s", 
                 origin, allowedOrigin, method, path));
     }
 

@@ -27,6 +27,9 @@ import uy.edu.tse.hcen.manager.SessionManager;
 @RunWith(AndroidJUnit4.class)
 public class UserManagerInstrumentedTest {
 
+    private static final String TEST_EMAIL = "a@b.com";
+    private static final String TEST_DEPARTMENT = "MONTEVIDEO";
+
     private Context context;
 
     @Before
@@ -43,11 +46,11 @@ public class UserManagerInstrumentedTest {
     public void saveAndLoadUserFromPrefs() throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
         TestNetworkDispatcher.enqueueResponse(AppConfig.UPDATE_USER_DATA_URL, 200, "{\"success\": true}");
-        UserManager.saveUser(context, "a@b.com", "MONTEVIDEO", "Loc", "Addr", () -> latch.countDown());
+    UserManager.saveUser(context, TEST_EMAIL, TEST_DEPARTMENT, "Loc", "Addr", () -> latch.countDown());
         latch.await(); // Wait for saveUser to complete
         User u = UserManager.getUser(context);
         // getUser spawns background fetch but returns stored prefs; ensure saved values are present
-        assertEquals("a@b.com", u.getEmail());
+    assertEquals(TEST_EMAIL, u.getEmail());
     }
 
     @Test
@@ -62,30 +65,29 @@ public class UserManagerInstrumentedTest {
                 .put("localidad", "Montevideo")
                 .put("direccion", "Calle 1")
                 .put("fecha_nacimiento", "1980-05-01")
-                .put("departamento", "MONTEVIDEO");
+                .put("departamento", TEST_DEPARTMENT);
 
         TestNetworkDispatcher.enqueueResponse(AppConfig.USER_DATA_URL, 200, payload.toString());
 
-        try {
-            // call private static fetchUserDataFromBackend via reflection
-            Method m = UserManager.class.getDeclaredMethod("fetchUserDataFromBackend", android.content.Context.class, String.class);
-            m.setAccessible(true);
-            m.invoke(null, context, "jwt-xyz");
-        } catch (Exception e) {
-            // Log the error for debugging, but do not fail the test
-            Logger logger = Logger.getLogger(UserManagerInstrumentedTest.class.getName());
-            logger.info("Reflection error in fetchUserDataFromBackend: " + e);
-        }
+        // Ejecutar y esperar a que los datos se escriban en SharedPreferences
+        Method m = UserManager.class.getDeclaredMethod("fetchUserDataFromBackend", android.content.Context.class, String.class);
+        m.invoke(null, context, "jwt-xyz");
 
-        User u = UserManager.getUser(context);
-        // verify some fields
-        assertEquals("net@host", u.getEmail());
-        assertEquals("Juan", u.getFirstName());
+        // Esperar hasta que el valor de email esté presente (máx 2 segundos)
+        long start = System.currentTimeMillis();
+        String email = null;
+        while (System.currentTimeMillis() - start < 2000) {
+            email = UserManager.getUser(context).getEmail();
+            if (email != null) break;
+            Thread.sleep(50);
+        }
+        assertEquals("net@host", email);
+        assertEquals("Juan", UserManager.getUser(context).getFirstName());
     }
 
     @Test
-    public void clearUser_clearsPrefs() {
-    UserManager.saveUser(context, "a@b.com", "MONTEVIDEO", "Loc", "Addr", () -> {});
+    public void clearUserClearsPrefs() {
+        UserManager.saveUser(context, TEST_EMAIL, TEST_DEPARTMENT, "Loc", "Addr", () -> {});
         UserManager.clearUser(context);
         User u = UserManager.getUser(context);
         assertNull(u.getEmail());

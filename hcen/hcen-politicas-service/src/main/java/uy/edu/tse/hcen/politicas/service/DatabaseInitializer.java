@@ -29,12 +29,12 @@ public class DatabaseInitializer {
 
     @PostConstruct
     public void init() {
-        LOG.info("🚀 DatabaseInitializer (Políticas) - Verificando migraciones...");
+        LOG.info("DatabaseInitializer (Políticas) - Verificando migraciones...");
         try {
             migrateDatabase();
-            LOG.info("✅ Migraciones completadas exitosamente");
+            LOG.info("Migraciones completadas exitosamente");
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "❌ Error en migraciones: " + e.getMessage(), e);
+            LOG.log(Level.SEVERE, "Error en migraciones: " + e.getMessage(), e);
         }
     }
 
@@ -53,7 +53,7 @@ public class DatabaseInitializer {
         DatabaseMetaData metaData = conn.getMetaData();
         try (ResultSet columns = metaData.getColumns(null, null, tableName, columnName)) {
             if (columns.next()) {
-                LOG.info(String.format("  ✅ Columna %s.%s ya existe, omitiendo migración", tableName, columnName));
+                LOG.info(String.format("  Columna %s.%s ya existe, omitiendo migración", tableName, columnName));
                 return;
             }
         }
@@ -66,7 +66,7 @@ public class DatabaseInitializer {
 
         try (PreparedStatement ps = conn.prepareStatement(alterTable)) {
             ps.execute();
-            LOG.info(String.format("  ✅ Columna %s.%s agregada exitosamente", tableName, columnName));
+            LOG.info(String.format("  Columna %s.%s agregada exitosamente", tableName, columnName));
         } catch (SQLException e) {
             // Si la columna ya existe (por ejemplo, si se creó entre la verificación y el ALTER),
             // solo loguear una advertencia y continuar
@@ -74,7 +74,7 @@ public class DatabaseInitializer {
             if (errorMsg.contains("already exists") || 
                 errorMsg.contains("duplicate") || 
                 errorMsg.contains("duplicate column name")) {
-                LOG.warning(String.format("  ⚠️ Columna %s.%s ya existe (creada concurrentemente o en migración anterior), omitiendo", tableName, columnName));
+                LOG.warning(String.format("  Columna %s.%s ya existe (creada concurrentemente o en migración anterior), omitiendo", tableName, columnName));
                 // No lanzar excepción, solo continuar
                 return;
             } else {

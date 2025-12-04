@@ -203,65 +203,65 @@ public class PoliticasAccesoResource {
     public Response listarPoliticas(@Context HttpServletRequest request) {
         Client client = null;
         try {
-            LOG.info("🔵 [POLITICAS] GET /api/documentos/politicas - Iniciando listado de políticas");
+            LOG.info("[POLITICAS] GET /api/documentos/politicas - Iniciando listado de políticas");
             
             // Obtener JWT de la cookie
             String jwtToken = CookieUtil.resolveJwtToken(request);
             
             if (jwtToken == null) {
-                LOG.warning("🔴 [POLITICAS] No se encontró JWT en la cookie");
+                LOG.warning("[POLITICAS] No se encontró JWT en la cookie");
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity(Map.of("error", "No autenticado"))
                         .build();
             }
             
-            LOG.info("🔵 [POLITICAS] JWT encontrado en cookie");
+            LOG.info("[POLITICAS] JWT encontrado en cookie");
             
             // Validar JWT y extraer userUid
             String userUid = JWTUtil.validateJWT(jwtToken);
             if (userUid == null) {
-                LOG.warning("🔴 [POLITICAS] JWT inválido o expirado");
+                LOG.warning("[POLITICAS] JWT inválido o expirado");
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity(Map.of("error", "Token inválido o expirado"))
                         .build();
             }
             
-            LOG.info("🔵 [POLITICAS] JWT válido - userUid: " + userUid);
+            LOG.info("[POLITICAS] JWT válido - userUid: " + userUid);
             
             // Buscar el usuario por UID para obtener su CI
             User user = userDAO.findByUid(userUid);
             
             if (user == null) {
-                LOG.warning("🔴 [POLITICAS] Usuario no encontrado con UID: " + userUid);
+                LOG.warning("[POLITICAS] Usuario no encontrado con UID: " + userUid);
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity(Map.of("error", "Usuario no encontrado"))
                         .build();
             }
             
             String codDocum = user.getCodDocum();
-            LOG.info("🔵 [POLITICAS] Usuario encontrado - UID: " + userUid + ", codDocum inicial: " + codDocum);
+            LOG.info("[POLITICAS] Usuario encontrado - UID: " + userUid + ", codDocum inicial: " + codDocum);
             
             // Si el usuario no tiene CI pero el UID contiene el CI (formato: uy-ci-XXXXX)
             if ((codDocum == null || codDocum.trim().isEmpty()) && userUid.startsWith("uy-ci-")) {
                 String[] parts = userUid.split("-");
                 if (parts.length >= 3) {
                     codDocum = parts[2];
-                    LOG.info("🔵 [POLITICAS] CI extraído del UID: " + codDocum);
+                    LOG.info("[POLITICAS] CI extraído del UID: " + codDocum);
                 }
             }
             
             if (codDocum == null || codDocum.trim().isEmpty()) {
-                LOG.warning("🔴 [POLITICAS] No se pudo obtener el CI del usuario. UID: " + userUid);
+                LOG.warning("[POLITICAS] No se pudo obtener el CI del usuario. UID: " + userUid);
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity(Map.of("error", "No se pudo identificar el documento del usuario"))
                         .build();
             }
             
-            LOG.info("🔵 [POLITICAS] Listando políticas para usuario CI: " + codDocum);
+            LOG.info("[POLITICAS] Listando políticas para usuario CI: " + codDocum);
             
             // Llamar internamente al servicio de políticas para obtener solo las políticas del usuario
             String url = PoliticasServiceUrlUtil.buildUrl("/politicas/paciente/" + codDocum);
-            LOG.info("🔵 [POLITICAS] URL del servicio de políticas: " + url);
+            LOG.info("[POLITICAS] URL del servicio de políticas: " + url);
             
             client = createClientWithTimeout();
             
@@ -370,60 +370,60 @@ public class PoliticasAccesoResource {
     public Response listarPoliticasPorPaciente(@PathParam("ci") String ci, @QueryParam("tenantId") String tenantId, @Context HttpServletRequest request) {
         Client client = null;
         try {
-            LOG.info("🔵 [POLITICAS] GET /api/documentos/politicas/paciente/{ci} - Iniciando listado de políticas");
+            LOG.info("[POLITICAS] GET /api/documentos/politicas/paciente/{ci} - Iniciando listado de políticas");
             
             // Obtener JWT de la cookie
             String jwtToken = CookieUtil.resolveJwtToken(request);
             
             if (jwtToken == null) {
-                LOG.warning("🔴 [POLITICAS] No se encontró JWT en la cookie");
+                LOG.warning("[POLITICAS] No se encontró JWT en la cookie");
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity(Map.of("error", "No autenticado"))
                         .build();
             }
             
-            LOG.info("🔵 [POLITICAS] JWT encontrado en cookie");
+            LOG.info("[POLITICAS] JWT encontrado en cookie");
             
             // Validar JWT y extraer userUid
             String userUid = JWTUtil.validateJWT(jwtToken);
             if (userUid == null) {
-                LOG.warning("🔴 [POLITICAS] JWT inválido o expirado");
+                LOG.warning("[POLITICAS] JWT inválido o expirado");
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity(Map.of("error", "Token inválido o expirado"))
                         .build();
             }
             
-            LOG.info("🔵 [POLITICAS] JWT válido - userUid: " + userUid);
+            LOG.info("[POLITICAS] JWT válido - userUid: " + userUid);
             
             // Extraer el documento del UID (formato: pais-tipodocumento-numero)
             String codDocum = UserUuidUtil.extractDocumentoFromUid(userUid);
             
             if (codDocum == null || codDocum.trim().isEmpty()) {
-                LOG.warning("🔴 [POLITICAS] No se pudo extraer el documento del UID. UID: " + userUid);
+                LOG.warning("[POLITICAS] No se pudo extraer el documento del UID. UID: " + userUid);
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity(Map.of("error", "No se pudo identificar el documento del usuario"))
                         .build();
             }
             
-            LOG.info("🔵 [POLITICAS] Documento extraído del UID: " + codDocum + " (UID: " + userUid + ")");
+            LOG.info("[POLITICAS] Documento extraído del UID: " + codDocum + " (UID: " + userUid + ")");
             
             // Validar que el CI del path (si se proporciona) coincida con el CI del usuario autenticado
             // Esto previene que un usuario intente ver políticas de otro paciente
             if (ci != null && !ci.trim().isEmpty() && !ci.equals(codDocum)) {
-                LOG.warning("🔴 [POLITICAS] Intento de acceso no autorizado - CI del path: " + ci + ", CI del usuario: " + codDocum);
+                LOG.warning("[POLITICAS] Intento de acceso no autorizado - CI del path: " + ci + ", CI del usuario: " + codDocum);
                 return Response.status(Response.Status.FORBIDDEN)
                         .entity(Map.of("error", "No autorizado para ver políticas de otro paciente"))
                         .build();
             }
             
-            LOG.info("🔵 [POLITICAS] Listando políticas para usuario CI: " + codDocum);
+            LOG.info("[POLITICAS] Listando políticas para usuario CI: " + codDocum);
             
             // Usar el CI del usuario autenticado (ignorar el del path por seguridad)
             String url = PoliticasServiceUrlUtil.buildUrl("/politicas/paciente/" + codDocum);
             if (tenantId != null && !tenantId.isEmpty()) {
                 url += "?tenantId=" + tenantId;
             }
-            LOG.info("🔵 [POLITICAS] URL del servicio de políticas: " + url);
+            LOG.info("[POLITICAS] URL del servicio de políticas: " + url);
             
             client = createClientWithTimeout();
             Response response = client.target(url)
@@ -515,12 +515,12 @@ public class PoliticasAccesoResource {
     @GET
     @Path("/profesional/{id}")
     public Response listarPoliticasPorProfesional(@PathParam("id") String id, @Context HttpServletRequest request) {
-        LOG.info("🔵 [POLITICAS-ACCESO-RESOURCE] ========== Endpoint /documentos/politicas/profesional/" + id + " llamado ==========");
-        LOG.info("🔵 [POLITICAS-ACCESO-RESOURCE] Request URI: " + (request != null ? request.getRequestURI() : "null"));
-        LOG.info("🔵 [POLITICAS-ACCESO-RESOURCE] Request URL: " + (request != null ? request.getRequestURL() : "null"));
+        LOG.info("[POLITICAS-ACCESO-RESOURCE] ========== Endpoint /documentos/politicas/profesional/" + id + " llamado ==========");
+        LOG.info("[POLITICAS-ACCESO-RESOURCE] Request URI: " + (request != null ? request.getRequestURI() : "null"));
+        LOG.info("[POLITICAS-ACCESO-RESOURCE] Request URL: " + (request != null ? request.getRequestURL() : "null"));
         try {
             String url = PoliticasServiceUrlUtil.buildUrl("/politicas/profesional/" + id);
-            LOG.info("🔵 [POLITICAS-ACCESO-RESOURCE] Consultando políticas para profesional: " + id + " en URL: " + url);
+            LOG.info("[POLITICAS-ACCESO-RESOURCE] Consultando políticas para profesional: " + id + " en URL: " + url);
             
             Client client = createClientWithTimeout();
             Response response = client.target(url)

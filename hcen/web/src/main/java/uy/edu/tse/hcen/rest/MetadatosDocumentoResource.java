@@ -100,19 +100,19 @@ public class MetadatosDocumentoResource {
             String clinicaOrigen = dtoMetadata.getTenantId() != null ? "Clínica " + dtoMetadata.getTenantId() : dtoMetadata.getAaPrestador();
             
             // Log para debugging
-            logger.info(String.format("📋 [BACKEND] Recibiendo metadata - TenantId (String): %s, CI: %s", 
+            logger.info(String.format("[BACKEND] Recibiendo metadata - TenantId (String): %s, CI: %s", 
                     dtoMetadata.getTenantId(), dtoMetadata.getDocumentoIdPaciente()));
             
             Long tenantId = null;
             if (dtoMetadata.getTenantId() != null && !dtoMetadata.getTenantId().isBlank()) {
                 try {
                     tenantId = Long.parseLong(dtoMetadata.getTenantId());
-                    logger.info(String.format("✅ [BACKEND] TenantId parseado correctamente: %d", tenantId));
+                    logger.info(String.format("[BACKEND] TenantId parseado correctamente: %d", tenantId));
                 } catch (NumberFormatException e) {
-                    logger.warning("⚠️ [BACKEND] No se pudo parsear tenantId: " + dtoMetadata.getTenantId());
+                    logger.warning("[BACKEND] No se pudo parsear tenantId: " + dtoMetadata.getTenantId());
                 }
             } else {
-                logger.warning("⚠️ [BACKEND] TenantId es null o vacío en la metadata recibida");
+                logger.warning("[BACKEND] TenantId es null o vacío en la metadata recibida");
             }
             String profesionalSalud = dtoMetadata.getAutor();
             String descripcion = dtoMetadata.getDescripcion();
@@ -233,33 +233,33 @@ public class MetadatosDocumentoResource {
     @GET
     @Path("/usuario")
     public Response obtenerDocumentosPorUsuario(@Context HttpServletRequest request) {
-        logger.info("🔵 [ENDPOINT] /metadatos-documento/usuario - Método ejecutado");
+        logger.info("[ENDPOINT] /metadatos-documento/usuario - Método ejecutado");
         
         try {
             // Obtener JWT de la cookie
-            logger.info("🔍 [ENDPOINT] Extrayendo JWT de la cookie...");
+            logger.info("[ENDPOINT] Extrayendo JWT de la cookie...");
             String jwtToken = CookieUtil.resolveJwtToken(request);
             
             if (jwtToken == null) {
-                logger.warning("⚠️ [ENDPOINT] No se encontró JWT en la cookie");
+                logger.warning("[ENDPOINT] No se encontró JWT en la cookie");
                 return Response.status(Response.Status.UNAUTHORIZED)
                     .entity(Map.of("error", "No autenticado"))
                     .build();
             }
             
-            logger.info("✅ [ENDPOINT] JWT encontrado en cookie (primeros 50 chars): " + 
+            logger.info("[ENDPOINT] JWT encontrado en cookie (primeros 50 chars): " + 
                     (jwtToken.length() > 50 ? jwtToken.substring(0, 50) + "..." : jwtToken));
             
             String userUid = JWTUtil.validateJWT(jwtToken);
             if (userUid == null) {
-                logger.warning("⚠️ [ENDPOINT] JWT inválido o expirado");
+                logger.warning("[ENDPOINT] JWT inválido o expirado");
                 return Response.status(Response.Status.UNAUTHORIZED)
                     .entity(Map.of("error", "Token inválido o expirado"))
                     .build();
             }
             
-            logger.info("✅ [ENDPOINT] JWT válido - UID extraído: " + userUid);
-            logger.info("🔍 [ENDPOINT] Obteniendo documentos para usuario UID: " + userUid);
+            logger.info("[ENDPOINT] JWT válido - UID extraído: " + userUid);
+            logger.info("[ENDPOINT] Obteniendo documentos para usuario UID: " + userUid);
             
             // Buscar el usuario por UID para obtener su CI
             User user = userDAO.findByUid(userUid);
@@ -328,30 +328,30 @@ public class MetadatosDocumentoResource {
         
         try {
             // Obtener la metadata del documento
-            logger.info(String.format("📋 [BACKEND] Obteniendo metadata para documento ID: %d", id));
+            logger.info(String.format("[BACKEND] Obteniendo metadata para documento ID: %d", id));
             MetadataDocumentoDTO metadata = documentoRndcService.obtenerDocumentoPorId(id);
             
             if (metadata == null) {
-                logger.warning(String.format("❌ [BACKEND] Metadata no encontrada para documento ID: %d", id));
+                logger.warning(String.format("[BACKEND] Metadata no encontrada para documento ID: %d", id));
                 return Response.status(Response.Status.NOT_FOUND)
                     .entity(Map.of("error", "Documento no encontrado"))
                     .build();
             }
             
-            logger.info(String.format("✅ [BACKEND] Metadata obtenida - URI: %s, Clínica: %s", 
+            logger.info(String.format("[BACKEND] Metadata obtenida - URI: %s, Clínica: %s", 
                     metadata.getUriDocumento(), metadata.getClinicaOrigen()));
             
             DocumentoRndcService.DocumentoDescarga descarga = 
                 documentoRndcService.prepararDescargaDocumento(id);
             
             if (descarga == null || descarga.getStream() == null) {
-                logger.severe(String.format("❌ [BACKEND] Descarga nula o stream nulo después de obtener metadata. ID: %d", id));
+                logger.severe(String.format("[BACKEND] Descarga nula o stream nulo después de obtener metadata. ID: %d", id));
                 return Response.status(Response.Status.NOT_FOUND)
                     .entity(Map.of("error", "El PDF no está disponible para descarga (stream nulo)"))
                     .build();
             }
             
-            logger.info(String.format("📥 [BACKEND] Stream recibido del componente periférico"));
+            logger.info(String.format("[BACKEND] Stream recibido del componente periférico"));
             
             // Leer el stream completo a un byte array
             InputStream stream = descarga.getStream();
@@ -366,11 +366,11 @@ public class MetadatosDocumentoResource {
             byte[] pdfBytes = buffer.toByteArray();
             stream.close();
             
-            logger.info(String.format("✅ [BACKEND] PDF leído completamente - Tamaño: %d bytes (leídos: %d)", 
+            logger.info(String.format("[BACKEND] PDF leído completamente - Tamaño: %d bytes (leídos: %d)", 
                     pdfBytes.length, totalBytes));
             
             if (pdfBytes.length == 0) {
-                logger.severe(String.format("❌ [BACKEND] PDF vacío - Tamaño: 0 bytes"));
+                logger.severe(String.format("[BACKEND] PDF vacío - Tamaño: 0 bytes"));
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(Map.of("error", "El PDF recibido está vacío"))
                     .build();
@@ -380,15 +380,15 @@ public class MetadatosDocumentoResource {
             if (pdfBytes.length >= 4) {
                 String header = new String(pdfBytes, 0, 4);
                 if (!header.startsWith("%PDF")) {
-                    logger.warning(String.format("⚠️ [BACKEND] Los primeros bytes no son de un PDF válido: %s", header));
-                    logger.warning(String.format("⚠️ [BACKEND] Primeros 200 bytes: %s", 
+                    logger.warning(String.format("[BACKEND] Los primeros bytes no son de un PDF válido: %s", header));
+                    logger.warning(String.format("[BACKEND] Primeros 200 bytes: %s", 
                             new String(pdfBytes, 0, Math.min(200, pdfBytes.length))));
                 } else {
-                    logger.info(String.format("✅ [BACKEND] PDF válido detectado - Header: %s", header));
+                    logger.info(String.format("[BACKEND] PDF válido detectado - Header: %s", header));
                 }
             }
             
-            logger.info(String.format("📤 [BACKEND→FRONTEND] Enviando PDF al frontend - Tamaño: %d bytes", pdfBytes.length));
+            logger.info(String.format("[BACKEND→FRONTEND] Enviando PDF al frontend - Tamaño: %d bytes", pdfBytes.length));
             
             // Retornar el PDF
             return Response.ok(pdfBytes)
@@ -397,7 +397,7 @@ public class MetadatosDocumentoResource {
                 .build();
             
         } catch (Exception e) {
-            logger.log(Level.SEVERE, String.format("❌ [BACKEND] Error al descargar documento ID: %d", id), e);
+            logger.log(Level.SEVERE, String.format("[BACKEND] Error al descargar documento ID: %d", id), e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity(Map.of("error", "Error al descargar documento: " + e.getMessage()))
                 .build();
@@ -462,7 +462,7 @@ public class MetadatosDocumentoResource {
             // Esto previene crear solicitudes duplicadas cuando ya hay acceso
             try {
                 String politicasUrl = PoliticasServiceUrlUtil.buildUrl("/politicas/profesional/" + java.net.URLEncoder.encode(userUid, "UTF-8"));
-                logger.info(String.format("🔍 [BACKEND] Verificando políticas existentes para profesional: %s, paciente: %s", userUid, pacienteCI));
+                logger.info(String.format("[BACKEND] Verificando políticas existentes para profesional: %s, paciente: %s", userUid, pacienteCI));
                 
                 jakarta.ws.rs.client.Client checkClient = jakarta.ws.rs.client.ClientBuilder.newClient();
                 try {
@@ -474,10 +474,10 @@ public class MetadatosDocumentoResource {
                         @SuppressWarnings("unchecked")
                         java.util.List<Map<String, Object>> politicas = politicasResponse.readEntity(java.util.List.class);
                         if (politicas != null) {
-                            logger.info(String.format("🔍 [BACKEND] Políticas encontradas para profesional %s: %d", userUid, politicas.size()));
+                            logger.info(String.format("[BACKEND] Políticas encontradas para profesional %s: %d", userUid, politicas.size()));
                             
                             // Verificar si hay alguna política activa para este paciente específico
-                            logger.info(String.format("🔍 [BACKEND] Verificando %d políticas para paciente %s", politicas.size(), pacienteCI));
+                            logger.info(String.format("[BACKEND] Verificando %d políticas para paciente %s", politicas.size(), pacienteCI));
                             boolean tienePoliticaActiva = false;
                             
                             for (Map<String, Object> politica : politicas) {
@@ -505,23 +505,23 @@ public class MetadatosDocumentoResource {
                                 // Si activa es null pero la política existe, asumir que está activa (por defecto)
                                 // Esto maneja el caso donde el DTO no mapea correctamente el campo
                                 if (activa == null) {
-                                    logger.warning(String.format("⚠️ [BACKEND] Política ID: %s tiene activa=null, asumiendo activa=true", politica.get("id")));
+                                    logger.warning(String.format("[BACKEND] Política ID: %s tiene activa=null, asumiendo activa=true", politica.get("id")));
                                     activa = Boolean.TRUE; // Por defecto, las políticas están activas
                                 }
                                 
                                 Object politicaId = politica.get("id");
-                                logger.info(String.format("🔍 [BACKEND] Política ID: %s, codDocumPaciente: '%s', pacienteCI buscado: '%s', activa: %s", 
+                                logger.info(String.format("[BACKEND] Política ID: %s, codDocumPaciente: '%s', pacienteCI buscado: '%s', activa: %s", 
                                     politicaId, codDocumPaciente, pacienteCI, activa));
                                 
                                 boolean esPacienteCorrecto = codDocumPaciente != null && 
                                     codDocumPaciente.trim().equals(pacienteCI.trim());
                                 boolean esActiva = activa != null && activa;
                                 
-                                logger.info(String.format("🔍 [BACKEND] Política ID: %s - esPacienteCorrecto: %s, esActiva: %s", 
+                                logger.info(String.format("[BACKEND] Política ID: %s - esPacienteCorrecto: %s, esActiva: %s", 
                                     politicaId, esPacienteCorrecto, esActiva));
                                 
                                 if (esPacienteCorrecto && esActiva) {
-                                    logger.warning(String.format("⚠️ [BACKEND] Ya existe una política activa para profesional %s y paciente %s (ID: %s). Bloqueando solicitud.", 
+                                    logger.warning(String.format("[BACKEND] Ya existe una política activa para profesional %s y paciente %s (ID: %s). Bloqueando solicitud.", 
                                         userUid, pacienteCI, politicaId));
                                     tienePoliticaActiva = true;
                                     break;
@@ -546,7 +546,7 @@ public class MetadatosDocumentoResource {
             } catch (Exception e) {
                 // Si falla la verificación, continuar con la creación de la solicitud
                 // No queremos bloquear la solicitud si hay un problema técnico
-                logger.warning(String.format("⚠️ [BACKEND] Error al verificar políticas existentes (continuando con solicitud): %s", e.getMessage()));
+                logger.warning(String.format("[BACKEND] Error al verificar políticas existentes (continuando con solicitud): %s", e.getMessage()));
             }
             
             // Construir solicitud para el servicio de políticas
@@ -707,10 +707,10 @@ public class MetadatosDocumentoResource {
                 
                 int status = response.getStatus();
                 if (status == 201 || status == 200) {
-                    logger.info(String.format("✅ Acceso registrado exitosamente - Status: %d", status));
+                    logger.info(String.format("Acceso registrado exitosamente - Status: %d", status));
                 } else {
                     String errorBody = response.hasEntity() ? response.readEntity(String.class) : "Sin detalles";
-                    logger.warning(String.format("⚠️ Error al registrar acceso - Status: %d, Response: %s", status, errorBody));
+                    logger.warning(String.format("Error al registrar acceso - Status: %d, Response: %s", status, errorBody));
                 }
             } finally {
                 client.close();
@@ -730,7 +730,7 @@ public class MetadatosDocumentoResource {
     @Path("/paciente/historia")
     @Produces("application/pdf")
     public Response descargarPdfMergeado(@Context HttpServletRequest request) {
-        logger.info("🔵 [ENDPOINT] /metadatos-documento/paciente/historia - Método ejecutado");
+        logger.info("[ENDPOINT] /metadatos-documento/paciente/historia - Método ejecutado");
         List<File> tempFiles = new ArrayList<>();
         try {
             String jwtToken = CookieUtil.resolveJwtToken(request);

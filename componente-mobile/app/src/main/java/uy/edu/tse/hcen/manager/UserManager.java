@@ -26,8 +26,24 @@ import uy.edu.tse.hcen.model.User;
 
 public class UserManager {
 
+    private static final String TAG = "UserManager";
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_FIRST_NAME = "firstName";
+    private static final String KEY_SECOND_NAME = "secondName";
+    private static final String KEY_FIRST_LAST_NAME = "firstLastName";
+    private static final String KEY_SECOND_LAST_NAME = "secondLastName";
+    private static final String KEY_DOCUMENT_TYPE = "documentType";
+    private static final String KEY_DOCUMENT_CODE = "documentCode";
+    private static final String KEY_NATIONALITY = "nationality";
+    private static final String KEY_LOCATION = "location";
+    private static final String KEY_ADDRESS = "address";
+    private static final String KEY_BIRTHDATE = "birthdate";
+    private static final String KEY_DEPARTMENT = "department";
+
+    private UserManager() { }
+
     // Método para consumir datos del backend y actualizar SharedPreferences
-    private static void fetchUserDataFromBackend(Context context, String jwt) throws Exception {
+    public static void fetchUserDataFromBackend(Context context, String jwt) throws Exception {
         SharedPreferences prefs = SecurePrefsHelper.getSessionPrefs(context);
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -59,31 +75,31 @@ public class UserManager {
             if (responseCode == HttpURLConnection.HTTP_OK && !responseBody.isEmpty()) {
                 JSONObject payload = new JSONObject(responseBody);
 
-                editor.putString("email", payload.optString("email"));
-                editor.putString("firstName", payload.optString("primer_nombre"));
-                editor.putString("secondName", payload.optString("segundo_nombre"));
-                editor.putString("firstLastName", payload.optString("primer_apellido"));
-                editor.putString("secondLastName", payload.optString("segundo_apellido"));
-                editor.putString("documentType", payload.optString("tipo_documento"));
-                editor.putString("documentCode", payload.optString("codigo_documento"));
-                editor.putString("nationality", payload.optString("nacionalidad"));
-                editor.putString("location", payload.optString("localidad"));
-                editor.putString("address", payload.optString("direccion"));
+                editor.putString(KEY_EMAIL, payload.optString(KEY_EMAIL));
+                editor.putString(KEY_FIRST_NAME, payload.optString("primer_nombre"));
+                editor.putString(KEY_SECOND_NAME, payload.optString("segundo_nombre"));
+                editor.putString(KEY_FIRST_LAST_NAME, payload.optString("primer_apellido"));
+                editor.putString(KEY_SECOND_LAST_NAME, payload.optString("segundo_apellido"));
+                editor.putString(KEY_DOCUMENT_TYPE, payload.optString("tipo_documento"));
+                editor.putString(KEY_DOCUMENT_CODE, payload.optString("codigo_documento"));
+                editor.putString(KEY_NATIONALITY, payload.optString("nacionalidad"));
+                editor.putString(KEY_LOCATION, payload.optString("localidad"));
+                editor.putString(KEY_ADDRESS, payload.optString("direccion"));
 
                 Date birthdate = parseBirthdate(payload.optString("fecha_nacimiento"), "yyyy-MM-dd");
                 if (birthdate != null) {
-                    editor.putLong("birthdate", birthdate.getTime());
+                    editor.putLong(KEY_BIRTHDATE, birthdate.getTime());
                 }
 
                 Department department = parseDepartment(payload.optString("departamento"));
                 if (department != null) {
-                    editor.putString("department", department.name());
+                    editor.putString(KEY_DEPARTMENT, department.name());
                 }
 
                 editor.commit();
-                Log.i("UserManager", "Datos de usuario actualizados desde el backend");
+                Log.i(TAG, "Datos de usuario actualizados desde el backend");
             } else {
-                throw new Exception("Backend error. Codigo: " + responseCode);
+                throw new BackendException("Backend error. Codigo: " + responseCode);
             }
 
         } finally {
@@ -99,7 +115,7 @@ public class UserManager {
                 String jwt = SessionManager.getJwtSession(context);
                 fetchUserDataFromBackend(context, jwt);
             } catch (Exception e) {
-                Log.e("UserManager", "Error creando usuario", e);
+                Log.e(TAG, "Error creando usuario", e);
             }
         }).start();
     }
@@ -110,7 +126,7 @@ public class UserManager {
                 String jwt = SessionManager.getJwtSession(context);
                 fetchUserDataFromBackend(context, jwt);
             } catch (Exception e) {
-                Log.e("UserManager", "Error devolviendo usuario", e);
+                Log.e(TAG, "Error devolviendo usuario", e);
             }
         }).start();
 
@@ -123,23 +139,23 @@ public class UserManager {
     private static User buildUserFromPrefs(Context context) {
         SharedPreferences prefs = SecurePrefsHelper.getSessionPrefs(context);
 
-        String email = prefs.getString("email", null);
-        String firstName = prefs.getString("firstName", null);
-        String secondName = prefs.getString("secondName", null);
-        String firstLastName = prefs.getString("firstLastName", null);
-        String secondLastName = prefs.getString("secondLastName", null);
-        String documentType = prefs.getString("documentType", null);
-        String documentCode = prefs.getString("documentCode", null);
-        String nationality = prefs.getString("nationality", null);
+    String email = prefs.getString(KEY_EMAIL, null);
+    String firstName = prefs.getString(KEY_FIRST_NAME, null);
+    String secondName = prefs.getString(KEY_SECOND_NAME, null);
+    String firstLastName = prefs.getString(KEY_FIRST_LAST_NAME, null);
+    String secondLastName = prefs.getString(KEY_SECOND_LAST_NAME, null);
+    String documentType = prefs.getString(KEY_DOCUMENT_TYPE, null);
+    String documentCode = prefs.getString(KEY_DOCUMENT_CODE, null);
+    String nationality = prefs.getString(KEY_NATIONALITY, null);
 
-        long fechaMillis = prefs.getLong("birthdate", -1);
+    long fechaMillis = prefs.getLong(KEY_BIRTHDATE, -1);
         Date birthdate = fechaMillis > 0 ? new Date(fechaMillis) : null;
 
-        String depString = prefs.getString("department", null);
+    String depString = prefs.getString(KEY_DEPARTMENT, null);
         Department department = parseDepartment(depString);
 
-        String location = prefs.getString("location", null);
-        String address = prefs.getString("address", null);
+    String location = prefs.getString(KEY_LOCATION, null);
+    String address = prefs.getString(KEY_ADDRESS, null);
 
         return new User(
                 email, firstName, secondName, firstLastName, secondLastName,
@@ -167,10 +183,10 @@ public class UserManager {
                 connection.setDoOutput(true);
 
                 JSONObject body = new JSONObject();
-                if (email != null) body.put("email", email);
-                if (department != null) body.put("departamento", department.name());
-                if (location != null) body.put("localidad", location);
-                if (address != null) body.put("direccion", address);
+                if (email != null) body.put(KEY_EMAIL, email);
+                if (department != null) body.put(KEY_DEPARTMENT, department.name());
+                if (location != null) body.put(KEY_LOCATION, location);
+                if (address != null) body.put(KEY_ADDRESS, address);
 
                 byte[] bodyBytes = body.toString().getBytes(StandardCharsets.UTF_8);
                 connection.getOutputStream().write(bodyBytes);
@@ -192,42 +208,42 @@ public class UserManager {
                     // Actualizar preferencias locales solo si el backend responde éxito
                     SharedPreferences prefs = SecurePrefsHelper.getSessionPrefs(context);
                     SharedPreferences.Editor editor = prefs.edit();
-                    if (email != null) editor.putString("email", email);
-                    if (department != null) editor.putString("department", department.name());
-                    if (location != null) editor.putString("location", location);
-                    if (address != null) editor.putString("address", address);
+                    if (email != null) editor.putString(KEY_EMAIL, email);
+                    if (department != null) editor.putString(KEY_DEPARTMENT, department.name());
+                    if (location != null) editor.putString(KEY_LOCATION, location);
+                    if (address != null) editor.putString(KEY_ADDRESS, address);
                     editor.commit();
-                    Log.i("UserManager", "Datos de usuario actualizados en backend y local");
+                    Log.i(TAG, "Datos de usuario actualizados en backend y local");
                     if (onSuccess != null) {
                         android.os.Handler mainHandler = new android.os.Handler(android.os.Looper.getMainLooper());
                         mainHandler.post(onSuccess);
                     }
                 } else {
-                    Log.e("UserManager", "Error actualizando usuario: " + responseBody);
+                    Log.e(TAG, "Error actualizando usuario: " + responseBody);
                 }
                 connection.disconnect();
             } catch (Exception e) {
-                Log.e("UserManager", "Error actualizando usuario", e);
+                Log.e(TAG, "Error actualizando usuario", e);
             }
         }).start();
     }
 
     public static void clearUser(Context context) {
         SharedPreferences prefs = SecurePrefsHelper.getSessionPrefs(context);
-        prefs.edit()
-                .remove("email")
-                .remove("firstName")
-                .remove("secondName")
-                .remove("firstLastName")
-                .remove("secondLastName")
-                .remove("documentType")
-                .remove("documentCode")
-                .remove("nationality")
-                .remove("birthdate")
-                .remove("department")
-                .remove("location")
-                .remove("address")
-                .commit();
+    prefs.edit()
+        .remove(KEY_EMAIL)
+        .remove(KEY_FIRST_NAME)
+        .remove(KEY_SECOND_NAME)
+        .remove(KEY_FIRST_LAST_NAME)
+        .remove(KEY_SECOND_LAST_NAME)
+        .remove(KEY_DOCUMENT_TYPE)
+        .remove(KEY_DOCUMENT_CODE)
+        .remove(KEY_NATIONALITY)
+        .remove(KEY_BIRTHDATE)
+        .remove(KEY_DEPARTMENT)
+        .remove(KEY_LOCATION)
+        .remove(KEY_ADDRESS)
+        .commit();
     }
 
     private static Date parseBirthdate(String birthdateStr, String format) {
@@ -235,7 +251,7 @@ public class UserManager {
         try {
             return new SimpleDateFormat(format, Locale.getDefault()).parse(birthdateStr);
         } catch (ParseException e) {
-            Log.e("UserManager", "Error parsing date", e);
+            Log.e(TAG, "Error parsing date", e);
             return null;
         }
     }
@@ -243,10 +259,19 @@ public class UserManager {
     private static Department parseDepartment(String departmentStr) {
         if (departmentStr == null || departmentStr.isEmpty()) return null;
         try {
-            return Department.valueOf(departmentStr);
+            // Normalizar a mayúsculas y reemplazar espacios con guiones bajos
+            String normalized = departmentStr.trim().toUpperCase().replace(" ", "_");
+            return Department.valueOf(normalized);
         } catch (IllegalArgumentException e) {
-            Log.e("UserManager", "Invalid department", e);
+            Log.e(TAG, "Invalid department", e);
             return null;
+        }
+    }
+
+    // Excepción personalizada para errores de backend
+    public static class BackendException extends Exception {
+        public BackendException(String message) {
+            super(message);
         }
     }
 }

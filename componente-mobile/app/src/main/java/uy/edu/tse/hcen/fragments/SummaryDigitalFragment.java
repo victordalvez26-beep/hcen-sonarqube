@@ -54,10 +54,13 @@ import uy.edu.tse.hcen.summary.SummaryItemFactory;
 
 public class SummaryDigitalFragment extends Fragment {
 
+    private static final String ERROR_DIALOG_TAG = "errorDialog";
+    private static final String SUCCESS_DIALOG_TAG = "successDialog";
+    private static final String LOG_TAG = "SummaryDigitalFragment";
+    private List<SummaryItem> items = new ArrayList<>();
     private View emptyView;
     private RecyclerView recyclerSummary;
     private SummaryAdapter adapter;
-    private List<SummaryItem> items = new ArrayList<>();
     private View contentContainer;
 
     @Nullable
@@ -67,18 +70,17 @@ public class SummaryDigitalFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_summary_digital, container, false);
 
-        contentContainer = view.findViewById(R.id.contentContainer);
-        contentContainer.setVisibility(View.GONE); // Ocultar al inicio
+    contentContainer = view.findViewById(R.id.contentContainer);
+    contentContainer.setVisibility(View.GONE); // Ocultar al inicio
 
-        emptyView = view.findViewById(R.id.emptyView);
-        recyclerSummary = view.findViewById(R.id.recyclerSummary);
-        recyclerSummary.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new SummaryAdapter(new ArrayList<>(), item -> {});
-        recyclerSummary.setAdapter(adapter);
+    emptyView = view.findViewById(R.id.emptyView);
+    recyclerSummary = view.findViewById(R.id.recyclerSummary);
+    recyclerSummary.setLayoutManager(new LinearLayoutManager(requireContext()));
+    adapter = new SummaryAdapter(new ArrayList<>(), item -> {});
+    recyclerSummary.setAdapter(adapter);
 
-
-        Button btnExportPdf = view.findViewById(R.id.btnExportPdf);
-        btnExportPdf.setOnClickListener(v -> generatePdfFromSummary(items));
+    Button btnExportPdf = view.findViewById(R.id.btnExportPdf);
+    btnExportPdf.setOnClickListener(v -> generatePdfFromSummary(items));
 
         getSummaryDigital();
 
@@ -123,34 +125,32 @@ public class SummaryDigitalFragment extends Fragment {
                     loadingDialog.dismiss();
 
                     if (responseCode == 200) {
-                        parseSummary(response.toString());
+                        parseSummary(response.toString(), recyclerSummary, adapter, contentContainer, emptyView);
                         contentContainer.setVisibility(View.VISIBLE);
                     } else {
                         loadingDialog.dismiss();
                         StatusDialogFragment dialog = StatusDialogFragment.newInstance(DialogType.ERROR, "No se pudo obtener el resumen, intenta más tarde");
                         dialog.setOnDismissAction(() -> requireActivity().onBackPressed());
-                        dialog.show(getParentFragmentManager(), "errorDialog");
+                        dialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
                     }
                 });
 
             } catch (Exception e) {
-                Log.e("SummaryDigitalFragment", "Error obteniendo el resumen", e);
+                Log.e(LOG_TAG, "Error obteniendo el resumen", e);
                 requireActivity().runOnUiThread(() -> {
                     loadingDialog.dismiss();
                     StatusDialogFragment dialog = StatusDialogFragment.newInstance(DialogType.ERROR, "Error de red");
                     dialog.setOnDismissAction(() -> requireActivity().onBackPressed());
-                    dialog.show(getParentFragmentManager(), "errorDialog");
+                    dialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
                 });
             }
         }).start();
     }
 
-    private void parseSummary(String jsonResponse) {
+    private void parseSummary(String jsonResponse, RecyclerView recyclerSummary, SummaryAdapter adapter, View contentContainer, View emptyView) {
         try {
             JSONObject root = new JSONObject(jsonResponse);
-
             items.clear();
-
             String[] categories = {"allergies", "conditions", "medications", "immunizations", "observations", "procedures"};
             for (String category : categories) {
                 JSONArray arr = root.optJSONArray(category);
@@ -162,59 +162,51 @@ public class SummaryDigitalFragment extends Fragment {
                     }
                 }
             }
-
-            requireActivity().runOnUiThread(() -> {
-                // Definir títulos
-                String[] titles = {"Alergias", "Diagnósticos", "Medicación", "Vacunas", "Observaciones", "Procedimientos"};
-
-                // Agrupar por categoría original
-                java.util.Map<String, List<SummaryItem>> groupedItems = new java.util.LinkedHashMap<>();
-                for (String cat : categories) {
-                    groupedItems.put(cat, new ArrayList<>());
-                }
-                for (int i = 0; i < items.size(); i++) {
-                    SummaryItem item = items.get(i);
-                    // Buscar la categoría original por el título singular
-                    for (int j = 0; j < categories.length; j++) {
-                        String singular = uy.edu.tse.hcen.summary.SummaryItemFactory.fromCategory(categories[j], new JSONObject()).title;
-                        if (item.title.equals(singular)) {
-                            groupedItems.get(categories[j]).add(item);
-                            break;
-                        }
-                    }
-                }
-
-                // Crear tarjetas por tipo (usando el primer elemento de cada grupo)
-                List<SummaryItem> typeCards = new ArrayList<>();
-                java.util.Map<String, String> typeTitleMap = new java.util.HashMap<>();
-                for (int i = 0; i < categories.length; i++) {
-                    String cat = categories[i];
-                    String pluralTitle = titles[i];
-                    List<SummaryItem> group = groupedItems.get(cat);
-                    if (!group.isEmpty()) {
-                        SummaryItem first = group.get(0);
-                        // Crear una tarjeta con el plural como título
-                        typeCards.add(new SummaryItem(pluralTitle, first.description, first.iconResId));
-                        typeTitleMap.put(pluralTitle, cat);
-                    }
-                }
-                adapter = new SummaryAdapter(typeCards, item -> {
-                    String cat = typeTitleMap.get(item.title);
-                    List<SummaryItem> group = groupedItems.get(cat);
-                    showTypePopup(item.title, group);
-                });
-                recyclerSummary.setAdapter(adapter);
-
-                if (typeCards.isEmpty()) {
-                    contentContainer.setVisibility(View.GONE);
-                    emptyView.setVisibility(View.VISIBLE);
-                } else {
-                    emptyView.setVisibility(View.GONE);
-                    contentContainer.setVisibility(View.VISIBLE);
-                }
-            });
+            requireActivity().runOnUiThread(() -> updateSummaryUI(categories, recyclerSummary, adapter, contentContainer, emptyView));
         } catch (Exception e) {
-            Log.e("SummaryDigitalFragment", "Error parseando JSON", e);
+            Log.e(LOG_TAG, "Error parseando JSON", e);
+        }
+    }
+
+    private void updateSummaryUI(String[] categories, RecyclerView recyclerSummary, SummaryAdapter adapter, View contentContainer, View emptyView) {
+        String[] titles = {"Alergias", "Diagnósticos", "Medicación", "Vacunas", "Observaciones", "Procedimientos"};
+        java.util.Map<String, List<SummaryItem>> groupedItems = new java.util.LinkedHashMap<>();
+        for (String cat : categories) {
+            groupedItems.put(cat, new ArrayList<>());
+        }
+        for (SummaryItem item : items) {
+            for (int j = 0; j < categories.length; j++) {
+                String singular = uy.edu.tse.hcen.summary.SummaryItemFactory.fromCategory(categories[j], new JSONObject()).title;
+                if (item.title.equals(singular)) {
+                    groupedItems.get(categories[j]).add(item);
+                    break;
+                }
+            }
+        }
+        List<SummaryItem> typeCards = new ArrayList<>();
+        java.util.Map<String, String> typeTitleMap = new java.util.HashMap<>();
+        for (int i = 0; i < categories.length; i++) {
+            String cat = categories[i];
+            String pluralTitle = titles[i];
+            List<SummaryItem> group = groupedItems.get(cat);
+            if (!group.isEmpty()) {
+                SummaryItem first = group.get(0);
+                typeCards.add(new SummaryItem(pluralTitle, first.description, first.iconResId));
+                typeTitleMap.put(pluralTitle, cat);
+            }
+        }
+        SummaryAdapter newAdapter = new SummaryAdapter(typeCards, item -> {
+            String cat = typeTitleMap.get(item.title);
+            List<SummaryItem> group = groupedItems.get(cat);
+            showTypePopup(item.title, group);
+        });
+        recyclerSummary.setAdapter(newAdapter);
+        if (typeCards.isEmpty()) {
+            contentContainer.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+            contentContainer.setVisibility(View.VISIBLE);
         }
     }
 
@@ -355,19 +347,19 @@ public class SummaryDigitalFragment extends Fragment {
                     try {
                         startActivity(intent);
                         StatusDialogFragment successDialog = StatusDialogFragment.newInstance(DialogType.SUCCESS, "PDF generado correctamente");
-                        successDialog.show(getParentFragmentManager(), "successDialog");
+                        successDialog.show(getParentFragmentManager(), SUCCESS_DIALOG_TAG);
                     } catch (ActivityNotFoundException e) {
                         StatusDialogFragment errorDialog = StatusDialogFragment.newInstance(DialogType.ERROR, "No hay visor de PDF instalado");
-                        errorDialog.show(getParentFragmentManager(), "errorDialog");
+                        errorDialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
                     }
                 });
 
             } catch (Exception e) {
-                Log.e("SummaryDigitalFragment", "Error generando PDF", e);
+                Log.e(LOG_TAG, "Error generando PDF", e);
                 requireActivity().runOnUiThread(() -> {
                     loadingDialog.dismiss();
                     StatusDialogFragment errorDialog = StatusDialogFragment.newInstance(DialogType.ERROR, "Error al generar el PDF");
-                    errorDialog.show(getParentFragmentManager(), "errorDialog");
+                    errorDialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
                 });
             }
         }).start();

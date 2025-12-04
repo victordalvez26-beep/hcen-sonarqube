@@ -81,12 +81,12 @@ public class PoliticaAccesoService {
 
     public List<PoliticaAcceso> listarPorPaciente(String codDocumPaciente) {
         java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PoliticaAccesoService.class.getName());
-        logger.info("🔵 [POLITICAS-SERVICE] listarPorPaciente llamado con CI: '" + codDocumPaciente + "'");
+        logger.info("[POLITICAS-SERVICE] listarPorPaciente llamado con CI: '" + codDocumPaciente + "'");
         List<PoliticaAcceso> politicas = repository.buscarPorPaciente(codDocumPaciente);
-        logger.info("🔵 [POLITICAS-SERVICE] Políticas retornadas por repository: " + politicas.size());
+        logger.info("[POLITICAS-SERVICE] Políticas retornadas por repository: " + politicas.size());
         if (!politicas.isEmpty()) {
             for (PoliticaAcceso p : politicas) {
-                logger.info("  ✅ Política - ID: " + p.getId() + ", Paciente CI: " + p.getCodDocumPaciente());
+                logger.info("  Política - ID: " + p.getId() + ", Paciente CI: " + p.getCodDocumPaciente());
             }
         }
         return politicas;
@@ -94,9 +94,9 @@ public class PoliticaAccesoService {
 
     public List<PoliticaAcceso> listarPorProfesional(String profesionalId) {
         java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PoliticaAccesoService.class.getName());
-        logger.info("🔵 [SERVICE] listarPorProfesional llamado con profesionalId: '" + profesionalId + "'");
+        logger.info("[SERVICE] listarPorProfesional llamado con profesionalId: '" + profesionalId + "'");
         List<PoliticaAcceso> politicas = repository.buscarPorProfesional(profesionalId);
-        logger.info("🔵 [SERVICE] Políticas retornadas por repository: " + politicas.size());
+        logger.info("[SERVICE] Políticas retornadas por repository: " + politicas.size());
         return politicas;
     }
 

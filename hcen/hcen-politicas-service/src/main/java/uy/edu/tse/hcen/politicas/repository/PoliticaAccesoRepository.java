@@ -29,15 +29,15 @@ public class PoliticaAccesoRepository {
     }
 
     public List<PoliticaAcceso> buscarPorPaciente(String codDocumPaciente) {
-        LOGGER.info("🔍 [POLITICAS-REPO] Buscando políticas para paciente CI: '" + codDocumPaciente + "'");
+        LOGGER.info("[POLITICAS-REPO] Buscando políticas para paciente CI: '" + codDocumPaciente + "'");
         
         if (codDocumPaciente == null || codDocumPaciente.trim().isEmpty()) {
-            LOGGER.warning("⚠️ [POLITICAS-REPO] CI es null o vacío");
+            LOGGER.warning("[POLITICAS-REPO] CI es null o vacío");
             return new java.util.ArrayList<>();
         }
         
         String ciNormalizado = codDocumPaciente.trim();
-        LOGGER.info("🔍 [POLITICAS-REPO] CI normalizado: '" + ciNormalizado + "'");
+        LOGGER.info("[POLITICAS-REPO] CI normalizado: '" + ciNormalizado + "'");
         
         List<PoliticaAcceso> politicas = em.createQuery(
             "SELECT p FROM PoliticaAcceso p WHERE p.codDocumPaciente = :codDocum AND p.activa = true",
@@ -46,23 +46,23 @@ public class PoliticaAccesoRepository {
         .setParameter("codDocum", ciNormalizado)
         .getResultList();
         
-        LOGGER.info("🔍 [POLITICAS-REPO] Políticas encontradas para CI '" + ciNormalizado + "': " + politicas.size());
+        LOGGER.info("[POLITICAS-REPO] Políticas encontradas para CI '" + ciNormalizado + "': " + politicas.size());
         
         if (!politicas.isEmpty()) {
             for (PoliticaAcceso p : politicas) {
-                LOGGER.info("  ✅ Política encontrada - ID: " + p.getId() + 
+                LOGGER.info("  Política encontrada - ID: " + p.getId() + 
                     ", Paciente CI: " + p.getCodDocumPaciente() + 
                     ", Clínica: " + p.getClinicaAutorizada() +
                     ", Activa: " + p.getActiva());
             }
         } else {
             // Si no se encontraron políticas, buscar todas las políticas activas para ver qué hay
-            LOGGER.warning("⚠️ [POLITICAS-REPO] No se encontraron políticas para CI '" + ciNormalizado + "'. Buscando todas las políticas activas...");
+            LOGGER.warning("[POLITICAS-REPO] No se encontraron políticas para CI '" + ciNormalizado + "'. Buscando todas las políticas activas...");
             List<PoliticaAcceso> todasActivas = em.createQuery(
                 "SELECT p FROM PoliticaAcceso p WHERE p.activa = true",
                 PoliticaAcceso.class
             ).getResultList();
-            LOGGER.warning("⚠️ [POLITICAS-REPO] Total de políticas activas en el sistema: " + todasActivas.size());
+            LOGGER.warning("[POLITICAS-REPO] Total de políticas activas en el sistema: " + todasActivas.size());
             for (PoliticaAcceso p : todasActivas) {
                 String pacienteCI = p.getCodDocumPaciente() != null ? p.getCodDocumPaciente() : "NULL";
                 boolean coincide = ciNormalizado.equals(pacienteCI);
@@ -78,21 +78,21 @@ public class PoliticaAccesoRepository {
     }
 
     public List<PoliticaAcceso> buscarPorProfesional(String profesionalId) {
-        LOGGER.info("🔍 [REPOSITORY] Buscando políticas para profesional: '" + profesionalId + "'");
+        LOGGER.info("[REPOSITORY] Buscando políticas para profesional: '" + profesionalId + "'");
         
         if (profesionalId == null || profesionalId.trim().isEmpty()) {
-            LOGGER.warning("⚠️ [REPOSITORY] ProfesionalId es null o vacío");
+            LOGGER.warning("[REPOSITORY] ProfesionalId es null o vacío");
             return new java.util.ArrayList<>();
         }
         
         // Normalizar el profesionalId (trim para eliminar espacios)
         String profIdNormalizado = profesionalId.trim();
-        LOGGER.info("🔍 [REPOSITORY] ProfesionalId normalizado: '" + profIdNormalizado + "'");
+        LOGGER.info("[REPOSITORY] ProfesionalId normalizado: '" + profIdNormalizado + "'");
         
         // Buscar políticas donde profesionalAutorizado coincida exactamente
         // Usar la misma lógica que verificarPermiso: p.activa = true (sin parámetro para evitar problemas con Boolean)
         Date ahora = new Date();
-        LOGGER.info("🔍 [REPOSITORY] Ejecutando consulta para profesional: '" + profIdNormalizado + "', fecha actual: " + ahora);
+        LOGGER.info("[REPOSITORY] Ejecutando consulta para profesional: '" + profIdNormalizado + "', fecha actual: " + ahora);
         
         List<PoliticaAcceso> politicas = em.createQuery(
             "SELECT p FROM PoliticaAcceso p WHERE p.profesionalAutorizado = :profId AND p.activa = true AND (p.fechaVencimiento IS NULL OR p.fechaVencimiento >= :ahora)",
@@ -102,25 +102,25 @@ public class PoliticaAccesoRepository {
         .setParameter("ahora", ahora)
         .getResultList();
         
-        LOGGER.info("🔍 [REPOSITORY] Consulta ejecutada. Resultados: " + politicas.size());
+        LOGGER.info("[REPOSITORY] Consulta ejecutada. Resultados: " + politicas.size());
         
-        LOGGER.info("🔍 [REPOSITORY] Políticas encontradas para profesional '" + profIdNormalizado + "': " + politicas.size());
+        LOGGER.info("[REPOSITORY] Políticas encontradas para profesional '" + profIdNormalizado + "': " + politicas.size());
         
         if (!politicas.isEmpty()) {
             for (PoliticaAcceso p : politicas) {
-                LOGGER.info("  ✅ Política encontrada - ID: " + p.getId() + 
+                LOGGER.info("  Política encontrada - ID: " + p.getId() + 
                     ", Paciente: " + p.getCodDocumPaciente() + 
                     ", ProfesionalAutorizado: '" + p.getProfesionalAutorizado() + "'" +
                     ", Activa: " + p.getActiva());
             }
         } else {
             // Si no se encontraron políticas, buscar todas las políticas activas para ver qué hay
-            LOGGER.warning("⚠️ [REPOSITORY] No se encontraron políticas para profesional '" + profIdNormalizado + "'. Buscando todas las políticas activas...");
+            LOGGER.warning("[REPOSITORY] No se encontraron políticas para profesional '" + profIdNormalizado + "'. Buscando todas las políticas activas...");
             List<PoliticaAcceso> todasActivas = em.createQuery(
                 "SELECT p FROM PoliticaAcceso p WHERE p.activa = true OR p.activa IS NULL",
                 PoliticaAcceso.class
             ).getResultList();
-            LOGGER.warning("⚠️ [REPOSITORY] Total de políticas activas en el sistema: " + todasActivas.size());
+            LOGGER.warning("[REPOSITORY] Total de políticas activas en el sistema: " + todasActivas.size());
             for (PoliticaAcceso p : todasActivas) {
                 String profAuth = p.getProfesionalAutorizado() != null ? p.getProfesionalAutorizado() : "NULL";
                 String profAuthTrimmed = profAuth != null && !profAuth.equals("NULL") ? profAuth.trim() : profAuth;

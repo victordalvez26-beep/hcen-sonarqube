@@ -10,16 +10,16 @@ const Login = () => {
   const [isMinor, setIsMinor] = useState(false);
 
   useEffect(() => {
-    console.log('🔍 [DEBUG] Login.js useEffect ejecutado');
-    console.log('🔍 [DEBUG] URL completa:', window.location.href);
+    console.log(' [DEBUG] Login.js useEffect ejecutado');
+    console.log(' [DEBUG] URL completa:', window.location.href);
     const urlParams = new URLSearchParams(window.location.search);
     const loginStatus = urlParams.get('login');
     const logoutStatus = urlParams.get('logout');
     const error = urlParams.get('error');
     const tempToken = urlParams.get('token');
     
-    console.log('🔍 [DEBUG] loginStatus:', loginStatus);
-    console.log('🔍 [DEBUG] tempToken:', tempToken ? 'PRESENTE' : 'NO PRESENTE');
+    console.log(' [DEBUG] loginStatus:', loginStatus);
+    console.log(' [DEBUG] tempToken:', tempToken ? 'PRESENTE' : 'NO PRESENTE');
     
     // Verificar si ya se procesó el token (evitar llamadas duplicadas)
     const tokenProcessed = sessionStorage.getItem('token_exchange_processed');
@@ -33,11 +33,11 @@ const Login = () => {
     }
 
     if (loginStatus === 'success' && tempToken && !tokenProcessed) {
-      console.log('✅ Login exitoso! Intercambiando token temporal...');
+      console.log('Login exitoso! Intercambiando token temporal...');
       sessionStorage.setItem('token_exchange_processed', 'true');
       exchangeTokenAndSetCookie(tempToken);
     } else if (loginStatus === 'success' && tempToken && tokenProcessed) {
-      console.log('⚠️ Token ya fue procesado, limpiando URL...');
+      console.log('Token ya fue procesado, limpiando URL...');
       window.history.replaceState({}, document.title, window.location.pathname);
       checkSession();
     } else if (loginStatus === 'success') {
@@ -66,7 +66,7 @@ const Login = () => {
   const exchangeTokenAndSetCookie = async (tempToken) => {
     // Validar que el token no esté vacío
     if (!tempToken || tempToken.trim() === '') {
-      console.error('❌ Token temporal vacío o inválido');
+      console.error('Token temporal vacío o inválido');
       sessionStorage.removeItem('token_exchange_processed');
       window.history.replaceState({}, document.title, window.location.pathname);
       checkSession();
@@ -93,8 +93,8 @@ const Login = () => {
         }
         // El exchange es opcional - la cookie ya está seteada por el callback
         // Si falla, simplemente verificar sesión (la cookie ya está)
-        console.warn('⚠️ Exchange de token falló, pero la cookie JWT ya está seteada por el callback');
-        console.warn('⚠️ Continuando con verificación de sesión...');
+        console.warn('Exchange de token falló, pero la cookie JWT ya está seteada por el callback');
+        console.warn('Continuando con verificación de sesión...');
         window.history.replaceState({}, document.title, window.location.pathname);
         checkSession();
         return; // No lanzar error, solo continuar
@@ -104,7 +104,7 @@ const Login = () => {
       // El backend ya setea la cookie cross-site, no necesitamos hacerlo aquí
       // El JWT se puede recibir pero no se usa para setear cookie propia
       
-      console.log('✅ Token intercambiado - Cookie establecida por el backend (cross-site)');
+      console.log('Token intercambiado - Cookie establecida por el backend (cross-site)');
       
       // Limpiar URL inmediatamente (remover token de la barra de direcciones)
       window.history.replaceState({}, document.title, window.location.pathname);
@@ -116,11 +116,11 @@ const Login = () => {
       checkSession();
       
     } catch (error) {
-      console.error('❌ Error intercambiando token:', error);
+      console.error('Error intercambiando token:', error);
       // El exchange es opcional - la cookie ya está seteada por el callback
       // Si falla, simplemente verificar sesión (la cookie ya está)
-      console.warn('⚠️ Exchange de token falló, pero la cookie JWT ya está seteada por el callback');
-      console.warn('⚠️ Continuando con verificación de sesión...');
+      console.warn('Exchange de token falló, pero la cookie JWT ya está seteada por el callback');
+      console.warn('Continuando con verificación de sesión...');
       window.history.replaceState({}, document.title, window.location.pathname);
       checkSession();
       // No mostrar alert - la cookie ya está y el login funcionará

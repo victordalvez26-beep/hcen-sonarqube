@@ -1,6 +1,6 @@
 # HCEN Frontend - Ambiente de Desarrollo
 
-## 🚀 Scripts de Desarrollo Disponibles
+## Scripts de Desarrollo Disponibles
 
 ### 1. `npm run dev` (Recomendado)
 ```bash
@@ -96,7 +96,7 @@ PORT=3001 npm run dev
 npm run dev:simple
 ```
 
-## 📝 Notas Importantes
+## Notas Importantes
 
 1. **Primera vez**: Usa `npm run dev:clean` para asegurar un inicio limpio
 2. **Desarrollo diario**: Usa `npm run dev` para máxima eficiencia
@@ -109,7 +109,7 @@ npm run dev:simple
 - **Backend API**: http://localhost:8080/api
 - **Backend Admin**: http://localhost:9990
 
-## 🔗 Integración con Backend
+## Integración con Backend
 
 El frontend está configurado para comunicarse con:
 - **API Base URL**: `http://localhost:8080/api`

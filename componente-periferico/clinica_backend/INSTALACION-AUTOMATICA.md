@@ -30,7 +30,7 @@
 
 ---
 
-## 📋 **Instrucciones para NUEVA INSTALACIÓN**
+## **Instrucciones para NUEVA INSTALACIÓN**
 
 ### Paso 1: Clonar y compilar
 ```bash

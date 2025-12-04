@@ -13,12 +13,12 @@
 
 | Módulo | Tests Ejecutados | Fallos | Errores | Estado |
 |--------|-----------------|--------|---------|--------|
-| **ejb** | 539+ | 0 | 0 | ✅ OK |
-| **web** | ~400+ | ~9 | ~17 | ⚠️ MEJORADO |
-| **hcen-common** | ~20 | 0 | 0 | ✅ OK |
-| **hcen-politicas-service** | 225 | 2 | 0 | ⚠️ MEJORADO |
-| **hcen-rndc-service** | 78 | 0 | 0 | ✅ OK |
-| **TOTAL** | **~1,262** | **11** | **17** | ⚠️ MEJORADO |
+| **ejb** | 539+ | 0 | 0 | OK |
+| **web** | ~400+ | ~9 | ~17 | MEJORADO |
+| **hcen-common** | ~20 | 0 | 0 | OK |
+| **hcen-politicas-service** | 225 | 2 | 0 | MEJORADO |
+| **hcen-rndc-service** | 78 | 0 | 0 | OK |
+| **TOTAL** | **~1,262** | **11** | **17** | MEJORADO |
 
 ---
 
@@ -27,7 +27,7 @@
 ### 1. Módulo EJB (hcen-ejb)
 - **Cobertura de Instrucciones:** ~78.8% (mejorado)
 - **Cobertura de Ramas:** ~69.4%
-- **Estado:** ✅ Excelente
+- **Estado:** Excelente
 - **Tests:** 539+ tests, todos pasando
 
 **Clases Principales con Cobertura Actualizada:**
@@ -47,7 +47,7 @@
 ### 2. Módulo Web (hcen-web)
 - **Cobertura de Instrucciones:** ~60.2% (mejorado)
 - **Cobertura de Ramas:** ~46.5%
-- **Estado:** ⚠️ Mejorado - Requiere atención
+- **Estado:** Mejorado - Requiere atención
 - **Tests:** ~400+ tests, ~9 fallos, ~17 errores
 
 **Clases Principales con Cobertura Actualizada:**
@@ -66,47 +66,47 @@
 
 ### 3. Módulo Common (hcen-common)
 - **Cobertura:** No disponible (módulo sin código ejecutable o sin tests)
-- **Estado:** ⚠️ Sin datos
+- **Estado:** Sin datos
 - **Tests:** ~20 tests, todos pasando
 
 ### 4. Módulo Políticas Service (hcen-politicas-service)
 - **Cobertura:** En análisis
-- **Estado:** ⚠️ Mejorado
+- **Estado:** Mejorado
 - **Tests:** 225 tests, 2 fallos, 0 errores
 
 ### 5. Módulo RNDC Service (hcen-rndc-service)
 - **Cobertura:** En análisis
-- **Estado:** ✅ OK - Todos los tests pasando
+- **Estado:** OK - Todos los tests pasando
 - **Tests:** 78 tests, 0 fallos, 0 errores ✅
 
 ---
 
-## ✅ MEJORAS RECIENTES APLICADAS
+## MEJORAS RECIENTES APLICADAS
 
 ### Tests Agregados en esta Sesión
 
 1. **ReportesService (EJB):**
-   - ✅ 10 nuevos tests agregados
-   - ✅ Cobertura mejorada de 18% a **96.8%** (+78.8 puntos porcentuales)
-   - ✅ Tests para manejo de valores null, fechas inválidas, mapas vacíos, construcción de nombres
+   - 10 nuevos tests agregados
+   - Cobertura mejorada de 18% a **96.8%** (+78.8 puntos porcentuales)
+   - Tests para manejo de valores null, fechas inválidas, mapas vacíos, construcción de nombres
 
 2. **ReportesResource (Web):**
-   - ✅ 20+ nuevos tests agregados
-   - ✅ Cobertura mejorada de 0% a **21.0%** (+21 puntos porcentuales)
-   - ✅ Tests para métodos privados (parseDate, extractJwtFromCookie, getPoliticasUrl, createClient)
-   - ✅ Tests para manejo de excepciones, fechas inválidas, endpoints proxy
+   - 20+ nuevos tests agregados
+   - Cobertura mejorada de 0% a **21.0%** (+21 puntos porcentuales)
+   - Tests para métodos privados (parseDate, extractJwtFromCookie, getPoliticasUrl, createClient)
+   - Tests para manejo de excepciones, fechas inválidas, endpoints proxy
 
 3. **Correcciones:**
-   - ✅ Eliminados métodos duplicados en ReportesResourceTest
-   - ✅ Corregidos errores de compilación y linter
+   - Eliminados métodos duplicados en ReportesResourceTest
+   - Corregidos errores de compilación y linter
 
 ---
 
-## ❌ ERRORES Y FALLOS DETECTADOS
+## ERRORES Y FALLOS DETECTADOS
 
 ### 1. Módulo hcen-politicas-service
 
-#### ⚠️ Error 1: SolicitudAccesoResourceTest - 2 fallos pendientes
+#### Error 1: SolicitudAccesoResourceTest - 2 fallos pendientes
 
 **Tests Afectados:**
 - `crearSolicitud_serviceThrowsException_shouldReturnBadRequest` - espera 400, recibe 201
@@ -123,7 +123,7 @@
 
 ### 2. Módulo web
 
-#### ⚠️ Error 2: NotificationResourceTest - Códigos de estado HTTP incorrectos
+#### Error 2: NotificationResourceTest - Códigos de estado HTTP incorrectos
 
 **Tests Afectados:**
 - `sendNotification_exception_shouldReturnInternalError` - espera 500, recibe 400
@@ -144,24 +144,24 @@
 
 ## 🔧 SOLUCIONES APLICADAS Y PENDIENTES
 
-### ✅ Correcciones Completadas
+### Correcciones Completadas
 
-1. ✅ **ReportesService** - Agregados 10 tests nuevos, cobertura mejorada a 96.8%
-2. ✅ **ReportesResource** - Agregados 20+ tests nuevos, cobertura mejorada a 21.0%
-3. ✅ **MetadataDocumentoMapper.toEntity()** - Agregado mapeo de `apellidoPaciente`
-4. ✅ **setupAuthenticatedUser() y setupAdminUser()** - Corregidos mocks de JWTUtil usando MockedStatic
-5. ✅ **GubUyCallbackService.processCallback()** - Agregada validación de longitud
-6. ✅ **GubUyCallbackServiceTest** - Corregido doNothing() por when().thenReturn()
-7. ✅ **Tests nuevos agregados** - LoginCallbackResourceTest (6 tests), AuthResourceTest (13 tests)
-8. ✅ **Eliminados métodos duplicados** - ReportesResourceTest
+1. **ReportesService** - Agregados 10 tests nuevos, cobertura mejorada a 96.8%
+2. **ReportesResource** - Agregados 20+ tests nuevos, cobertura mejorada a 21.0%
+3. **MetadataDocumentoMapper.toEntity()** - Agregado mapeo de `apellidoPaciente`
+4. **setupAuthenticatedUser() y setupAdminUser()** - Corregidos mocks de JWTUtil usando MockedStatic
+5. **GubUyCallbackService.processCallback()** - Agregada validación de longitud
+6. **GubUyCallbackServiceTest** - Corregido doNothing() por when().thenReturn()
+7. **Tests nuevos agregados** - LoginCallbackResourceTest (6 tests), AuthResourceTest (13 tests)
+8. **Eliminados métodos duplicados** - ReportesResourceTest
 
-### ⚠️ Pendientes (Prioridad ALTA)
+### Pendientes (Prioridad ALTA)
 
 1. **Agregar tests para PoliticasAccesoResource** - Actualmente 0% de cobertura (1,127 instrucciones sin cubrir)
 2. **Agregar tests para CorsRequestFilter y CorsResponseFilter** - Actualmente 0% de cobertura cada uno
 3. **Agregar tests para GubUyCallbackServlet** - Actualmente 0% de cobertura
 
-### ⚠️ Pendientes (Prioridad MEDIA)
+### Pendientes (Prioridad MEDIA)
 
 1. **Revisar validaciones en NotificationResource** - Ajustar códigos de estado HTTP en algunos tests
 2. **Corregir SolicitudAccesoResourceTest** - 2 fallos pendientes
@@ -178,23 +178,23 @@
 
 ---
 
-## 📋 CHECKLIST DE CORRECCIONES
+## CHECKLIST DE CORRECCIONES
 
-- [x] ✅ Agregar tests para ReportesService - **COMPLETADO** (96.8% cobertura)
-- [x] ✅ Agregar tests para ReportesResource - **COMPLETADO** (21.0% cobertura)
-- [x] ✅ Eliminar métodos duplicados en ReportesResourceTest - **COMPLETADO**
-- [x] ✅ Revisar y corregir `MetadataDocumentoMapper.toEntity()` para mapear `apellidoPaciente` - **COMPLETADO**
-- [x] ✅ Corregir `setupAuthenticatedUser()` en `NotificationResourceTest` - **COMPLETADO**
-- [x] ✅ Corregir `setupAdminUser()` en `ReportesResourceTest` - **COMPLETADO**
-- [x] ✅ Agregar validación de longitud en `GubUyCallbackService.processCallback()` - **COMPLETADO**
-- [x] ✅ Corregir mocks en `GubUyCallbackServiceTest` (cambiar doNothing por when/thenReturn) - **COMPLETADO**
-- [x] ✅ Ejecutar todos los tests nuevamente después de las correcciones - **COMPLETADO**
-- [x] ✅ Generar nuevo reporte de cobertura - **COMPLETADO**
-- [ ] ⚠️ Agregar tests para PoliticasAccesoResource (0% cobertura) - **PENDIENTE - PRIORIDAD ALTA**
-- [ ] ⚠️ Agregar tests para CorsRequestFilter y CorsResponseFilter (0% cobertura) - **PENDIENTE - PRIORIDAD ALTA**
-- [ ] ⚠️ Agregar tests para GubUyCallbackServlet (0% cobertura) - **PENDIENTE - PRIORIDAD ALTA**
-- [ ] ⚠️ Revisar códigos de estado HTTP en `NotificationResource.sendNotification()` - **PENDIENTE**
-- [ ] ⚠️ Corregir `SolicitudAccesoResourceTest` - 2 fallos pendientes - **PENDIENTE**
+- [x] Agregar tests para ReportesService - **COMPLETADO** (96.8% cobertura)
+- [x] Agregar tests para ReportesResource - **COMPLETADO** (21.0% cobertura)
+- [x] Eliminar métodos duplicados en ReportesResourceTest - **COMPLETADO**
+- [x] Revisar y corregir `MetadataDocumentoMapper.toEntity()` para mapear `apellidoPaciente` - **COMPLETADO**
+- [x] Corregir `setupAuthenticatedUser()` en `NotificationResourceTest` - **COMPLETADO**
+- [x] Corregir `setupAdminUser()` en `ReportesResourceTest` - **COMPLETADO**
+- [x] Agregar validación de longitud en `GubUyCallbackService.processCallback()` - **COMPLETADO**
+- [x] Corregir mocks en `GubUyCallbackServiceTest` (cambiar doNothing por when/thenReturn) - **COMPLETADO**
+- [x] Ejecutar todos los tests nuevamente después de las correcciones - **COMPLETADO**
+- [x] Generar nuevo reporte de cobertura - **COMPLETADO**
+- [ ] Agregar tests para PoliticasAccesoResource (0% cobertura) - **PENDIENTE - PRIORIDAD ALTA**
+- [ ] Agregar tests para CorsRequestFilter y CorsResponseFilter (0% cobertura) - **PENDIENTE - PRIORIDAD ALTA**
+- [ ] Agregar tests para GubUyCallbackServlet (0% cobertura) - **PENDIENTE - PRIORIDAD ALTA**
+- [ ] Revisar códigos de estado HTTP en `NotificationResource.sendNotification()` - **PENDIENTE**
+- [ ] Corregir `SolicitudAccesoResourceTest` - 2 fallos pendientes - **PENDIENTE**
 
 ---
 
@@ -206,10 +206,10 @@
 - **Objetivo:** 90% (falta ~15-20 puntos porcentuales)
 
 ### Distribución de Cobertura
-- ✅ **Excelente (>90%):** ReportesService (96.8%), NodoService (98.3%), EmailService (95.9%), PrestadorSaludService (100%), AuthTokenService (100%)
-- ✅ **Buena (75-90%):** ejb módulo general (78.8%), UserResource (85.2%), NodoPerifericoResource (85.6%), UsuarioSaludResource (86.2%), AuthResource (86.4%)
-- ⚠️ **Regular (50-75%):** web módulo general (60.2%), DocumentoRndcService (78.6%), NotificationService (58.4%), MetadatosDocumentoResource (49.7%), NotificationResource (54.6%)
-- ❌ **Crítica (<50%):** PoliticasAccesoResource (0%), CorsRequestFilter (0%), CorsResponseFilter (0%), GubUyCallbackServlet (0%), AuthService (42.9%), UserSessionDAO (40.0%), UserDAO (55.5%), ReportesResource (21.0%)
+- **Excelente (>90%):** ReportesService (96.8%), NodoService (98.3%), EmailService (95.9%), PrestadorSaludService (100%), AuthTokenService (100%)
+- **Buena (75-90%):** ejb módulo general (78.8%), UserResource (85.2%), NodoPerifericoResource (85.6%), UsuarioSaludResource (86.2%), AuthResource (86.4%)
+- **Regular (50-75%):** web módulo general (60.2%), DocumentoRndcService (78.6%), NotificationService (58.4%), MetadatosDocumentoResource (49.7%), NotificationResource (54.6%)
+- **Crítica (<50%):** PoliticasAccesoResource (0%), CorsRequestFilter (0%), CorsResponseFilter (0%), GubUyCallbackServlet (0%), AuthService (42.9%), UserSessionDAO (40.0%), UserDAO (55.5%), ReportesResource (21.0%)
 
 ---
 
@@ -256,9 +256,9 @@
 ## 📊 RESUMEN DE MEJORAS APLICADAS
 
 ### Correcciones Implementadas en esta Sesión
-- ✅ **ReportesService:** 10 tests nuevos, cobertura mejorada de 18% a 96.8% (+78.8 puntos porcentuales)
-- ✅ **ReportesResource:** 20+ tests nuevos, cobertura mejorada de 0% a 21.0% (+21 puntos porcentuales)
-- ✅ **Eliminados métodos duplicados** en ReportesResourceTest
+- **ReportesService:** 10 tests nuevos, cobertura mejorada de 18% a 96.8% (+78.8 puntos porcentuales)
+- **ReportesResource:** 20+ tests nuevos, cobertura mejorada de 0% a 21.0% (+21 puntos porcentuales)
+- **Eliminados métodos duplicados** en ReportesResourceTest
 
 ### Estado Actual
 - **Total Tests:** ~1,262 tests ejecutados

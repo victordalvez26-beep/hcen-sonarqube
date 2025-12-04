@@ -102,12 +102,12 @@ public class NodoService {
                 );
                 
                 if (emailSent) {
-                    logger.info("✅ Invitation email sent successfully to: " + adminEmail);
+                    logger.info("Invitation email sent successfully to: " + adminEmail);
                 } else {
-                    logger.warning("⚠️ Failed to send invitation email");
+                    logger.warning("Failed to send invitation email");
                 }
             } catch (Exception e) {
-                logger.log(Level.WARNING, "⚠️ Failed to send invitation email", e);
+                logger.log(Level.WARNING, "Failed to send invitation email", e);
                 // No cambiamos a ERROR porque el token sigue válido
             }
         } else {

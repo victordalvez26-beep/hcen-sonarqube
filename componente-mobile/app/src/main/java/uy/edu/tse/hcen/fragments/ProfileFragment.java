@@ -33,7 +33,7 @@ import uy.edu.tse.hcen.manager.UserManager;
 
 public class ProfileFragment extends Fragment {
 
-    private View sectionHelp, sectionSettings, sectionHCEN;
+    private static final String TAG = "ProfileFragment";
 
     @Nullable
     @Override
@@ -42,9 +42,9 @@ public class ProfileFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        sectionHelp = view.findViewById(R.id.sectionHelp);
-        sectionSettings = view.findViewById(R.id.sectionSettings);
-        sectionHCEN = view.findViewById(R.id.sectionHCEN);
+        View sectionHelp = view.findViewById(R.id.sectionHelp);
+        View sectionSettings = view.findViewById(R.id.sectionSettings);
+        View sectionHCEN = view.findViewById(R.id.sectionHCEN);
 
         setupSection(sectionHelp, R.drawable.ic_help, "Ayuda y FAQs",
                 Arrays.asList("Servicio de ayuda"));
@@ -126,25 +126,51 @@ public class ProfileFragment extends Fragment {
 
     private void logout() {
         new Thread(() -> {
+            String gubUyLogoutUrl = null;
             try {
                 String jwt = SessionManager.getJwtSession(requireContext());
                 if (jwt != null) {
                     URL url = new URL(AppConfig.LOGOUT_URL);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setInstanceFollowRedirects(false); // No seguir redirect automáticamente
                     conn.setRequestMethod("GET");
                     conn.setRequestProperty("Cookie", "hcen_session=" + jwt);
-                    Log.i("ProfileFragment", "logout: Codigo de respuesta backend: " + conn.getResponseCode());
+                    int responseCode = conn.getResponseCode();
+                    Log.i(TAG, "logout: Codigo de respuesta backend: " + responseCode);
+                    if (responseCode == HttpURLConnection.HTTP_SEE_OTHER || responseCode == HttpURLConnection.HTTP_MOVED_TEMP || responseCode == HttpURLConnection.HTTP_MOVED_PERM) {
+                        String location = conn.getHeaderField("Location");
+                        if (location != null && location.contains("gub.uy")) {
+                            gubUyLogoutUrl = location;
+                        }
+                    }
                 }
-            } catch (Exception ignored) {
-            } finally {
-                SessionManager.clearSession(requireContext());
-                UserManager.clearUser(requireContext());
-                requireActivity().runOnUiThread(() -> {
-                    Intent intent = new Intent(requireContext(), SplashActivity.class);
-                    startActivity(intent);
-                    requireActivity().finish();
-                });
+                // Si hay URL de logout de GubUy, hacer petición HTTP en background
+                if (gubUyLogoutUrl != null) {
+                    try {
+                        URL gubuyUrl = new URL(gubUyLogoutUrl);
+                        HttpURLConnection gubuyConn = (HttpURLConnection) gubuyUrl.openConnection();
+                        gubuyConn.setRequestMethod("GET");
+                        gubuyConn.setConnectTimeout(5000);
+                        gubuyConn.setReadTimeout(5000);
+                        int gubuyCode = gubuyConn.getResponseCode();
+                        Log.e(TAG, "URL gubuy: " + gubUyLogoutUrl);
+                        Log.i(TAG, "logout GubUy: Codigo de respuesta: " + gubuyCode);
+                        gubuyConn.disconnect();
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error cerrando sesión en GubUy", e);
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error en logout", e);
             }
+            // Limpiar sesión local y navegar
+            SessionManager.clearSession(requireContext());
+            UserManager.clearUser(requireContext());
+            requireActivity().runOnUiThread(() -> {
+                Intent intent = new Intent(requireContext(), SplashActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
+            });
         }).start();
     }
 }

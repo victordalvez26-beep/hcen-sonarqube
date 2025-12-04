@@ -377,7 +377,7 @@ function ProfesionalesPage() {
 
       {/* Table */}
       <div style={styles.tableCard}>
-        <h3 style={styles.tableTitle}>📋 Profesionales Registrados ({profesionales.length})</h3>
+        <h3 style={styles.tableTitle}>Profesionales Registrados ({profesionales.length})</h3>
         {loading ? (
           <div style={styles.loading}>Cargando...</div>
         ) : profesionales.length === 0 ? (

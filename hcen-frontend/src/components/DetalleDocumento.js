@@ -265,7 +265,7 @@ const DetalleDocumento = () => {
     if (archivo.url && archivo.url.includes('ejemplo.com')) {
       setPopup({ 
         show: true, 
-        message: `📄 Documento: ${archivo.nombre}\n\n⚠️ Este es un documento de demostración.\nEn una implementación real, el archivo se descargaría desde el servidor del hospital.`, 
+        message: `Documento: ${archivo.nombre}\n\nEste es un documento de demostración.\nEn una implementación real, el archivo se descargaría desde el servidor del hospital.`, 
         type: 'warning',
         title: 'Documento de Demostración'
       });
@@ -288,7 +288,7 @@ const DetalleDocumento = () => {
       
       setPopup({ 
         show: true, 
-        message: `📄 Descargando: ${archivo.nombre}\n\n⚠️ En una implementación real, este archivo se descargaría desde el servidor.`, 
+        message: `Descargando: ${archivo.nombre}\n\nEn una implementación real, este archivo se descargaría desde el servidor.`, 
         type: 'info',
         title: 'Descarga'
       });

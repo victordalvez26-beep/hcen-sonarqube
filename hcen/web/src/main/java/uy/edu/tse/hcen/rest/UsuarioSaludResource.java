@@ -120,9 +120,9 @@ public class UsuarioSaludResource {
                 
                 boolean creado = inusService.crearUsuarioEnInus(datosEntrada);
                 if (!creado) {
-                    LOGGER.warn("⚠️ No se pudo crear el usuario en INUS. Se procederá a crear localmente pero podría haber inconsistencias.");
+                    LOGGER.warn("No se pudo crear el usuario en INUS. Se procederá a crear localmente pero podría haber inconsistencias.");
                 } else {
-                    LOGGER.info("✅ Usuario creado exitosamente en INUS.");
+                    LOGGER.info("Usuario creado exitosamente en INUS.");
                 }
             } else {
                 // Existe en INUS -> Actualizar datos de INUS con los recibidos (PRIORIDAD CLÍNICA)
@@ -174,8 +174,8 @@ public class UsuarioSaludResource {
                 // Actualizar INUS
                 LOGGER.info("Actualizando registro de INUS con datos de clínica...");
                 boolean actualizado = inusService.actualizarUsuarioEnInus(inusUser);
-                if (actualizado) LOGGER.info("✅ Usuario actualizado exitosamente en INUS.");
-                else LOGGER.warn("⚠️ No se pudo actualizar el usuario en INUS.");
+                if (actualizado) LOGGER.info("Usuario actualizado exitosamente en INUS.");
+                else LOGGER.warn("No se pudo actualizar el usuario en INUS.");
                 
                 // Usamos el objeto inusUser actualizado como la fuente para los datos locales
                 datosEntrada = inusUser;
@@ -239,9 +239,9 @@ public class UsuarioSaludResource {
             LOGGER.info("Replicando asociación Usuario-Clínica en INUS...");
             boolean asociacionInus = inusService.asociarUsuarioConPrestador(finalUid, dto.getTenantId(), null);
             if (asociacionInus) {
-                LOGGER.info("✅ Asociación replicada exitosamente en INUS.");
+                LOGGER.info("Asociación replicada exitosamente en INUS.");
             } else {
-                LOGGER.warn("⚠️ No se pudo replicar la asociación en INUS (Usuario: " + finalUid + ", Prestador: " + dto.getTenantId() + ")");
+                LOGGER.warn("No se pudo replicar la asociación en INUS (Usuario: " + finalUid + ", Prestador: " + dto.getTenantId() + ")");
             }
             
             if (association == null) {

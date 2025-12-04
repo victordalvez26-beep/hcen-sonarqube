@@ -45,8 +45,6 @@ public class LoginCallbackActivity extends AppCompatActivity {
                     if (success) {
                         String jwt = SessionManager.getJwtSession(this);
 
-                        Log.e("LCA", "jwt: " + jwt);
-
                         // Envia TokenFCM para posterior recepción de notificaciones
                         sendTokenFCMBackend(this);
 
@@ -63,10 +61,30 @@ public class LoginCallbackActivity extends AppCompatActivity {
 
                 return;
             }
+
+            String isMinor = "error:menor_de_edad";
+            if (state.equals(isMinor)) {
+                Log.e("LoginCallbackActivity", "Usuario menor de edad intentando ingresar");
+                isMinor();
+            }
         }
 
         startActivity(new Intent(this, SplashActivity.class));
         finish();
+    }
+
+    private void isMinor() {
+        StatusDialogFragment errorDialog = StatusDialogFragment.newInstance(
+                DialogType.INFO,
+                "El usuario debe ser mayor de 18 años para ingresar"
+        );
+        errorDialog.show(getSupportFragmentManager(), "errorDialog");
+
+        // Esperar unos segundos antes de redirigir
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            startActivity(new Intent(this, SplashActivity.class));
+            finish();
+        }, 3000);
     }
 
     private void fallbackToSplash() {

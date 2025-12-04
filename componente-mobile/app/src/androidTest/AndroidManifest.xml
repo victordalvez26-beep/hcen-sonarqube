@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="uy.edu.tse.hcen.test">
     <application>
-        <activity android:name="uy.edu.tse.hcen.SingleFragmentActivity" />
+    <activity android:name="uy.edu.tse.hcen.SingleFragmentActivity" />
     </application>
 </manifest>

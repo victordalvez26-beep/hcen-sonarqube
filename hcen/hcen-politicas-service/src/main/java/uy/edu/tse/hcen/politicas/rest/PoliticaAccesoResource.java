@@ -52,14 +52,14 @@ public class PoliticaAccesoResource {
     @Path("/paciente/{ci}")
     public Response listarPorPaciente(@PathParam("ci") String ci, @QueryParam("tenantId") String tenantId) {
         java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PoliticaAccesoResource.class.getName());
-        logger.info("🔵 [POLITICAS-REST] GET /politicas/paciente/{ci} - CI recibido: '" + ci + "', tenantId: " + tenantId);
+        logger.info("[POLITICAS-REST] GET /politicas/paciente/{ci} - CI recibido: '" + ci + "', tenantId: " + tenantId);
         
         List<PoliticaAcceso> politicas = service.listarPorPaciente(ci);
-        logger.info("🔵 [POLITICAS-REST] Políticas encontradas por servicio: " + politicas.size());
+        logger.info("[POLITICAS-REST] Políticas encontradas por servicio: " + politicas.size());
         
         if (!politicas.isEmpty()) {
             for (PoliticaAcceso p : politicas) {
-                logger.info("  ✅ Política encontrada - ID: " + p.getId() + 
+                logger.info("  Política encontrada - ID: " + p.getId() + 
                     ", Paciente CI: " + p.getCodDocumPaciente() + 
                     ", Clínica: " + p.getClinicaAutorizada() +
                     ", Activa: " + p.getActiva());
@@ -67,19 +67,19 @@ public class PoliticaAccesoResource {
         }
         
         if (tenantId != null && !tenantId.isEmpty()) {
-            logger.info("🔵 [POLITICAS-REST] Filtrando por tenantId: " + tenantId);
+            logger.info("[POLITICAS-REST] Filtrando por tenantId: " + tenantId);
             int antes = politicas.size();
             politicas = politicas.stream()
                 .filter(p -> tenantId.equals(p.getClinicaAutorizada()))
                 .collect(Collectors.toList());
-            logger.info("🔵 [POLITICAS-REST] Políticas después del filtro por tenantId: " + politicas.size() + " (antes: " + antes + ")");
+            logger.info("[POLITICAS-REST] Políticas después del filtro por tenantId: " + politicas.size() + " (antes: " + antes + ")");
         }
         
         List<PoliticaAccesoDTO> dtos = politicas.stream()
                 .map(PoliticaAccesoMapper::toDTO)
                 .collect(Collectors.toList());
         
-        logger.info("🔵 [POLITICAS-REST] DTOs creados: " + dtos.size());
+        logger.info("[POLITICAS-REST] DTOs creados: " + dtos.size());
         return Response.ok(dtos).build();
     }
 
@@ -87,17 +87,17 @@ public class PoliticaAccesoResource {
     @Path("/profesional/{profesionalId}")
     public Response listarPorProfesional(@PathParam("profesionalId") String profesionalId) {
         java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PoliticaAccesoResource.class.getName());
-        logger.info("🔵 [REST] Endpoint /politicas/profesional/" + profesionalId + " llamado");
-        logger.info("🔵 [REST] ProfesionalId recibido: '" + profesionalId + "'");
+        logger.info("[REST] Endpoint /politicas/profesional/" + profesionalId + " llamado");
+        logger.info("[REST] ProfesionalId recibido: '" + profesionalId + "'");
         
         List<PoliticaAcceso> politicas = service.listarPorProfesional(profesionalId);
-        logger.info("🔵 [REST] Políticas encontradas por servicio: " + politicas.size());
+        logger.info("[REST] Políticas encontradas por servicio: " + politicas.size());
         
         List<PoliticaAccesoDTO> dtos = politicas.stream()
                 .map(PoliticaAccesoMapper::toDTO)
                 .collect(Collectors.toList());
         
-        logger.info("🔵 [REST] DTOs creados: " + dtos.size());
+        logger.info("[REST] DTOs creados: " + dtos.size());
         return Response.ok(dtos).build();
     }
 
@@ -111,7 +111,7 @@ public class PoliticaAccesoResource {
             @QueryParam("especialidad") String especialidad) {
         
         java.util.logging.Logger.getLogger(PoliticaAccesoResource.class.getName())
-            .info(String.format("🔍 [POLITICAS] Verificando Permiso - Profesional: '%s', Paciente: '%s', TipoDoc: '%s', Tenant: '%s', Especialidad: '%s'", 
+            .info(String.format("[POLITICAS] Verificando Permiso - Profesional: '%s', Paciente: '%s', TipoDoc: '%s', Tenant: '%s', Especialidad: '%s'", 
                 profesionalId, pacienteCI, tipoDoc, tenantId, especialidad));
                 
         if (profesionalId == null || pacienteCI == null) {

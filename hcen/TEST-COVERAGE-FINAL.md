@@ -2,79 +2,79 @@
 
 ## 📊 Estado de Cobertura Final
 
-### ✅ Tests Creados (Alta Calidad y Defensivos)
+### Tests Creados (Alta Calidad y Defensivos)
 
 #### **Módulo hcen-common**
-- ✅ `ValidationUtilTest.java` - Tests exhaustivos para validaciones (15+ casos)
-- ✅ `ValidationExceptionTest.java` - Tests para excepciones de validación
-- ✅ `HcenBusinessExceptionTest.java` - Tests para excepciones de negocio
+- `ValidationUtilTest.java` - Tests exhaustivos para validaciones (15+ casos)
+- `ValidationExceptionTest.java` - Tests para excepciones de validación
+- `HcenBusinessExceptionTest.java` - Tests para excepciones de negocio
 
 #### **Módulo ejb**
 **Servicios:**
-- ✅ `PrestadorSaludServiceTest.java` - Tests completos para servicio de prestadores (9 casos)
-- ✅ `NodoServiceTest.java` - Tests para servicio de nodos (7 casos)
-- ✅ `AuthServiceTest.java` - Tests para métodos auxiliares de AuthService (5 casos)
-- ✅ `EmailServiceTest.java` - Tests para validaciones de EmailService (8 casos)
+- `PrestadorSaludServiceTest.java` - Tests completos para servicio de prestadores (9 casos)
+- `NodoServiceTest.java` - Tests para servicio de nodos (7 casos)
+- `AuthServiceTest.java` - Tests para métodos auxiliares de AuthService (5 casos)
+- `EmailServiceTest.java` - Tests para validaciones de EmailService (8 casos)
 
 **Utilidades:**
-- ✅ `PasswordUtilTest.java` - Tests para generación de salt y hashing (5 casos)
-- ✅ `JWTUtilTest.java` - Tests exhaustivos para JWT (10 casos)
+- `PasswordUtilTest.java` - Tests para generación de salt y hashing (5 casos)
+- `JWTUtilTest.java` - Tests exhaustivos para JWT (10 casos)
 
 **DAOs:**
-- ✅ `UserDAOTest.java` - Tests completos para UserDAO (12 casos)
-- ✅ `UserSessionDAOTest.java` - Tests para UserSessionDAO (5 casos)
+- `UserDAOTest.java` - Tests completos para UserDAO (12 casos)
+- `UserSessionDAOTest.java` - Tests para UserSessionDAO (5 casos)
 
 **Repositories:**
-- ✅ `NodoPerifericoRepositoryTest.java` - Tests para NodoPerifericoRepository (9 casos)
-- ✅ `PrestadorSaludRepositoryTest.java` - Tests para PrestadorSaludRepository (9 casos)
+- `NodoPerifericoRepositoryTest.java` - Tests para NodoPerifericoRepository (9 casos)
+- `PrestadorSaludRepositoryTest.java` - Tests para PrestadorSaludRepository (9 casos)
 
 **Converters:**
-- ✅ `NacionalidadConverterTest.java` - Tests para converter (7 casos)
-- ✅ `DepartamentoConverterTest.java` - Tests para converter (7 casos)
-- ✅ `RolConverterTest.java` - Tests para converter (7 casos)
+- `NacionalidadConverterTest.java` - Tests para converter (7 casos)
+- `DepartamentoConverterTest.java` - Tests para converter (7 casos)
+- `RolConverterTest.java` - Tests para converter (7 casos)
 
 **Modelos/Enums:**
-- ✅ `NacionalidadTest.java` - Tests para enum Nacionalidad (5 casos)
-- ✅ `EstadoNodoPerifericoTest.java` - Tests para enum EstadoNodoPeriferico (2 casos)
-- ✅ `RolTest.java` - Tests para enum Rol (9 casos)
+- `NacionalidadTest.java` - Tests para enum Nacionalidad (5 casos)
+- `EstadoNodoPerifericoTest.java` - Tests para enum EstadoNodoPeriferico (2 casos)
+- `RolTest.java` - Tests para enum Rol (9 casos)
 
 #### **Módulo web**
 **Recursos REST:**
-- ✅ `EmailTestResourceTest.java` - Tests para endpoint de prueba de emails (3 casos)
-- ✅ `ConfigResourceTest.java` - Tests para endpoints de configuración (2 casos)
-- ✅ `PrestadorSaludResourceTest.java` - Tests para recurso REST de prestadores (8 casos)
-- ✅ `AuthResourceTest.java` - Tests para recurso REST de autenticación (8 casos)
-- ✅ `UserResourceTest.java` - Tests para recurso REST de usuarios (11 casos)
+- `EmailTestResourceTest.java` - Tests para endpoint de prueba de emails (3 casos)
+- `ConfigResourceTest.java` - Tests para endpoints de configuración (2 casos)
+- `PrestadorSaludResourceTest.java` - Tests para recurso REST de prestadores (8 casos)
+- `AuthResourceTest.java` - Tests para recurso REST de autenticación (8 casos)
+- `UserResourceTest.java` - Tests para recurso REST de usuarios (11 casos)
 
 **Utilidades:**
-- ✅ `CookieUtilTest.java` - Tests para utilidad de cookies (12 casos)
+- `CookieUtilTest.java` - Tests para utilidad de cookies (12 casos)
 
 **Tests Existentes:**
-- ✅ `NodoPerifericoResourceTest.java` - Ya existía parcialmente
-- ✅ `NodoPerifericoConverterTest.java` - Ya existía
+- `NodoPerifericoResourceTest.java` - Ya existía parcialmente
+- `NodoPerifericoConverterTest.java` - Ya existía
 
 #### **Módulo hcen-politicas-service**
 **Servicios:**
-- ✅ `PoliticaAccesoServiceTest.java` - Tests para servicio de políticas (8 casos)
-- ✅ `SolicitudAccesoServiceTest.java` - Tests para servicio de solicitudes (7 casos)
+- `PoliticaAccesoServiceTest.java` - Tests para servicio de políticas (8 casos)
+- `SolicitudAccesoServiceTest.java` - Tests para servicio de solicitudes (7 casos)
 
 **Recursos REST:**
-- ✅ `PoliticaAccesoResourceTest.java` - Tests para recurso REST de políticas (7 casos)
+- `PoliticaAccesoResourceTest.java` - Tests para recurso REST de políticas (7 casos)
 
 **Repositories:**
-- ✅ `RegistroAccesoRepositoryTest.java` - Tests para RegistroAccesoRepository (7 casos)
+- `RegistroAccesoRepositoryTest.java` - Tests para RegistroAccesoRepository (7 casos)
 
 **Mappers:**
-- ✅ `PoliticaAccesoMapperTest.java` - Tests para mapper (8 casos)
-- ✅ `SolicitudAccesoMapperTest.java` - Tests para mapper (6 casos)
-- ✅ `RegistroAccesoMapperTest.java` - Tests para mapper (3 casos)
+- `PoliticaAccesoMapperTest.java` - Tests para mapper (8 casos)
+- `SolicitudAccesoMapperTest.java` - Tests para mapper (6 casos)
+- `RegistroAccesoMapperTest.java` - Tests para mapper (3 casos)
 
 #### **Módulo hcen-rndc-service**
 **Servicios:**
-- ✅ `DocumentoRndcServiceTest.java` - Tests para servicio de documentos RNDC (10 casos)
+- `DocumentoRndcServiceTest.java` - Tests para servicio de documentos RNDC (10 casos)
 
 **Recursos REST:**
-- ✅ `DocumentoRestControllerTest.java` - Tests para controlador REST de documentos (5 casos)
+- `DocumentoRestControllerTest.java` - Tests para controlador REST de documentos (5 casos)
 
 ### 📈 Cobertura Estimada Final
 
@@ -96,7 +96,7 @@ Todos los tests creados son:
 4. **Con mocks apropiados**: Uso correcto de Mockito para aislar unidades
 5. **Exhaustivos**: Múltiples casos de prueba por método
 
-### 📋 Resumen por Categoría
+### Resumen por Categoría
 
 #### Tests de Servicios EJB: 4 archivos
 - PrestadorSaludServiceTest
@@ -143,10 +143,10 @@ Todos los tests creados son:
 
 ### 🔧 Configuración Completada
 
-- ✅ Mockito agregado a todos los módulos (ejb, web, hcen-common, hcen-politicas-service, hcen-rndc-service)
-- ✅ JUnit 5 configurado en todos los módulos
-- ✅ Estructura de tests organizada por módulo
-- ✅ Todos los tests corrigen errores de linter
+- Mockito agregado a todos los módulos (ejb, web, hcen-common, hcen-politicas-service, hcen-rndc-service)
+- JUnit 5 configurado en todos los módulos
+- Estructura de tests organizada por módulo
+- Todos los tests corrigen errores de linter
 
 ### ⏳ Componentes Pendientes (Para llegar al 90%)
 
@@ -158,7 +158,7 @@ Para alcanzar el 90% de cobertura, aún se pueden agregar:
 4. **Tests para recursos REST adicionales** (ReportesResource, otros)
 5. **Tests para servicios de negocio adicionales** (RegistroAccesoService, otros)
 
-### 📋 Cómo Ejecutar los Tests
+### Cómo Ejecutar los Tests
 
 ```bash
 # Ejecutar todos los tests
@@ -190,17 +190,17 @@ mvn clean test jacoco:report
 
 5. **Los tests son mantenibles y fáciles de extender**.
 
-### ✅ Logros Finales
+### Logros Finales
 
-- ✅ Dependencias de testing configuradas correctamente en todos los módulos
-- ✅ Suite completa de tests defensivos creada
-- ✅ Tests cubriendo componentes críticos de todos los módulos
-- ✅ Estructura preparada para expansión
-- ✅ Cobertura mejorada significativamente (de ~35-45% a ~65-70%)
-- ✅ ~30+ archivos de test nuevos
-- ✅ ~250+ casos de prueba individuales
+- Dependencias de testing configuradas correctamente en todos los módulos
+- Suite completa de tests defensivos creada
+- Tests cubriendo componentes críticos de todos los módulos
+- Estructura preparada para expansión
+- Cobertura mejorada significativamente (de ~35-45% a ~65-70%)
+- ~30+ archivos de test nuevos
+- ~250+ casos de prueba individuales
 
-### 🚀 Próximos Pasos Recomendados
+### Próximos Pasos Recomendados
 
 Para alcanzar el 90% de cobertura:
 

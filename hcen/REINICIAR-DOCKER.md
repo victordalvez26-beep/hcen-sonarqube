@@ -1,6 +1,6 @@
-# 🔄 Comandos para Reiniciar los Contenedores Docker
+# Comandos para Reiniciar los Contenedores Docker
 
-## ⚠️ Importante: Esto eliminará todos los datos de la base de datos
+## Importante: Esto eliminará todos los datos de la base de datos
 
 ## Paso 1: Detener y eliminar contenedores y volúmenes
 
@@ -77,7 +77,7 @@ docker-compose -f docker-compose.dev.yml up -d
 docker-compose -f docker-compose.dev.yml logs -f
 ```
 
-## 🔍 Comandos Útiles de Diagnóstico
+## Comandos Útiles de Diagnóstico
 
 ### Ver todos los contenedores
 ```powershell

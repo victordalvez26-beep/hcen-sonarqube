@@ -38,7 +38,7 @@ export POST_LOGOUT_REDIRECT_URI=http://localhost:8080/logout
 
 ---
 
-## 🚀 Ambiente de Producción
+## Ambiente de Producción
 
 ### Opción 1: Docker Compose (Recomendado)
 
@@ -91,7 +91,7 @@ Editar `standalone.xml` y agregar en la sección `<system-properties>`:
 
 ---
 
-## ✅ Verificación
+## Verificación
 
 Para verificar qué valores está usando la aplicación, agregar logs en `GubUyCallbackServlet.java`:
 
@@ -102,7 +102,7 @@ LOGGER.info("FRONTEND_URL: " + GubUyConfig.FRONTEND_URL);
 
 ---
 
-## 📋 Checklist de Despliegue
+## Checklist de Despliegue
 
 Antes de desplegar a producción, asegúrate de:
 

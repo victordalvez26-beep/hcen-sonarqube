@@ -10,7 +10,7 @@ Este proyecto es un mockup sencillo que permite a los prestadores de salud:
 - Registrar metadatos de documentos clínicos en el RNDC
 - Consultar y descargar documentos clínicos
 
-## 🚀 Características
+## Características
 
 - **Interfaz Web Simple**: HTML/CSS/JavaScript para una experiencia de usuario amigable
 - **Cliente REST**: Consumo de servicios HCEN mediante HTTP
@@ -22,7 +22,7 @@ Este proyecto es un mockup sencillo que permite a los prestadores de salud:
   - Consulta de documento específico
   - Descarga de documentos
 
-## 📋 Requisitos
+## Requisitos
 
 - Java 17+
 - Maven 3.8+

@@ -122,22 +122,22 @@ Resource REST que expone los endpoints para gestionar notificaciones:
 
 ## Características Principales
 
-### ✅ Verificación de Preferencias
+### Verificación de Preferencias
 Antes de enviar cualquier notificación, el sistema verifica automáticamente si el usuario tiene habilitado ese tipo de notificación. Si `allDisabled` está activo, no se envían notificaciones de ningún tipo.
 
-### ✅ Sincronización Multiplataforma
+### Sincronización Multiplataforma
 Las preferencias se pueden actualizar tanto desde el frontend web como desde la aplicación móvil, manteniendo sincronización entre ambas plataformas.
 
-### ✅ Gestión de Device Tokens
+### Gestión de Device Tokens
 El sistema almacena el device token de Firebase cuando la aplicación móvil lo registra, permitiendo enviar notificaciones push a dispositivos específicos.
 
-### ✅ Integración Firebase Completa
+### Integración Firebase Completa
 Implementación completa de la integración con Firebase Cloud Messaging, incluyendo:
 - Autenticación OAuth2 con Service Account
 - Generación de JWT firmado (RS256)
 - Envío de mensajes a través de la API REST de FCM
 
-### ✅ Seguridad
+### Seguridad
 - Los endpoints de preferencias requieren autenticación JWT
 - El device token solo puede ser actualizado por el usuario autenticado
 - Validación de tipos de notificación antes de enviar
@@ -276,7 +276,7 @@ El servicio utiliza las siguientes credenciales de Firebase (hardcodeadas en `No
 - **Client Email:** `firebase-adminsdk-fbsvc@hcen-tse.iam.gserviceaccount.com`
 - **Private Key:** (incluida en el código)
 
-**⚠️ Nota de Seguridad:** En producción, estas credenciales deberían estar en variables de entorno o en un archivo de configuración seguro, no hardcodeadas en el código.
+**Nota de Seguridad:** En producción, estas credenciales deberían estar en variables de entorno o en un archivo de configuración seguro, no hardcodeadas en el código.
 
 ## Próximos Pasos
 

@@ -110,5 +110,5 @@ mv "$TEMP_EAR" "$EAR_FILE"
 rm -rf /tmp/ear-content
 
 # Iniciar WildFly
-echo "🚀 Iniciando WildFly..."
+echo "Iniciando WildFly..."
 exec /opt/jboss/wildfly/bin/standalone.sh -c standalone.xml -b 0.0.0.0

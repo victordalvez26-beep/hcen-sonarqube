@@ -41,13 +41,27 @@ import uy.edu.tse.hcen.manager.SessionManager;
 
 public class ManageNotificationsFragment extends Fragment {
 
-    private SwitchCompat switchResults, switchNewAccessRequest, switchMedicalHistory, switchNewAccessHistory,
-            switchMaintenance, switchNewFeatures, switchAll;
+    private SwitchCompat switchResults;
+    private SwitchCompat switchNewAccessRequest;
+    private SwitchCompat switchMedicalHistory;
+    private SwitchCompat switchNewAccessHistory;
+    private SwitchCompat switchMaintenance;
+    private SwitchCompat switchNewFeatures;
+    private SwitchCompat switchAll;
 
     private boolean isGlobalChange = false;
-    private boolean isTurningOffGlobalFromIndividual = false;
+    private static final String KEY_RESULTS = "results";
+    private static final String KEY_NEW_ACCESS_REQUEST = "new_access_request";
+    private static final String KEY_MEDICAL_HISTORY = "medical_history";
+    private static final String KEY_NEW_ACCESS_HISTORY = "new_access_history";
+    private static final String KEY_MAINTENANCE = "maintenance";
+    private static final String KEY_NEW_FEATURES = "new_features";
+    private static final String KEY_ALL_DISABLED = "all_disabled";
+    private static final String ERROR_DIALOG_TAG = "errorDialog";
+    private static final String SUCCESS_DIALOG_TAG = "successDialog";
 
     private SharedPreferences prefs;
+    boolean isTurningOffGlobalFromIndividual = false;
 
     @Nullable
     @Override
@@ -68,26 +82,26 @@ public class ManageNotificationsFragment extends Fragment {
 
         loadNotificationPreferencesFromBackend();
 
-        switchResults.setChecked(prefs.getBoolean("results", true));
-        switchNewAccessRequest.setChecked(prefs.getBoolean("new_access_request", true));
-        switchMedicalHistory.setChecked(prefs.getBoolean("medical_history", true));
-        switchNewAccessHistory.setChecked(prefs.getBoolean("new_access_history", true));
-        switchMaintenance.setChecked(prefs.getBoolean("maintenance", true));
-        switchNewFeatures.setChecked(prefs.getBoolean("new_features", true));
-        switchAll.setChecked(prefs.getBoolean("all_disabled", false));
+    switchResults.setChecked(prefs.getBoolean(KEY_RESULTS, true));
+    switchNewAccessRequest.setChecked(prefs.getBoolean(KEY_NEW_ACCESS_REQUEST, true));
+    switchMedicalHistory.setChecked(prefs.getBoolean(KEY_MEDICAL_HISTORY, true));
+    switchNewAccessHistory.setChecked(prefs.getBoolean(KEY_NEW_ACCESS_HISTORY, true));
+    switchMaintenance.setChecked(prefs.getBoolean(KEY_MAINTENANCE, true));
+    switchNewFeatures.setChecked(prefs.getBoolean(KEY_NEW_FEATURES, true));
+    switchAll.setChecked(prefs.getBoolean(KEY_ALL_DISABLED, false));
 
-        switchResults.setOnCheckedChangeListener((buttonView, isChecked) ->
-                handleIndividualSwitchChange("results", switchResults, isChecked));
-        switchNewAccessRequest.setOnCheckedChangeListener((buttonView, isChecked) ->
-                handleIndividualSwitchChange("new_access_request", switchNewAccessRequest, isChecked));
-        switchMedicalHistory.setOnCheckedChangeListener((buttonView, isChecked) ->
-                handleIndividualSwitchChange("medical_history", switchMedicalHistory, isChecked));
-        switchNewAccessHistory.setOnCheckedChangeListener((buttonView, isChecked) ->
-                handleIndividualSwitchChange("new_access_history", switchNewAccessHistory, isChecked));
-        switchMaintenance.setOnCheckedChangeListener((buttonView, isChecked) ->
-                handleIndividualSwitchChange("maintenance", switchMaintenance, isChecked));
-        switchNewFeatures.setOnCheckedChangeListener((buttonView, isChecked) ->
-                handleIndividualSwitchChange("new_features", switchNewFeatures, isChecked));
+    switchResults.setOnCheckedChangeListener((buttonView, isChecked) ->
+        handleIndividualSwitchChange(KEY_RESULTS, isChecked));
+    switchNewAccessRequest.setOnCheckedChangeListener((buttonView, isChecked) ->
+        handleIndividualSwitchChange(KEY_NEW_ACCESS_REQUEST, isChecked));
+    switchMedicalHistory.setOnCheckedChangeListener((buttonView, isChecked) ->
+        handleIndividualSwitchChange(KEY_MEDICAL_HISTORY, isChecked));
+    switchNewAccessHistory.setOnCheckedChangeListener((buttonView, isChecked) ->
+        handleIndividualSwitchChange(KEY_NEW_ACCESS_HISTORY, isChecked));
+    switchMaintenance.setOnCheckedChangeListener((buttonView, isChecked) ->
+        handleIndividualSwitchChange(KEY_MAINTENANCE, isChecked));
+    switchNewFeatures.setOnCheckedChangeListener((buttonView, isChecked) ->
+        handleIndividualSwitchChange(KEY_NEW_FEATURES, isChecked));
 
         switchAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isTurningOffGlobalFromIndividual) {
@@ -96,7 +110,7 @@ public class ManageNotificationsFragment extends Fragment {
                 return;
             }
 
-            prefs.edit().putBoolean("all_disabled", isChecked).apply();
+            prefs.edit().putBoolean(KEY_ALL_DISABLED, isChecked).apply();
 
             isGlobalChange = true; // activar flag
             switchResults.setChecked(!isChecked);
@@ -114,7 +128,7 @@ public class ManageNotificationsFragment extends Fragment {
         return view;
     }
 
-    private void handleIndividualSwitchChange(String key, SwitchCompat changedSwitch, boolean isChecked) {
+    private void handleIndividualSwitchChange(String key, boolean isChecked) {
         prefs.edit().putBoolean(key, isChecked).apply();
 
         if (isGlobalChange) {
@@ -125,22 +139,21 @@ public class ManageNotificationsFragment extends Fragment {
         if (isChecked && switchAll.isChecked()) {
             isTurningOffGlobalFromIndividual = true;
             switchAll.setChecked(false);
-            prefs.edit().putBoolean("all_disabled", false).apply();
+            prefs.edit().putBoolean(KEY_ALL_DISABLED, false).apply();
         }
 
         // Si todos los individuales están apagados, activar "all_disabled"
-        if (!switchResults.isChecked()
+        boolean allOff = !switchResults.isChecked()
                 && !switchNewAccessRequest.isChecked()
                 && !switchMedicalHistory.isChecked()
                 && !switchNewAccessHistory.isChecked()
                 && !switchMaintenance.isChecked()
-                && !switchNewFeatures.isChecked()) {
-            if (!switchAll.isChecked()) {
-                isGlobalChange = true;
-                switchAll.setChecked(true);
-                prefs.edit().putBoolean("all_disabled", true).apply();
-                isGlobalChange = false;
-            }
+                && !switchNewFeatures.isChecked();
+        if (allOff && !switchAll.isChecked()) {
+            isGlobalChange = true;
+            switchAll.setChecked(true);
+            prefs.edit().putBoolean(KEY_ALL_DISABLED, true).apply();
+            isGlobalChange = false;
         }
 
         String jwt = SessionManager.getJwtSession(requireContext());
@@ -154,7 +167,7 @@ public class ManageNotificationsFragment extends Fragment {
                     DialogType.ERROR,
                     "Sesión inválida. No se pueden cargar preferencias."
             );
-            errorDialog.show(getParentFragmentManager(), "errorDialog");
+            errorDialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
             return;
         }
 
@@ -189,7 +202,7 @@ public class ManageNotificationsFragment extends Fragment {
                                 DialogType.ERROR,
                                 "Respuesta vacía del servidor"
                         );
-                        errorDialog.show(getParentFragmentManager(), "errorDialog");
+                        errorDialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
                         return;
                     }
 
@@ -205,15 +218,15 @@ public class ManageNotificationsFragment extends Fragment {
                         boolean allDisabled = json.optBoolean("allDisabled", false);
 
                         // Guardar en prefs
-                        prefs.edit()
-                                .putBoolean("results", notifyResults)
-                                .putBoolean("new_access_request", notifyNewAccessRequest)
-                                .putBoolean("medical_history", notifyMedicalHistory)
-                                .putBoolean("new_access_history", notifyNewAccessHistory)
-                                .putBoolean("maintenance", notifyMaintenance)
-                                .putBoolean("new_features", notifyNewFeatures)
-                                .putBoolean("all_disabled", allDisabled)
-                                .apply();
+            prefs.edit()
+                .putBoolean(KEY_RESULTS, notifyResults)
+                .putBoolean(KEY_NEW_ACCESS_REQUEST, notifyNewAccessRequest)
+                .putBoolean(KEY_MEDICAL_HISTORY, notifyMedicalHistory)
+                .putBoolean(KEY_NEW_ACCESS_HISTORY, notifyNewAccessHistory)
+                .putBoolean(KEY_MAINTENANCE, notifyMaintenance)
+                .putBoolean(KEY_NEW_FEATURES, notifyNewFeatures)
+                .putBoolean(KEY_ALL_DISABLED, allDisabled)
+                .apply();
 
                         // Actualizar switches
                         switchResults.setChecked(notifyResults);
@@ -229,7 +242,7 @@ public class ManageNotificationsFragment extends Fragment {
                                 DialogType.ERROR,
                                 "Error al interpretar preferencias"
                         );
-                        errorDialog.show(getParentFragmentManager(), "errorDialog");
+                        errorDialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
                     }
                 });
 
@@ -239,7 +252,7 @@ public class ManageNotificationsFragment extends Fragment {
                             DialogType.ERROR,
                             "Error al obtener preferencias"
                     );
-                    errorDialog.show(getParentFragmentManager(), "errorDialog");
+                    errorDialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
                 });
             } finally {
                 if (connection != null) {
@@ -252,16 +265,16 @@ public class ManageNotificationsFragment extends Fragment {
     private void sendNotificationPreferencesToBackend(String jwt) {
         JSONObject json = new JSONObject();
         try {
-            json.put("notifyResults", prefs.getBoolean("results", true));
-            json.put("notifyNewAccessRequest", prefs.getBoolean("new_access_request", true));
-            json.put("notifyMedicalHistory", prefs.getBoolean("medical_history", true));
-            json.put("notifyNewAccessHistory", prefs.getBoolean("new_access_history", true));
-            json.put("notifyMaintenance", prefs.getBoolean("maintenance", true));
-            json.put("notifyNewFeatures", prefs.getBoolean("new_features", true));
-            json.put("allDisabled", prefs.getBoolean("all_disabled", false));
+            json.put("notifyResults", prefs.getBoolean(KEY_RESULTS, true));
+            json.put("notifyNewAccessRequest", prefs.getBoolean(KEY_NEW_ACCESS_REQUEST, true));
+            json.put("notifyMedicalHistory", prefs.getBoolean(KEY_MEDICAL_HISTORY, true));
+            json.put("notifyNewAccessHistory", prefs.getBoolean(KEY_NEW_ACCESS_HISTORY, true));
+            json.put("notifyMaintenance", prefs.getBoolean(KEY_MAINTENANCE, true));
+            json.put("notifyNewFeatures", prefs.getBoolean(KEY_NEW_FEATURES, true));
+            json.put("allDisabled", prefs.getBoolean(KEY_ALL_DISABLED, false));
         } catch (JSONException e) {
             StatusDialogFragment errorDialog = StatusDialogFragment.newInstance(DialogType.ERROR, "Error al preparar preferencias");
-            errorDialog.show(getParentFragmentManager(), "errorDialog");
+            errorDialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
             return;
         }
 
@@ -299,7 +312,7 @@ public class ManageNotificationsFragment extends Fragment {
                 requireActivity().runOnUiThread(() -> {
                     if (responseBody == null || responseBody.isEmpty()) {
                         StatusDialogFragment errorDialog = StatusDialogFragment.newInstance(DialogType.ERROR, "Error al actualizar preferencias");
-                        errorDialog.show(getParentFragmentManager(), "errorDialog");
+                        errorDialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
                         return;
                     }
 
@@ -310,22 +323,22 @@ public class ManageNotificationsFragment extends Fragment {
 
                         if (success) {
                             StatusDialogFragment successDialog = StatusDialogFragment.newInstance(DialogType.SUCCESS, message);
-                            successDialog.show(getParentFragmentManager(), "successDialog");
+                            successDialog.show(getParentFragmentManager(), SUCCESS_DIALOG_TAG);
                         } else {
                             StatusDialogFragment errorDialog = StatusDialogFragment.newInstance(DialogType.ERROR, message);
-                            errorDialog.show(getParentFragmentManager(), "errorDialog");
+                            errorDialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
                         }
 
                     } catch (JSONException e) {
                         StatusDialogFragment errorDialog = StatusDialogFragment.newInstance(DialogType.ERROR, "Error al interpretar respuesta del servidor");
-                        errorDialog.show(getParentFragmentManager(), "errorDialog");
+                        errorDialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
                     }
                 });
 
             } catch (Exception e) {
                 requireActivity().runOnUiThread(() -> {
                     StatusDialogFragment errorDialog = StatusDialogFragment.newInstance(DialogType.ERROR, "Error al actualizar preferencias");
-                    errorDialog.show(getParentFragmentManager(), "errorDialog");
+                    errorDialog.show(getParentFragmentManager(), ERROR_DIALOG_TAG);
                 });
             } finally {
                 if (connection != null) {

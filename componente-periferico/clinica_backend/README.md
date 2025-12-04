@@ -2,7 +2,7 @@
 
 Sistema multi-tenant para gestión de clínicas con infraestructura automatizada.
 
-## 🚀 Instalación y Despliegue (Primera Vez)
+## Instalación y Despliegue (Primera Vez)
 
 ### Prerrequisitos
 - Docker y Docker Compose instalados

@@ -12,9 +12,9 @@ import java.util.logging.Logger;
 /**
  * Filtro JAX-RS para manejar solicitudes CORS preflight (OPTIONS).
  * 
- * ⚠️ IMPORTANTE: Este filtro NO se llama manualmente. JAX-RS lo ejecuta AUTOMÁTICAMENTE.
+ * IMPORTANTE: Este filtro NO se llama manualmente. JAX-RS lo ejecuta AUTOMÁTICAMENTE.
  * 
- * 🔄 CÓMO FUNCIONA:
+ * CÓMO FUNCIONA:
  * 1. Está registrado en RestApplication.getClasses() (línea 17)
  * 2. JAX-RS detecta que implementa ContainerRequestFilter y tiene @Provider
  * 3. La anotación @PreMatching hace que se ejecute ANTES de matchear el endpoint
@@ -27,10 +27,10 @@ import java.util.logging.Logger;
  * - Maneja especialmente las requests OPTIONS (preflight CORS)
  * - Se ejecuta ANTES que cualquier otro filtro o endpoint
  * 
- * 🔍 PARA VERLO EN ACCIÓN:
+ * PARA VERLO EN ACCIÓN:
  * - Revisa los logs de WildFly
  * - Busca "🟢 [CORS-REQUEST-FILTER]" para ver cuándo se ejecuta
- * - Busca "✅ [CORS-REQUEST-FILTER]" para ver cuándo maneja OPTIONS
+ * - Busca "[CORS-REQUEST-FILTER]" para ver cuándo maneja OPTIONS
  */
 @Provider
 @PreMatching
@@ -60,7 +60,7 @@ public class CorsRequestFilter implements ContainerRequestFilter {
             responseBuilder.header("Access-Control-Max-Age", "3600");
             responseBuilder.header("Access-Control-Allow-Credentials", "true");
             
-            LOGGER.info(String.format("✅ [CORS-REQUEST-FILTER] OPTIONS preflight manejado - Origin: %s -> Allowed: %s para path: %s", 
+            LOGGER.info(String.format("[CORS-REQUEST-FILTER] OPTIONS preflight manejado - Origin: %s -> Allowed: %s para path: %s", 
                     origin, allowedOrigin, path));
             
             requestContext.abortWith(responseBuilder.build());

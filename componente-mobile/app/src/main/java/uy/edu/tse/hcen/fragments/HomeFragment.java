@@ -34,6 +34,9 @@ public class HomeFragment extends Fragment {
 
     private long lastBackPressedTime = 0;
     private static final int BACK_PRESS_INTERVAL = 2000; // 2 segundos
+    private static final String SESSION_EXPIRED = "sessionExpired";
+    private static final String NETWORK_ERROR = "networkError";
+    private static final String WELCOME_MESSAGE_PREFIX = "¡Bienvenido, ";
     private View rootView;
 
     private TextView txtWelcome;
@@ -61,16 +64,16 @@ public class HomeFragment extends Fragment {
         SessionManager.checkSessionAndProceed(requireContext(), new SessionManager.SessionCheckCallback() {
             @Override
             public void onSessionValid() {
-                // Hay sesión, continua
+                refreshWelcome();
             }
 
             @Override
             public void onSessionInvalid() {
                 if (!isAdded() || getView() == null || getActivity() == null || isRemoving() || isDetached()) return;
                 StatusDialogFragment dialog = StatusDialogFragment.newInstance(DialogType.ERROR, "La sesión ha expirado. Por favor, inicia sesión nuevamente");
-                dialog.show(getParentFragmentManager(), "sessionExpired");
+                dialog.show(getParentFragmentManager(), SESSION_EXPIRED);
                 getParentFragmentManager().executePendingTransactions();
-                StatusDialogFragment shownDialog = (StatusDialogFragment) getParentFragmentManager().findFragmentByTag("sessionExpired");
+                StatusDialogFragment shownDialog = (StatusDialogFragment) getParentFragmentManager().findFragmentByTag(SESSION_EXPIRED);
                 if (shownDialog != null) {
                     shownDialog.setOnDismissAction(() -> {
                         if (!isAdded() || getView() == null || getActivity() == null || isRemoving() || isDetached()) return;
@@ -86,10 +89,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onNetworkError() {
                 if (!isAdded() || getView() == null || getActivity() == null || isRemoving() || isDetached()) return;
-                StatusDialogFragment dialog = StatusDialogFragment.newInstance(DialogType.ERROR, "Sin conexión. Conéctate a Internet");
-                dialog.show(getParentFragmentManager(), "networkError");
+                StatusDialogFragment dialog = StatusDialogFragment.newInstance(DialogType.ERROR, "Error de conexión. Conéctate a Internet o intentalo más tarde");
+                dialog.show(getParentFragmentManager(), NETWORK_ERROR);
                 getParentFragmentManager().executePendingTransactions();
-                StatusDialogFragment shownDialog = (StatusDialogFragment) getParentFragmentManager().findFragmentByTag("networkError");
+                StatusDialogFragment shownDialog = (StatusDialogFragment) getParentFragmentManager().findFragmentByTag(NETWORK_ERROR);
                 if (shownDialog != null) {
                     shownDialog.setOnDismissAction(() -> {
                         new android.os.Handler().postDelayed(() -> {
@@ -105,8 +108,7 @@ public class HomeFragment extends Fragment {
         txtWelcome = rootView.findViewById(R.id.txtWelcome);
 
         // Cargar nombre del usuario
-        User user = UserManager.getUser(requireContext());
-        txtWelcome.setText("¡Bienvenido, " + user.getFirstName() + "!");
+        refreshWelcome();
 
         MaterialCardView cardHistory = rootView.findViewById(R.id.cardHistory);
         MaterialCardView cardClinicalDocs = rootView.findViewById(R.id.cardClinicalDocs);
@@ -152,7 +154,7 @@ public class HomeFragment extends Fragment {
                 if (!isAdded() || getView() == null || getActivity() == null || isRemoving() || isDetached()) return;
                 txtWelcome = rootView.findViewById(R.id.txtWelcome);
                 User user = UserManager.getUser(requireContext());
-                txtWelcome.setText("¡Bienvenido, " + user.getFirstName() + "!");
+                txtWelcome.setText(WELCOME_MESSAGE_PREFIX + user.getFirstName() + "!");
 
                 MaterialCardView cardHistory = rootView.findViewById(R.id.cardHistory);
                 MaterialCardView cardSummary = rootView.findViewById(R.id.cardSummary);
@@ -187,9 +189,9 @@ public class HomeFragment extends Fragment {
             public void onSessionInvalid() {
                 if (!isAdded() || getView() == null) return;
                 StatusDialogFragment dialog = StatusDialogFragment.newInstance(DialogType.ERROR, "La sesión ha expirado. Por favor, inicia sesión nuevamente");
-                dialog.show(getParentFragmentManager(), "sessionExpired");
+                dialog.show(getParentFragmentManager(), SESSION_EXPIRED);
                 getParentFragmentManager().executePendingTransactions();
-                StatusDialogFragment shownDialog = (StatusDialogFragment) getParentFragmentManager().findFragmentByTag("sessionExpired");
+                StatusDialogFragment shownDialog = (StatusDialogFragment) getParentFragmentManager().findFragmentByTag(SESSION_EXPIRED);
                 if (shownDialog != null) {
                     shownDialog.setOnDismissAction(() -> {
                         if (!isAdded() || getView() == null || getActivity() == null || isRemoving() || isDetached()) return;
@@ -206,9 +208,9 @@ public class HomeFragment extends Fragment {
             public void onNetworkError() {
                 if (!isAdded() || getView() == null || getActivity() == null || isRemoving() || isDetached()) return;
                 StatusDialogFragment dialog = StatusDialogFragment.newInstance(DialogType.ERROR, "Sin conexión. Conéctate a Internet");
-                dialog.show(getParentFragmentManager(), "networkError");
+                dialog.show(getParentFragmentManager(), NETWORK_ERROR);
                 getParentFragmentManager().executePendingTransactions();
-                StatusDialogFragment shownDialog = (StatusDialogFragment) getParentFragmentManager().findFragmentByTag("networkError");
+                StatusDialogFragment shownDialog = (StatusDialogFragment) getParentFragmentManager().findFragmentByTag(NETWORK_ERROR);
                 if (shownDialog != null) {
                     shownDialog.setOnDismissAction(() -> {
                         new android.os.Handler().postDelayed(() -> {
@@ -223,7 +225,7 @@ public class HomeFragment extends Fragment {
 
         // Cargar nombre del usuario
         User user = UserManager.getUser(requireContext());
-        txtWelcome.setText("¡Bienvenido, " + user.getFirstName() + "!");
+        txtWelcome.setText(WELCOME_MESSAGE_PREFIX + user.getFirstName() + "!");
 
         MaterialCardView cardHistory = rootView.findViewById(R.id.cardHistory);
         MaterialCardView cardClinicalDocs = rootView.findViewById(R.id.cardClinicalDocs);
@@ -306,5 +308,13 @@ public class HomeFragment extends Fragment {
                 });
             }
         }).start();
+    }
+
+    private void refreshWelcome() {
+        if (txtWelcome != null && isAdded() && getActivity() != null) {
+            User user = UserManager.getUser(requireContext());
+            String text = (user != null && user.getFirstName() != null) ? WELCOME_MESSAGE_PREFIX + user.getFirstName() + "!" : "¡Bienvenido!";
+            txtWelcome.setText(text);
+        }
     }
 }
