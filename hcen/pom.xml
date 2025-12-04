@@ -232,6 +232,14 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
+                    <!-- Generar reporte XML para SonarQube -->
+                    <execution>
+                        <id>report-aggregate-xml</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
                     <!-- Generar reporte agregado consolidado de todos los módulos -->
                     <execution>
                         <id>report-aggregate</id>

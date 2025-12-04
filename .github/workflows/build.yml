@@ -40,22 +40,26 @@ jobs:
       - name: Install hcen-common module (required by other modules)
         working-directory: hcen/hcen-common
         # Install to local repository so other modules can find it
-        run: mvn clean install -DskipTests
+        # Execute tests to generate coverage reports
+        run: mvn clean install
         continue-on-error: false
 
       - name: Install hcen-politicas-service module
         working-directory: hcen/hcen-politicas-service
-        run: mvn clean install -DskipTests
+        # Execute tests to generate coverage reports
+        run: mvn clean install
         continue-on-error: false
 
       - name: Install hcen-ejb module
         working-directory: hcen/ejb
-        run: mvn clean install -DskipTests
+        # Execute tests to generate coverage reports
+        run: mvn clean install
         continue-on-error: false
 
       - name: Install hcen-web module
         working-directory: hcen/web
-        run: mvn clean install -DskipTests
+        # Execute tests to generate coverage reports
+        run: mvn clean install
         continue-on-error: false
 
       - name: Compile componente-periferico backend
@@ -82,6 +86,14 @@ jobs:
         run: |
           Get-ChildItem -Path . -Include "*.class" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 20 FullName
           Get-ChildItem -Path . -Include "*.jar" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 20 FullName
+        continue-on-error: true
+
+      - name: List JaCoCo coverage reports for debugging
+        run: |
+          Write-Host "Searching for JaCoCo coverage reports..."
+          Get-ChildItem -Path . -Include "jacoco.exec" -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "Found: $($_.FullName)" }
+          Get-ChildItem -Path . -Include "jacoco.xml" -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "Found XML: $($_.FullName)" }
+          Get-ChildItem -Path . -Include "**/target/site/jacoco/**/*.xml" -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "Found site XML: $($_.FullName)" }
         continue-on-error: true
 
       - name: SonarQube Scan
